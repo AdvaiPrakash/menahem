@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@theme {
+  /* Exact User Provided Brand Palette */
+  /* Camel: #AC9661 | Dark Khaki: #353819 | Dark Khaki 2: #373511 | Dark Khaki 3: #3D3E1C | Dark Khaki 4: #3B3C1A */
+  --color-camel: #AC9661;             /* Primary Camel Accent, Buttons, Badges */
+  --color-camel-hover: #937f4f;       /* Camel Hover State */
+  --color-camel-light: #f7f4ea;       /* Subtle Camel Light Tint */
+  --color-camel-subtle: rgba(172, 150, 97, 0.16);
+
+  --color-khaki-1: #353819;           /* Dark Khaki (Announcement Bar, Primary Dark) */
+  --color-khaki-2: #373511;           /* Dark Khaki 2 (Footer, Deep Accent) */
+  --color-khaki-3: #3D3E1C;           /* Dark Khaki 3 (Promo Panels) */
+  --color-khaki-4: #3B3C1A;           /* Dark Khaki 4 (Cards, Dark Surface) */
+
+  --color-canvas: #faf9f5;            /* Warm Off-White / Natural Linen Canvas */
+  --color-card-bg: #f3efe6;           /* Soft Camel-Tinted Card Background */
+  --color-charcoal: #212411;          /* High Contrast Dark Khaki Heading Text */
+  --color-subtext: #595b45;           /* Clean Muted Khaki Subtext */
+  --color-border-subtle: rgba(53, 56, 25, 0.12); /* Delicate Khaki Divider */
+  --color-star: #AC9661;              /* Rating Stars in Brand Camel */
+
+  /* Legacy variable mapping to keep full backward compatibility */
+  --color-olive-dark: #353819;
+  --color-olive-card: #3D3E1C;
+  --color-amber-brown: #AC9661;
+  --color-amber-hover: #937f4f;
+  --color-amber-light: #f7f4ea;
+
+  /* Fonts */
+  --font-display: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+
+  /* Geometry */
+  --radius-pill: 9999px;
+  --radius-card: 16px;
+  --radius-button: 8px;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-charcoal);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+::selection {
+  background-color: #AC9661;
+  color: #ffffff;
+}
+
+/* Glassmorphism */
+@utility glass {
+  background: rgba(250, 249, 245, 0.94);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+@utility eyebrow {
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--color-camel);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-canvas);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(172, 150, 97, 0.35);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-camel);
+}
+
+/* Lenis Smooth Scroll Integration */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Scroll Reveal Elements */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
