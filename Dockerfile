@@ -7,7 +7,8 @@ WORKDIR /app
 
 # Cache dependency installations
 COPY package.json package-lock.json ./
-RUN npm ci --prefer-offline --no-audit
+RUN npm install
+
 
 # Copy files necessary for Vite compilation and Tailwind class discovery
 COPY vite.config.js ./
