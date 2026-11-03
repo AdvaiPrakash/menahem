@@ -2,7 +2,7 @@
 
 /**
  * MENAHEM - SINGLE SOURCE OF TRUTH FOR WEBSITE CONTENT
- * 
+ *
  * All copy, pricing, navigation items, links, and asset paths live here.
  * Re-skinning or updating copy is a single-file edit.
  */
@@ -519,7 +519,7 @@ return [
             ['label' => 'Terms of Service', 'url' => '#terms'],
         ],
         'payment_methods' => ['Visa', 'Mastercard', 'RuPay', 'UPI', 'Netbanking'],
-        'copyright' => '© ' . date('Y') . ' Menahem. All Rights Reserved.',
+        'copyright' => '© '.date('Y').' Menahem. All Rights Reserved.',
     ],
 
     'SEO' => [
