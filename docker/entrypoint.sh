@@ -1,7 +1,14 @@
 #!/bin/sh
 set -e
 
-# Ensure storage and cache directories exist
+# Support dynamic PORT environment variable (for Render, Railway, Fly.io, Cloud Run, Heroku)
+PORT="${PORT:-80}"
+if [ -f /etc/nginx/http.d/default.conf ]; then
+    sed -i "s/listen [0-9]\+;/listen ${PORT};/g" /etc/nginx/http.d/default.conf 2>/dev/null || true
+    sed -i "s/listen \[::\]:[0-9]\+;/listen \[::\]:${PORT};/g" /etc/nginx/http.d/default.conf 2>/dev/null || true
+fi
+
+# Ensure storage, cache, and database directories exist
 mkdir -p /var/www/html/storage/framework/cache/data \
          /var/www/html/storage/framework/sessions \
          /var/www/html/storage/framework/views \
@@ -9,34 +16,58 @@ mkdir -p /var/www/html/storage/framework/cache/data \
          /var/www/html/bootstrap/cache \
          /var/www/html/database
 
-# Ensure SQLite database file exists if using sqlite
-if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
-    if [ ! -f /var/www/html/database/database.sqlite ]; then
-        touch /var/www/html/database/database.sqlite
+# Ensure .env file exists
+if [ ! -f /var/www/html/.env ]; then
+    if [ -f /var/www/html/.env.example ]; then
+        cp /var/www/html/.env.example /var/www/html/.env
+    else
+        touch /var/www/html/.env
     fi
 fi
 
-# Set proper permissions for Laravel writable directories
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
-chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+# Ensure APP_KEY is present; generate one if missing
+if [ -z "$APP_KEY" ]; then
+    if ! grep -q "^APP_KEY=base64:" /var/www/html/.env 2>/dev/null; then
+        echo "Generating application encryption key..."
+        php artisan key:generate --force --no-interaction || true
+    fi
+fi
 
-# Create storage symlink if it doesn't already exist
+# Ensure SQLite database exists and has open permissions if DB_CONNECTION is sqlite
+DB_CONN="${DB_CONNECTION:-sqlite}"
+if [ "$DB_CONN" = "sqlite" ]; then
+    if [ ! -f /var/www/html/database/database.sqlite ]; then
+        touch /var/www/html/database/database.sqlite
+    fi
+    chmod 777 /var/www/html/database
+    chmod 666 /var/www/html/database/database.sqlite
+fi
+
+# Clear any stale cached configuration from previous builds
+php artisan optimize:clear --no-interaction || true
+
+# Always ensure database migrations run so sessions, cache, and users tables exist
+echo "Running database migrations..."
+php artisan migrate --force --no-interaction || true
+
+# Ensure storage symlink exists
 if [ ! -L /var/www/html/public/storage ]; then
     php artisan storage:link --no-interaction || true
 fi
 
-# Run database migrations if RUN_MIGRATIONS is set to true
-if [ "${RUN_MIGRATIONS}" = "true" ]; then
-    echo "Running database migrations..."
-    php artisan migrate --force || true
+# In production, cache routes and views
+if [ "${APP_ENV:-production}" = "production" ]; then
+    echo "Caching routes and views for production..."
+    php artisan route:cache --no-interaction || true
+    php artisan view:cache --no-interaction || true
 fi
 
-# In production mode, cache configuration, routes, and views for optimal performance
-if [ "${APP_ENV}" = "production" ]; then
-    echo "Optimizing Laravel for production..."
-    php artisan config:cache || true
-    php artisan route:cache || true
-    php artisan view:cache || true
+# Set proper permissions for Laravel writable directories (executed AFTER all artisan commands)
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+if [ "$DB_CONN" = "sqlite" ]; then
+    chmod 777 /var/www/html/database
+    chmod 666 /var/www/html/database/database.sqlite
 fi
 
 exec "$@"

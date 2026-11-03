@@ -48,7 +48,9 @@ WORKDIR /var/www/html
 # Set production environment defaults
 ENV APP_ENV=production \
     APP_DEBUG=false \
-    LOG_CHANNEL=stderr
+    LOG_CHANNEL=stderr \
+    APP_KEY=base64:gLh+ocUTu1ySRYnPxkTXFNJ48wSfk7dV3kLh6FoJJgw=
+
 
 # Install system dependencies (Nginx, Supervisor, curl, bash)
 RUN apk add --no-cache \
@@ -113,8 +115,9 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 EXPOSE 80
 
 # Health check to ensure Nginx & PHP-FPM are responding
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost/ || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-80}/ || exit 1
+
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
