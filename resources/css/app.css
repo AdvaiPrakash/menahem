@@ -78,31 +78,31 @@ body {
   color: var(--color-camel);
 }
 
-/* Fail-safe Brand Logo Sizing */
+/* Fail-safe Brand Logo Sizing - clearly readable medallion text */
 .site-logo {
-  width: 50px !important;
-  height: 50px !important;
-  max-width: 50px !important;
-  max-height: 50px !important;
+  width: 66px !important;
+  height: 66px !important;
+  max-width: 66px !important;
+  max-height: 66px !important;
   object-fit: contain !important;
   display: block;
 }
 
 @media (min-width: 640px) {
   .site-logo {
-    width: 54px !important;
-    height: 54px !important;
-    max-width: 54px !important;
-    max-height: 54px !important;
+    width: 74px !important;
+    height: 74px !important;
+    max-width: 74px !important;
+    max-height: 74px !important;
   }
 }
 
 @media (min-width: 1024px) {
   .site-logo {
-    width: 58px !important;
-    height: 58px !important;
-    max-width: 58px !important;
-    max-height: 58px !important;
+    width: 82px !important;
+    height: 82px !important;
+    max-width: 82px !important;
+    max-height: 82px !important;
   }
 }
 
@@ -132,12 +132,12 @@ html.lenis, html.lenis body {
   overflow: hidden;
 }
 
-/* Scroll Reveal Elements */
+/* Scroll Reveal Elements (Guided by scroll-motion skill with [0.22, 1, 0.36, 1] ease) */
 [data-reveal] {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
 

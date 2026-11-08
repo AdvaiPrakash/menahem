@@ -9,72 +9,8 @@
 @endphp
 
 <header class="w-full fixed top-0 left-0 z-50 shadow-md">
-    <!-- Top Announcement Bar (Deep Olive Green Tone with Rose Accents) -->
-    <div class="bg-[#2f3014] text-white/95 text-xs py-1.5 sm:py-2 px-3 sm:px-8 border-b border-black/20">
-        
-        <!-- Mobile Announcement Bar: Compact 2 lines matching reference screenshot -->
-        <div class="sm:hidden flex flex-col items-center justify-center text-center gap-0.5 py-0.5">
-            <!-- Line 1: Free Shipping with shopping bag icon -->
-            <div class="flex items-center justify-center gap-1.5 text-[11px] font-medium text-white/95">
-                <svg class="w-3.5 h-3.5 text-[#f4b8da] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                </svg>
-                <span>Free Shipping on Orders Over ₹999</span>
-            </div>
-
-            <!-- Line 2: 30-Day Guarantee | Excellent 4.9 rating -->
-            <div class="flex items-center justify-center gap-2 text-[10px] text-white/85">
-                <span class="flex items-center gap-1">
-                    <svg class="w-3 h-3 text-[#f4b8da] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
-                    <span>30-Day Money Back Guarantee</span>
-                </span>
-                <span class="text-white/30">|</span>
-                <span class="flex items-center gap-1">
-                    <svg class="w-3 h-3 text-[#f4b8da] fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                    </svg>
-                    <span>Excellent 4.9 out of 5</span>
-                </span>
-            </div>
-        </div>
-
-        <!-- Desktop Announcement Bar (Preserved exactly as existing) -->
-        <div class="hidden sm:flex max-w-7xl mx-auto items-center justify-between sm:justify-center lg:justify-between gap-2 font-normal">
-            
-            <!-- Left: Free Shipping -->
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#f4b8da] flex-shrink-0" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1-4l-3 4h4z"/>
-                </svg>
-                <span class="text-[10px] sm:text-xs font-medium whitespace-nowrap">Free Shipping on Orders Over ₹999</span>
-            </div>
-
-            <!-- Divider -->
-            <span class="text-white/30 text-[10px] sm:text-xs mx-1">|</span>
-
-            <!-- Center: 30-Day Money Back Guarantee -->
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#f4b8da] flex-shrink-0" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                </svg>
-                <span class="text-[10px] sm:text-xs font-medium whitespace-nowrap">30-Day Money Back Guarantee</span>
-            </div>
-
-            <!-- Right: Rating -->
-            <div class="hidden lg:flex items-center gap-1.5">
-                <div class="flex text-[#f4b8da]">
-                    <svg class="w-3.5 h-3.5 fill-current" width="14" height="14" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                </div>
-                <span class="text-xs">Excellent 4.9 out of 5</span>
-            </div>
-
-        </div>
-    </div>
-
     <!-- Main Navigation Bar (Olive Green #3c3d1b with Enriched Gold Medallion Logo) -->
-    <nav id="main-navbar" class="w-full bg-[#3c3d1b] transition-all duration-300 py-1.5 sm:py-2 px-3 sm:px-8 border-b border-[#2e2f14]">
+    <nav id="main-navbar" class="w-full bg-[#3c3d1b] transition-all duration-300 py-2 sm:py-2.5 px-3 sm:px-8 border-b border-[#2e2f14]">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             
             <!-- Mobile Left: Hamburger Container (w-20 to balance the right icons on mobile, hidden on desktop) -->
@@ -91,20 +27,19 @@
                 </button>
             </div>
 
-            <!-- Logo: Balanced in the center on mobile, positioned on left on desktop -->
+            <!-- Logo: Balanced in the center on mobile, positioned on left on desktop (Enlarged for clear readability) -->
             <a
                 href="/"
-                class="flex items-center justify-center flex-shrink-0 group py-0"
-                style="width: 52px; height: 52px; max-width: 56px; max-height: 56px;"
+                class="flex items-center justify-center flex-shrink-0 group py-0 w-[66px] h-[66px] sm:w-[74px] sm:h-[74px] lg:w-[82px] lg:h-[82px]"
                 aria-label="Menahem Home"
             >
                 <img
                     src="{{ asset('images/logo.png') }}"
-                    alt="Menahem"
-                    width="52"
-                    height="52"
+                    alt="Menahem - The one that comforts you"
+                    width="82"
+                    height="82"
                     class="site-logo object-contain transition-transform duration-300 group-hover:scale-105"
-                    style="width: 50px; height: 50px; max-width: 56px; max-height: 56px; object-fit: contain;"
+                    style="max-width: 86px; max-height: 86px; object-fit: contain;"
                 />
             </a>
 

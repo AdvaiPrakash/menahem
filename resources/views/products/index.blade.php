@@ -77,7 +77,7 @@
     class="bg-[#FCF8FA] min-h-screen pt-28 pb-20"
 >
     <!-- Secondary Search & Filter Navigation Bar (Matches Reference Layout) -->
-    <div class="border-b border-[#23121F]/10 bg-white/80 backdrop-blur-md sticky top-[73px] z-30 py-3 transition-all">
+    <div class="border-b border-[#23121F]/10 bg-white/80 backdrop-blur-md sticky top-[80px] sm:top-[96px] z-30 py-3 transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                 

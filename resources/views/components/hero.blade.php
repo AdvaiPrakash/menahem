@@ -118,304 +118,317 @@
         <!-- ===================================================================
              MOBILE-ONLY LAYOUT (< lg): Matches User's Reference Screenshot
              1. Centered Hero Typography (Eyebrow, Title, Description, 2 Buttons)
-             2. 4 Categories Horizontal Strip + Pagination Dots
-             3. 2-Column Vertical Scrolling Gallery (Left UP, Right DOWN, 3:4 cards)
+             2. 2-Column Vertical Scrolling Gallery (The Image Sliding Portion)
+             3. 4 Categories Attached Just Behind (Below) The Image Sliding Portion
+             (Wired with scroll-motion reveal curves and smooth stagger)
              =================================================================== -->
         <div class="lg:hidden flex flex-col items-center text-center">
             
             <!-- 1. Eyebrow Pill -->
-            <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#fde4f2] text-[#e68bbe] border border-[#f4b8da]/60 text-xs font-bold uppercase tracking-wider mb-4">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#e68bbe] animate-pulse"></span>
-                <span>{{ $hero['label'] ?? 'NEW COLLECTION' }}</span>
-            </div>
+            <x-reveal delay="50">
+                <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#fde4f2] text-[#e68bbe] border border-[#f4b8da]/60 text-xs font-bold uppercase tracking-wider mb-4">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#e68bbe] animate-pulse"></span>
+                    <span>{{ $hero['label'] ?? 'NEW COLLECTION' }}</span>
+                </div>
+            </x-reveal>
 
             <!-- 2. Centered Editorial Headline in Playfair Display -->
-            <h1 class="text-3xl sm:text-4xl font-bold text-[#22121E] leading-[1.12] tracking-tight font-serif max-w-sm sm:max-w-md mx-auto">
-                Transform Living <br />
-                Spaces with <span class="italic text-[#e68bbe]">Menahem</span>
-            </h1>
+            <x-reveal delay="100">
+                <h1 class="text-3xl sm:text-4xl font-bold text-[#22121E] leading-[1.12] tracking-tight font-serif max-w-sm sm:max-w-md mx-auto">
+                    Transform Living <br />
+                    Spaces with <span class="italic text-[#e68bbe]">Menahem</span>
+                </h1>
+            </x-reveal>
 
             <!-- 3. Centered Description -->
-            <p class="mt-3.5 text-xs sm:text-sm text-[#6E5666] leading-relaxed max-w-sm sm:max-w-md mx-auto font-normal">
-                {{ $hero['description'] ?? 'Discover beautifully curated home essentials, from elegant curtains to luxurious towels and table linens, designed to bring warmth, comfort, and sophistication to your living spaces.' }}
-            </p>
+            <x-reveal delay="150">
+                <p class="mt-3.5 text-xs sm:text-sm text-[#6E5666] leading-relaxed max-w-sm sm:max-w-md mx-auto font-normal">
+                    {{ $hero['description'] ?? 'Discover beautifully curated home essentials, from elegant curtains to luxurious towels and table linens, designed to bring warmth, comfort, and sophistication to your living spaces.' }}
+                </p>
+            </x-reveal>
 
             <!-- 4. Dual Responsive CTA Buttons Side-by-Side -->
-            <div class="mt-6 flex items-center justify-center gap-2.5 sm:gap-3 w-full max-w-sm mx-auto">
-                <a
-                    href="{{ $whatsappUrl }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-full bg-[#23121F] hover:bg-[#341B2E] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-sm"
-                >
-                    <span>Shop Collection</span>
-                    <span class="text-[11px] font-mono">↗</span>
-                </a>
-
-                <a
-                    href="{{ route('products.index') }}"
-                    class="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-full bg-white hover:bg-[#FCF8FA] text-[#22121E] border border-[#23121F]/15 text-xs sm:text-sm font-semibold tracking-wide hover:border-[#e68bbe] hover:text-[#e68bbe] transition-all shadow-2xs"
-                >
-                    <span>Explore Catalog</span>
-                    <span class="text-[11px] font-mono">↗</span>
-                </a>
-            </div>
-
-            <!-- 5. Product Categories: 4 Categories in Compact Horizontal Layout -->
-            <div class="mt-7 w-full max-w-sm mx-auto">
-                <div class="grid grid-cols-4 gap-2 sm:gap-3 text-center">
-                    
-                    <!-- Category 1: Curtains -->
-                    <a href="{{ route('products.index', ['category' => 'curtains']) }}" class="flex flex-col items-center group">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#F8EAF3] group-hover:bg-[#fde4f2] transition-colors flex items-center justify-center text-[#22121E] border border-black/5 shadow-2xs">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16M5 4v16c0-4 3-6 3-6s3 2 3 6V4M19 4v16c0-4-3-6-3-6s-3 2-3 6V4"/>
-                            </svg>
-                        </div>
-                        <span class="mt-1.5 text-[11px] sm:text-xs font-semibold text-[#22121E] group-hover:text-[#e68bbe] transition-colors">
-                            Curtains
-                        </span>
+            <x-reveal delay="200" class="w-full">
+                <div class="mt-6 flex items-center justify-center gap-2.5 sm:gap-3 w-full max-w-sm mx-auto">
+                    <a
+                        href="{{ $whatsappUrl }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-full bg-[#23121F] hover:bg-[#341B2E] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-sm"
+                    >
+                        <span>Shop Collection</span>
+                        <span class="text-[11px] font-mono">↗</span>
                     </a>
 
-                    <!-- Category 2: Towels -->
-                    <a href="{{ route('products.index', ['category' => 'towels']) }}" class="flex flex-col items-center group">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#F8EAF3] group-hover:bg-[#fde4f2] transition-colors flex items-center justify-center text-[#22121E] border border-black/5 shadow-2xs">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7H5a2 2 0 00-2 2v1a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2zM19 12H5a2 2 0 00-2 2v1a2 2 0 002 2h14a2 2 0 002-2v-1a2 2 0 00-2-2zM19 17H5a2 2 0 00-2 2v1a2 2 0 002 2h14a2 2 0 002-2v-1a2 2 0 00-2-2z"/>
-                            </svg>
-                        </div>
-                        <span class="mt-1.5 text-[11px] sm:text-xs font-semibold text-[#22121E] group-hover:text-[#e68bbe] transition-colors">
-                            Towels
-                        </span>
+                    <a
+                        href="{{ route('products.index') }}"
+                        class="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-full bg-white hover:bg-[#FCF8FA] text-[#22121E] border border-[#23121F]/15 text-xs sm:text-sm font-semibold tracking-wide hover:border-[#e68bbe] hover:text-[#e68bbe] transition-all shadow-2xs"
+                    >
+                        <span>Explore Catalog</span>
+                        <span class="text-[11px] font-mono">↗</span>
                     </a>
-
-                    <!-- Category 3: Table Linen -->
-                    <a href="{{ route('products.index', ['category' => 'table-decor']) }}" class="flex flex-col items-center group">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#F8EAF3] group-hover:bg-[#fde4f2] transition-colors flex items-center justify-center text-[#22121E] border border-black/5 shadow-2xs">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                                <rect x="3" y="6" width="18" height="12" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 11h18M8 6v12M16 6v12"/>
-                            </svg>
-                        </div>
-                        <span class="mt-1.5 text-[11px] sm:text-xs font-semibold text-[#22121E] group-hover:text-[#e68bbe] transition-colors whitespace-nowrap">
-                            Table Linen
-                        </span>
-                    </a>
-
-                    <!-- Category 4: Rugs -->
-                    <a href="{{ route('products.index', ['category' => 'rugs']) }}" class="flex flex-col items-center group">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#F8EAF3] group-hover:bg-[#fde4f2] transition-colors flex items-center justify-center text-[#22121E] border border-black/5 shadow-2xs">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                                <rect x="4" y="5" width="16" height="14" rx="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16M7 5v14M17 5v14M2 7h2M2 12h2M2 17h2M20 7h2M20 12h2M20 17h2"/>
-                            </svg>
-                        </div>
-                        <span class="mt-1.5 text-[11px] sm:text-xs font-semibold text-[#22121E] group-hover:text-[#e68bbe] transition-colors">
-                            Rugs
-                        </span>
-                    </a>
-
                 </div>
+            </x-reveal>
 
-                <!-- 3 Pagination Indicator Dots Underneath Categories -->
-                <div class="mt-4 flex items-center justify-center gap-1.5">
-                    <span class="w-3.5 h-1.5 rounded-full bg-[#22121E]"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#e68bbe]/70"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#f4b8da]"></span>
-                </div>
-            </div>
-
-            <!-- 6. Two-Column Vertical Masonry-Style Gallery (Main Requirement) -->
+            <!-- 5. Two-Column Vertical Masonry-Style Gallery (The Image Sliding Portion) -->
             <!-- Left column scrolls UPWARD, Right column scrolls DOWNWARD, Portrait 3:4 cards -->
-            <div class="mt-6 w-full max-w-sm sm:max-w-md mx-auto">
-                <div class="relative h-[530px] sm:h-[580px] overflow-hidden rounded-[26px] sm:rounded-[30px] bg-[#F8EAF3]/35 border border-[#23121F]/10 p-2 sm:p-2.5 shadow-sm">
-                    
-                    <!-- Top Soft Vignette Mask -->
-                    <div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#FCF8FA] via-[#FCF8FA]/80 to-transparent z-20 pointer-events-none"></div>
-                    
-                    <!-- Bottom Soft Vignette Mask -->
-                    <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#FCF8FA] via-[#FCF8FA]/80 to-transparent z-20 pointer-events-none"></div>
-
-                    <!-- Dual Opposite-Direction Vertical Columns Container -->
-                    <div class="grid grid-cols-2 gap-2.5 sm:gap-3 h-full overflow-hidden">
+            <x-reveal delay="250" class="w-full">
+                <div class="mt-6 w-full max-w-sm sm:max-w-md mx-auto">
+                    <div class="relative h-[530px] sm:h-[580px] overflow-hidden rounded-[26px] sm:rounded-[30px] bg-[#F8EAF3]/35 border border-[#23121F]/10 p-2 sm:p-2.5 shadow-sm">
                         
-                        <!-- LEFT COLUMN: Scrolls UPWARD from bottom to top -->
-                        <div class="flex flex-col gap-2.5 sm:gap-3 animate-marquee-up hover:[animation-play-state:paused]">
+                        <!-- Top Soft Vignette Mask -->
+                        <div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#FCF8FA] via-[#FCF8FA]/80 to-transparent z-20 pointer-events-none"></div>
+                        
+                        <!-- Bottom Soft Vignette Mask -->
+                        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#FCF8FA] via-[#FCF8FA]/80 to-transparent z-20 pointer-events-none"></div>
+
+                        <!-- Dual Opposite-Direction Vertical Columns Container -->
+                        <div class="grid grid-cols-2 gap-2.5 sm:gap-3 h-full overflow-hidden">
                             
-                            <!-- Set 1 (Original) -->
-                            @foreach($col1Cards as $idx => $item)
-                                <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0">
-                                    <!-- Portrait Background Image -->
-                                    <img
-                                        src="{{ asset($item['image']) }}"
-                                        alt="{{ $item['alt'] }}"
-                                        loading="lazy"
-                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    />
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
+                            <!-- LEFT COLUMN: Scrolls UPWARD from bottom to top -->
+                            <div class="flex flex-col gap-2.5 sm:gap-3 animate-marquee-up hover:[animation-play-state:paused]">
+                                
+                                <!-- Set 1 (Original) -->
+                                @foreach($col1Cards as $idx => $item)
+                                    <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0">
+                                        <!-- Portrait Background Image -->
+                                        <img
+                                            src="{{ asset($item['image']) }}"
+                                            alt="{{ $item['alt'] }}"
+                                            loading="lazy"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
 
-                                    <!-- Top Spacer -->
-                                    <div></div>
+                                        <!-- Top Spacer -->
+                                        <div></div>
 
-                                    <!-- Bottom Action Pill: Floating dark pill with title & arrow -->
-                                    <div class="relative z-10 p-2 sm:p-2.5">
-                                        <a
-                                            href="{{ route('products.show', $item['id']) }}"
-                                            class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
-                                        >
-                                            <span class="truncate">{{ $item['title'] }}</span>
-                                            <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <!-- Upward Scroll Indicator Pill between Card 1 and Card 2 -->
-                                @if($idx === 0)
-                                    <div class="flex justify-center -my-2 relative z-20 pointer-events-none">
-                                        <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
-                                            </svg>
+                                        <!-- Bottom Action Pill: Floating dark pill with title & arrow -->
+                                        <div class="relative z-10 p-2 sm:p-2.5">
+                                            <a
+                                                href="{{ route('products.show', $item['id']) }}"
+                                                class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
+                                            >
+                                                <span class="truncate">{{ $item['title'] }}</span>
+                                                <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
+                                            </a>
                                         </div>
                                     </div>
-                                @endif
-                            @endforeach
 
-                            <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
-                            @foreach($col1Cards as $idx => $item)
-                                <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0" aria-hidden="true">
-                                    <img
-                                        src="{{ asset($item['image']) }}"
-                                        alt="{{ $item['alt'] }}"
-                                        loading="lazy"
-                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    />
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
+                                    <!-- Upward Scroll Indicator Pill between Card 1 and Card 2 -->
+                                    @if($idx === 0)
+                                        <div class="flex justify-center -my-2 relative z-20 pointer-events-none">
+                                            <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
 
-                                    <div></div>
+                                <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
+                                @foreach($col1Cards as $idx => $item)
+                                    <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0" aria-hidden="true">
+                                        <img
+                                            src="{{ asset($item['image']) }}"
+                                            alt="{{ $item['alt'] }}"
+                                            loading="lazy"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
 
-                                    <div class="relative z-10 p-2 sm:p-2.5">
-                                        <a
-                                            href="{{ route('products.show', $item['id']) }}"
-                                            class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
-                                        >
-                                            <span class="truncate">{{ $item['title'] }}</span>
-                                            <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
-                                        </a>
-                                    </div>
-                                </div>
+                                        <div></div>
 
-                                @if($idx === 0)
-                                    <div class="flex justify-center -my-2 relative z-20 pointer-events-none" aria-hidden="true">
-                                        <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
-                                            </svg>
+                                        <div class="relative z-10 p-2 sm:p-2.5">
+                                            <a
+                                                href="{{ route('products.show', $item['id']) }}"
+                                                class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
+                                            >
+                                                <span class="truncate">{{ $item['title'] }}</span>
+                                                <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
+                                            </a>
                                         </div>
                                     </div>
-                                @endif
-                            @endforeach
 
-                        </div>
+                                    @if($idx === 0)
+                                        <div class="flex justify-center -my-2 relative z-20 pointer-events-none" aria-hidden="true">
+                                            <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
 
-                        <!-- RIGHT COLUMN: Scrolls DOWNWARD from top to bottom -->
-                        <div class="flex flex-col gap-2.5 sm:gap-3 animate-marquee-down hover:[animation-play-state:paused]">
-                            
-                            <!-- Set 1 (Original) -->
-                            @foreach($col2Cards as $idx => $item)
-                                <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0">
-                                    <img
-                                        src="{{ asset($item['image']) }}"
-                                        alt="{{ $item['alt'] }}"
-                                        loading="lazy"
-                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    />
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
+                            </div>
 
-                                    <!-- Top Badges Row -->
-                                    <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between">
-                                        <span class="px-2 py-0.5 rounded-full {{ $item['badge'] === 'BESTSELLER' ? 'bg-[#23121F]/80 text-white' : 'bg-[#e68bbe] text-white' }} backdrop-blur-md text-[9px] font-bold tracking-wider uppercase border border-white/20">
-                                            {{ $item['badge'] }}
-                                        </span>
-                                        
-                                        <!-- Wishlist Heart Icon Button -->
-                                        <span class="w-6 h-6 rounded-full bg-black/30 backdrop-blur-md text-white flex items-center justify-center text-[10px] hover:bg-white hover:text-[#22121E] transition-colors">
-                                            ♡
-                                        </span>
-                                    </div>
+                            <!-- RIGHT COLUMN: Scrolls DOWNWARD from top to bottom -->
+                            <div class="flex flex-col gap-2.5 sm:gap-3 animate-marquee-down hover:[animation-play-state:paused]">
+                                
+                                <!-- Set 1 (Original) -->
+                                @foreach($col2Cards as $idx => $item)
+                                    <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0">
+                                        <img
+                                            src="{{ asset($item['image']) }}"
+                                            alt="{{ $item['alt'] }}"
+                                            loading="lazy"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
 
-                                    <!-- Bottom Action Pill -->
-                                    <div class="relative z-10 p-2 sm:p-2.5">
-                                        <a
-                                            href="{{ route('products.show', $item['id']) }}"
-                                            class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
-                                        >
-                                            <span class="truncate">{{ $item['title'] }}</span>
-                                            <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
-                                        </a>
-                                    </div>
-                                </div>
+                                        <!-- Top Badges Row -->
+                                        <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between">
+                                            <span class="px-2 py-0.5 rounded-full {{ $item['badge'] === 'BESTSELLER' ? 'bg-[#23121F]/80 text-white' : 'bg-[#e68bbe] text-white' }} backdrop-blur-md text-[9px] font-bold tracking-wider uppercase border border-white/20">
+                                                {{ $item['badge'] }}
+                                            </span>
+                                            
+                                            <!-- Wishlist Heart Icon Button -->
+                                            <span class="w-6 h-6 rounded-full bg-black/30 backdrop-blur-md text-white flex items-center justify-center text-[10px] hover:bg-white hover:text-[#22121E] transition-colors">
+                                                ♡
+                                            </span>
+                                        </div>
 
-                                <!-- Downward Scroll Indicator Pill between Card 1 and Card 2 -->
-                                @if($idx === 0)
-                                    <div class="flex justify-center -my-2 relative z-20 pointer-events-none">
-                                        <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                            </svg>
+                                        <!-- Bottom Action Pill -->
+                                        <div class="relative z-10 p-2 sm:p-2.5">
+                                            <a
+                                                href="{{ route('products.show', $item['id']) }}"
+                                                class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
+                                            >
+                                                <span class="truncate">{{ $item['title'] }}</span>
+                                                <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
+                                            </a>
                                         </div>
                                     </div>
-                                @endif
-                            @endforeach
 
-                            <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
-                            @foreach($col2Cards as $idx => $item)
-                                <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0" aria-hidden="true">
-                                    <img
-                                        src="{{ asset($item['image']) }}"
-                                        alt="{{ $item['alt'] }}"
-                                        loading="lazy"
-                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    />
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
+                                    <!-- Downward Scroll Indicator Pill between Card 1 and Card 2 -->
+                                    @if($idx === 0)
+                                        <div class="flex justify-center -my-2 relative z-20 pointer-events-none">
+                                            <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
 
-                                    <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between">
-                                        <span class="px-2 py-0.5 rounded-full {{ $item['badge'] === 'BESTSELLER' ? 'bg-[#23121F]/80 text-white' : 'bg-[#e68bbe] text-white' }} backdrop-blur-md text-[9px] font-bold tracking-wider uppercase border border-white/20">
-                                            {{ $item['badge'] }}
-                                        </span>
-                                        <span class="w-6 h-6 rounded-full bg-black/30 backdrop-blur-md text-white flex items-center justify-center text-[10px]">
-                                            ♡
-                                        </span>
-                                    </div>
+                                <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
+                                @foreach($col2Cards as $idx => $item)
+                                    <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0" aria-hidden="true">
+                                        <img
+                                            src="{{ asset($item['image']) }}"
+                                            alt="{{ $item['alt'] }}"
+                                            loading="lazy"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
 
-                                    <div class="relative z-10 p-2 sm:p-2.5">
-                                        <a
-                                            href="{{ route('products.show', $item['id']) }}"
-                                            class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
-                                        >
-                                            <span class="truncate">{{ $item['title'] }}</span>
-                                            <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
-                                        </a>
-                                    </div>
-                                </div>
+                                        <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between">
+                                            <span class="px-2 py-0.5 rounded-full {{ $item['badge'] === 'BESTSELLER' ? 'bg-[#23121F]/80 text-white' : 'bg-[#e68bbe] text-white' }} backdrop-blur-md text-[9px] font-bold tracking-wider uppercase border border-white/20">
+                                                {{ $item['badge'] }}
+                                            </span>
+                                            <span class="w-6 h-6 rounded-full bg-black/30 backdrop-blur-md text-white flex items-center justify-center text-[10px]">
+                                                ♡
+                                            </span>
+                                        </div>
 
-                                @if($idx === 0)
-                                    <div class="flex justify-center -my-2 relative z-20 pointer-events-none" aria-hidden="true">
-                                        <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                            </svg>
+                                        <div class="relative z-10 p-2 sm:p-2.5">
+                                            <a
+                                                href="{{ route('products.show', $item['id']) }}"
+                                                class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
+                                            >
+                                                <span class="truncate">{{ $item['title'] }}</span>
+                                                <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
+                                            </a>
                                         </div>
                                     </div>
-                                @endif
-                            @endforeach
+
+                                    @if($idx === 0)
+                                        <div class="flex justify-center -my-2 relative z-20 pointer-events-none" aria-hidden="true">
+                                            <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+
+                            </div>
 
                         </div>
 
                     </div>
-
                 </div>
-            </div>
+            </x-reveal>
+
+            <!-- 6. Product Categories: Attached directly behind (below) the image sliding portion -->
+            <x-reveal delay="300" class="w-full">
+                <div class="mt-4 sm:mt-5 w-full max-w-sm sm:max-w-md mx-auto p-3 sm:p-4 rounded-[24px] sm:rounded-3xl bg-white/80 backdrop-blur-md border border-[#23121F]/10 shadow-2xs">
+                    <div class="grid grid-cols-4 gap-2 sm:gap-3 text-center">
+                        
+                        <!-- Category 1: Curtains -->
+                        <a href="{{ route('products.index', ['category' => 'curtains']) }}" class="flex flex-col items-center group">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#F8EAF3] group-hover:bg-[#fde4f2] transition-colors flex items-center justify-center text-[#22121E] border border-black/5 shadow-2xs">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16M5 4v16c0-4 3-6 3-6s3 2 3 6V4M19 4v16c0-4-3-6-3-6s-3 2-3 6V4"/>
+                                </svg>
+                            </div>
+                            <span class="mt-1.5 text-[11px] sm:text-xs font-semibold text-[#22121E] group-hover:text-[#e68bbe] transition-colors">
+                                Curtains
+                            </span>
+                        </a>
+
+                        <!-- Category 2: Towels -->
+                        <a href="{{ route('products.index', ['category' => 'towels']) }}" class="flex flex-col items-center group">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#F8EAF3] group-hover:bg-[#fde4f2] transition-colors flex items-center justify-center text-[#22121E] border border-black/5 shadow-2xs">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7H5a2 2 0 00-2 2v1a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2zM19 12H5a2 2 0 00-2 2v1a2 2 0 002 2h14a2 2 0 002-2v-1a2 2 0 00-2-2zM19 17H5a2 2 0 00-2 2v1a2 2 0 002 2h14a2 2 0 002-2v-1a2 2 0 00-2-2z"/>
+                                </svg>
+                            </div>
+                            <span class="mt-1.5 text-[11px] sm:text-xs font-semibold text-[#22121E] group-hover:text-[#e68bbe] transition-colors">
+                                Towels
+                            </span>
+                        </a>
+
+                        <!-- Category 3: Table Linen -->
+                        <a href="{{ route('products.index', ['category' => 'table-decor']) }}" class="flex flex-col items-center group">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#F8EAF3] group-hover:bg-[#fde4f2] transition-colors flex items-center justify-center text-[#22121E] border border-black/5 shadow-2xs">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <rect x="3" y="6" width="18" height="12" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 11h18M8 6v12M16 6v12"/>
+                                </svg>
+                            </div>
+                            <span class="mt-1.5 text-[11px] sm:text-xs font-semibold text-[#22121E] group-hover:text-[#e68bbe] transition-colors whitespace-nowrap">
+                                Table Linen
+                            </span>
+                        </a>
+
+                        <!-- Category 4: Rugs -->
+                        <a href="{{ route('products.index', ['category' => 'rugs']) }}" class="flex flex-col items-center group">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#F8EAF3] group-hover:bg-[#fde4f2] transition-colors flex items-center justify-center text-[#22121E] border border-black/5 shadow-2xs">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                    <rect x="4" y="5" width="16" height="14" rx="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16M7 5v14M17 5v14M2 7h2M2 12h2M2 17h2M20 7h2M20 12h2M20 17h2"/>
+                                </svg>
+                            </div>
+                            <span class="mt-1.5 text-[11px] sm:text-xs font-semibold text-[#22121E] group-hover:text-[#e68bbe] transition-colors">
+                                Rugs
+                            </span>
+                        </a>
+
+                    </div>
+
+                    <!-- 3 Pagination Indicator Dots Underneath Categories -->
+                    <div class="mt-3.5 flex items-center justify-center gap-1.5">
+                        <span class="w-3.5 h-1.5 rounded-full bg-[#22121E]"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#e68bbe]/70"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#f4b8da]"></span>
+                    </div>
+                </div>
+            </x-reveal>
 
         </div>
 
