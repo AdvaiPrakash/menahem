@@ -77,12 +77,12 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon-192x192.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-    <meta name="theme-color" content="#353819">
+    <meta name="theme-color" content="#23121F">
 
-    <!-- Google Web Fonts (Cormorant Garamond & Plus Jakarta Sans) -->
+    <!-- Google Web Fonts (Playfair Display & Plus Jakarta Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- JSON-LD Structured Data safely encoded from PHP array -->
     <script type="application/ld+json">
@@ -91,7 +91,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[var(--color-canvas)] text-[var(--color-charcoal)] font-sans antialiased relative selection:bg-[#AC9661] selection:text-white">
+<body class="bg-[var(--color-canvas)] text-[var(--color-charcoal)] font-sans antialiased relative selection:bg-[#e68bbe] selection:text-white">
     {{ $slot }}
 </body>
 </html>

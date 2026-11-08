@@ -79,11 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateNavbar = () => {
             const scrollY = window.scrollY;
             if (scrollY > 50) {
-                navbar.classList.add('scrolled', 'py-2');
-                navbar.classList.remove('py-4');
+                navbar.classList.add('scrolled', 'shadow-lg');
             } else {
-                navbar.classList.remove('scrolled', 'py-2');
-                navbar.classList.add('py-4');
+                navbar.classList.remove('scrolled', 'shadow-lg');
             }
             lastScrollY = scrollY;
             ticking = false;

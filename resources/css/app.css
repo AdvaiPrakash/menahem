@@ -2,34 +2,41 @@
 
 @theme {
   /* Exact User Provided Brand Palette */
-  /* Camel: #AC9661 | Dark Khaki: #353819 | Dark Khaki 2: #373511 | Dark Khaki 3: #3D3E1C | Dark Khaki 4: #3B3C1A */
-  --color-camel: #AC9661;             /* Primary Camel Accent, Buttons, Badges */
-  --color-camel-hover: #937f4f;       /* Camel Hover State */
-  --color-camel-light: #f7f4ea;       /* Subtle Camel Light Tint */
-  --color-camel-subtle: rgba(172, 150, 97, 0.16);
+  /* Color 1: #fde4f2 | Color 2: #f9cee7 | Color 3: #f4b8da | Color 4: #eea1cd | Color 5: #e68bbe */
+  --color-rose-1: #fde4f2;            /* Lightest Pale Blush / Whisper Rose */
+  --color-rose-2: #f9cee7;            /* Soft Petal Pink */
+  --color-rose-3: #f4b8da;            /* Muted Blossom Pink */
+  --color-rose-4: #eea1cd;            /* Medium Peony Rose */
+  --color-rose-5: #e68bbe;            /* Deep Vibrant Peony / Rose Accent */
 
-  --color-khaki-1: #353819;           /* Dark Khaki (Announcement Bar, Primary Dark) */
-  --color-khaki-2: #373511;           /* Dark Khaki 2 (Footer, Deep Accent) */
-  --color-khaki-3: #3D3E1C;           /* Dark Khaki 3 (Promo Panels) */
-  --color-khaki-4: #3B3C1A;           /* Dark Khaki 4 (Cards, Dark Surface) */
+  --color-camel: #e68bbe;             /* Primary Rose Accent, Buttons, Badges */
+  --color-camel-hover: #d272a8;       /* Rose Hover State */
+  --color-camel-light: #fde4f2;       /* Subtle Rose Light Tint */
+  --color-camel-subtle: rgba(230, 139, 190, 0.16);
 
-  --color-canvas: #faf9f5;            /* Warm Off-White / Natural Linen Canvas */
-  --color-card-bg: #f3efe6;           /* Soft Camel-Tinted Card Background */
-  --color-charcoal: #212411;          /* High Contrast Dark Khaki Heading Text */
-  --color-subtext: #595b45;           /* Clean Muted Khaki Subtext */
-  --color-border-subtle: rgba(53, 56, 25, 0.12); /* Delicate Khaki Divider */
-  --color-star: #AC9661;              /* Rating Stars in Brand Camel */
+  --color-khaki-1: #23121F;           /* Deep Velvet Plum (Announcement Bar, Primary Dark) */
+  --color-khaki-2: #1D0B19;           /* Deepest Velvet Noir (Footer, Deep Accent) */
+  --color-khaki-3: #2C1628;           /* Rich Velvet Plum (Promo Panels) */
+  --color-khaki-4: #341B2E;           /* Velvet Dark Surface (Cards) */
+
+  --color-canvas: #FCF8FA;            /* Crisp Rose-Alabaster Luxury Canvas */
+  --color-card-bg: #F8EAF3;           /* Soft Rose-Tinted Card Background */
+  --color-charcoal: #22121E;          /* High Contrast Velvet Noir Heading Text */
+  --color-subtext: #6E5666;           /* Clean Muted Rose-Plum Subtext */
+  --color-border-subtle: rgba(35, 18, 31, 0.10); /* Delicate Divider */
+  --color-star: #e68bbe;              /* Rating Stars in Brand Peony Rose */
 
   /* Legacy variable mapping to keep full backward compatibility */
-  --color-olive-dark: #353819;
-  --color-olive-card: #3D3E1C;
-  --color-amber-brown: #AC9661;
-  --color-amber-hover: #937f4f;
-  --color-amber-light: #f7f4ea;
+  --color-olive-dark: #23121F;
+  --color-olive-card: #2C1628;
+  --color-amber-brown: #e68bbe;
+  --color-amber-hover: #d272a8;
+  --color-amber-light: #fde4f2;
 
   /* Fonts */
-  --font-display: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 
   /* Geometry */
   --radius-pill: 9999px;
@@ -44,20 +51,20 @@
 body {
   background-color: var(--color-canvas);
   color: var(--color-charcoal);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
 }
 
 ::selection {
-  background-color: #AC9661;
+  background-color: #e68bbe;
   color: #ffffff;
 }
 
 /* Glassmorphism */
 @utility glass {
-  background: rgba(250, 249, 245, 0.94);
+  background: rgba(252, 248, 250, 0.94);
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
   border-bottom: 1px solid var(--color-border-subtle);
@@ -71,6 +78,34 @@ body {
   color: var(--color-camel);
 }
 
+/* Fail-safe Brand Logo Sizing */
+.site-logo {
+  width: 50px !important;
+  height: 50px !important;
+  max-width: 50px !important;
+  max-height: 50px !important;
+  object-fit: contain !important;
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .site-logo {
+    width: 54px !important;
+    height: 54px !important;
+    max-width: 54px !important;
+    max-height: 54px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-logo {
+    width: 58px !important;
+    height: 58px !important;
+    max-width: 58px !important;
+    max-height: 58px !important;
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
@@ -79,7 +114,7 @@ body {
   background: var(--color-canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(172, 150, 97, 0.35);
+  background: rgba(230, 139, 190, 0.35);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -111,6 +146,42 @@ html.lenis, html.lenis body {
   transform: translateY(0);
 }
 
+/* Vertical Counter-Marquee Animations */
+@keyframes heroScrollUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes heroScrollDown {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-marquee-up {
+  animation: heroScrollUp 26s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-down {
+  animation: heroScrollDown 26s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-up:hover,
+.animate-marquee-down:hover,
+.hero-marquee-container:hover .animate-marquee-up,
+.hero-marquee-container:hover .animate-marquee-down {
+  animation-play-state: paused;
+}
+
 /* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
@@ -122,5 +193,9 @@ html.lenis, html.lenis body {
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
+  }
+  .animate-marquee-up,
+  .animate-marquee-down {
+    animation: none !important;
   }
 }
