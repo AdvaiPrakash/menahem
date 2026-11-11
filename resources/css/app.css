@@ -146,7 +146,49 @@ html.lenis, html.lenis body {
   transform: translateY(0);
 }
 
-/* Vertical Counter-Marquee Animations */
+/* Horizontal Counter-Marquee Animations (Left & Right) */
+@keyframes heroScrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes heroScrollRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  animation: heroScrollLeft 34s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-right {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  animation: heroScrollRight 34s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover,
+.hero-marquee-container:hover .animate-marquee-left,
+.hero-marquee-container:hover .animate-marquee-right {
+  animation-play-state: paused;
+}
+
+/* Vertical Counter-Marquee Animations (Retained for backward compatibility) */
 @keyframes heroScrollUp {
   0% {
     transform: translateY(0);
@@ -195,7 +237,9 @@ html.lenis, html.lenis body {
     transform: none !important;
   }
   .animate-marquee-up,
-  .animate-marquee-down {
+  .animate-marquee-down,
+  .animate-marquee-left,
+  .animate-marquee-right {
     animation: none !important;
   }
 }

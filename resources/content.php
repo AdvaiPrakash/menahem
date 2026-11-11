@@ -156,7 +156,7 @@ return [
                 'reviews' => 178,
                 'badge' => 'Bestseller',
                 'desc' => 'Silk and linen blend texture with breathable weave and matching pillow covers',
-                'image' => '/images/categories/bedsheets.webp',
+                'image' => '/images/products/bedsheet-set.webp',
             ],
             [
                 'id' => 2,
@@ -171,7 +171,7 @@ return [
                 'reviews' => 142,
                 'badge' => 'Sale',
                 'desc' => 'Light-filtering tailored blackout drapes with rust-free antique brass eyelets',
-                'image' => '/images/categories/curtains.webp',
+                'image' => '/images/products/curtains-blackout.webp',
             ],
             [
                 'id' => 3,
@@ -186,7 +186,7 @@ return [
                 'reviews' => 64,
                 'badge' => 'New',
                 'desc' => 'Handcrafted botanical table runner with 6 matching placemats and tassel fringe',
-                'image' => '/images/categories/table-decor.webp',
+                'image' => '/images/products/table-runner.webp',
             ],
             [
                 'id' => 4,
@@ -201,7 +201,7 @@ return [
                 'reviews' => 96,
                 'badge' => 'Sale',
                 'desc' => 'Textured combed cotton waffle weave designed to drape softly and protect upholstery',
-                'image' => '/images/categories/sofa-decor.webp',
+                'image' => '/images/products/sofa-throw.webp',
             ],
             [
                 'id' => 5,
@@ -216,7 +216,7 @@ return [
                 'reviews' => 112,
                 'badge' => 'Bestseller',
                 'desc' => '600 GSM zero-twist quick-dry Turkish cotton with ultra-soft plush texture',
-                'image' => '/images/categories/towels.webp',
+                'image' => '/images/products/towels-luxury.webp',
             ],
             [
                 'id' => 6,
@@ -231,7 +231,7 @@ return [
                 'reviews' => 58,
                 'badge' => 'New',
                 'desc' => 'Handcrafted geometric floor rug with natural wool fibers and Dark Khaki accents',
-                'image' => '/images/categories/rugs.webp',
+                'image' => '/images/products/rugs-artisan.webp',
             ],
         ],
     ],
@@ -241,7 +241,7 @@ return [
         'title' => 'Menahem Collection',
         'subtitle' => 'Explore The Curated Collection of Menahem',
         'description' => 'Thoughtfully crafted home essentials designed to bring comfort, style, and everyday luxury to your living spaces.',
-        'banner_image' => '/images/hero/hero-lifestyle.webp',
+        'banner_image' => '/images/products/hero-curated.webp',
         'filters' => [
             'categories' => [
                 ['name' => 'Bedsheets', 'slug' => 'bedsheets', 'count' => 3],
@@ -278,7 +278,7 @@ return [
                 'reviews' => 178,
                 'badge' => 'Bestseller',
                 'desc' => 'Silk and linen blend texture with breathable weave and matching pillow covers',
-                'image' => '/images/categories/bedsheets.webp',
+                'image' => '/images/products/bedsheet-set.webp',
             ],
             [
                 'id' => 2,
@@ -293,7 +293,7 @@ return [
                 'reviews' => 142,
                 'badge' => 'Sale',
                 'desc' => 'Light-filtering tailored blackout drapes with rust-free antique brass eyelets',
-                'image' => '/images/categories/curtains.webp',
+                'image' => '/images/products/curtains-blackout.webp',
             ],
             [
                 'id' => 3,
@@ -308,7 +308,7 @@ return [
                 'reviews' => 64,
                 'badge' => 'New',
                 'desc' => 'Handcrafted botanical table runner with 6 matching placemats and tassel fringe',
-                'image' => '/images/categories/table-decor.webp',
+                'image' => '/images/products/table-runner.webp',
             ],
             [
                 'id' => 4,
@@ -323,7 +323,7 @@ return [
                 'reviews' => 96,
                 'badge' => 'Sale',
                 'desc' => 'Textured combed cotton waffle weave designed to drape softly and protect upholstery',
-                'image' => '/images/categories/sofa-decor.webp',
+                'image' => '/images/products/sofa-throw.webp',
             ],
             [
                 'id' => 5,
@@ -338,7 +338,7 @@ return [
                 'reviews' => 112,
                 'badge' => 'Bestseller',
                 'desc' => '600 GSM zero-twist quick-dry Turkish cotton with ultra-soft plush texture',
-                'image' => '/images/categories/towels.webp',
+                'image' => '/images/products/towels-luxury.webp',
             ],
             [
                 'id' => 6,
@@ -353,7 +353,7 @@ return [
                 'reviews' => 58,
                 'badge' => 'New',
                 'desc' => 'Handcrafted geometric floor rug with natural wool fibers and Dark Khaki accents',
-                'image' => '/images/categories/rugs.webp',
+                'image' => '/images/products/rugs-artisan.webp',
             ],
             [
                 'id' => 7,
@@ -368,7 +368,7 @@ return [
                 'reviews' => 82,
                 'badge' => 'Bestseller',
                 'desc' => 'Featherlight 3-layer summer dohar with hypoallergenic microfiber fill',
-                'image' => '/images/categories/dohars-quilts.webp',
+                'image' => '/images/products/dohar-quilt.webp',
             ],
             [
                 'id' => 8,
@@ -383,7 +383,7 @@ return [
                 'reviews' => 94,
                 'badge' => 'Sale',
                 'desc' => 'Fitted elastic skirt with noiseless waterproof membrane and cooling surface',
-                'image' => '/images/categories/bed-protectors.webp',
+                'image' => '/images/products/bed-protector.webp',
             ],
             [
                 'id' => 9,
@@ -398,7 +398,7 @@ return [
                 'reviews' => 76,
                 'badge' => 'New',
                 'desc' => 'Diffuses gentle daylight while maintaining daytime privacy and airflow',
-                'image' => '/images/categories/curtains.webp',
+                'image' => '/images/products/curtains-sheer.webp',
             ],
             [
                 'id' => 10,
@@ -413,7 +413,7 @@ return [
                 'reviews' => 49,
                 'badge' => null,
                 'desc' => 'Stain-resistant botanical pattern crafted for 6 to 8-seater dining tables',
-                'image' => '/images/categories/table-decor.webp',
+                'image' => '/images/products/table-cloth.webp',
             ],
             [
                 'id' => 11,
@@ -428,7 +428,7 @@ return [
                 'reviews' => 52,
                 'badge' => null,
                 'desc' => 'Silicone anti-slip backing with deep side utility pockets for remotes',
-                'image' => '/images/categories/sofa-decor.webp',
+                'image' => '/images/products/sofa-cover.webp',
             ],
             [
                 'id' => 12,
@@ -443,7 +443,7 @@ return [
                 'reviews' => 68,
                 'badge' => 'Sale',
                 'desc' => 'High-density ribbed texture for rapid drying and everyday spa softness',
-                'image' => '/images/categories/towels.webp',
+                'image' => '/images/products/towels-ribbed.webp',
             ],
         ],
     ],

@@ -68,12 +68,12 @@
                     return 'https://wa.me/919876543210?text=' + msg;
                 }
             }"
-            class="pt-38 sm:pt-42 lg:pt-46 pb-20 bg-[#FCF8FA] min-h-screen text-[#22121E]"
+            class="pt-24 sm:pt-28 lg:pt-30 pb-20 bg-[#FCF8FA] min-h-screen text-[#22121E]"
         >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                <!-- Breadcrumbs Navigation: Generous, balanced distance below the fixed olive navbar -->
-                <nav class="flex items-center flex-wrap gap-2 text-xs text-[#6E5666] mb-8 sm:mb-10 font-medium" aria-label="Breadcrumb">
+                <!-- Breadcrumbs Navigation: Clean, aligned distance below the fixed navbar -->
+                <nav class="flex items-center flex-wrap gap-2 text-xs text-[#6E5666] mb-5 sm:mb-6 font-medium" aria-label="Breadcrumb">
                     <a href="{{ route('home') }}" class="hover:text-[#e68bbe] transition-colors flex items-center gap-1.5 group">
                         <svg class="w-3.5 h-3.5 opacity-70 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
@@ -92,7 +92,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-20">
 
                     <!-- Left: Gallery Showcase (Sticky on scroll so thumbnails & preview stay in view) -->
-                    <div class="lg:col-span-6 lg:sticky lg:top-36 self-start space-y-4">
+                    <div class="lg:col-span-6 lg:sticky lg:top-30 self-start space-y-4">
                         <div class="flex flex-col-reverse sm:flex-row gap-3.5 sm:gap-4 items-start">
                             
                             <!-- Picture Changing Thumbnails Strip (Left column on sm+, horizontal on mobile) -->

@@ -7,107 +7,111 @@
     $brand = $content['BRAND'] ?? [];
     $whatsappUrl = $brand['whatsapp_url'] ?? '#';
 
-    // Column 1 (Scrolls UPWARD): Curated cards duplicated for seamless infinite loop
-    $col1Cards = [
+    // Row 1 (Scrolls LEFTSIDE): Curated cards duplicated for seamless infinite loop
+    $row1Cards = [
         [
             'id' => 2,
             'title' => 'Custom Linen Drapes',
             'category' => 'Living Room',
             'chip' => '100% Belgian Flax Weave',
-            'action_label' => 'Explore Drapes',
-            'image' => '/images/categories/curtains.webp',
+            'image' => '/images/products/curtains-blackout.webp',
             'alt' => 'Luxury Curtains & Drapes',
-            'price' => '₹1,899',
+            'price' => '₹1,299',
             'badge' => '★ 4.9',
-            'height' => 'h-[290px] sm:h-[310px]',
         ],
         [
             'id' => 1,
             'title' => 'Embroidered Bed Linen',
             'category' => 'Bedroom Edit',
             'chip' => '400TC Sateen Weave',
-            'action_label' => 'View Linens',
-            'image' => '/images/categories/bedsheets.webp',
+            'image' => '/images/products/bedsheet-set.webp',
             'alt' => 'Embroidered Pure Cotton Bed Linen',
             'price' => '₹1,499',
-            'badge' => '★ 4.9',
-            'height' => 'h-[310px] sm:h-[330px]',
+            'badge' => 'Bestseller',
         ],
         [
-            'id' => 1,
+            'id' => 7,
             'title' => 'Artisanal Mulmul Dohars',
             'category' => 'Bedroom Edit',
             'chip' => 'Reversible 3-Layer Mulmul',
-            'action_label' => 'View Dohars',
-            'image' => '/images/categories/dohars-quilts.webp',
+            'image' => '/images/products/dohar-quilt.webp',
             'alt' => 'Mulmul Cotton Dohars',
-            'price' => '₹1,699',
-            'badge' => 'Bestseller',
-            'height' => 'h-[330px] sm:h-[350px]',
+            'price' => '₹1,799',
+            'badge' => '★ 4.9',
         ],
         [
             'id' => 4,
             'title' => 'Designer Sofa Throws',
             'category' => 'Comfort Living',
             'chip' => 'Textured Jacquard Blend',
-            'action_label' => 'Shop Throws',
-            'image' => '/images/categories/sofa-decor.webp',
+            'image' => '/images/products/sofa-throw.webp',
             'alt' => 'Designer Sofa Decor',
             'price' => '₹899',
             'badge' => 'New In',
-            'height' => 'h-[280px] sm:h-[300px]',
+        ],
+        [
+            'id' => 9,
+            'title' => 'Translucent Sheer Voiles',
+            'category' => 'Living Room',
+            'chip' => 'Sunlight Diffusing Linen',
+            'image' => '/images/products/curtains-sheer.webp',
+            'alt' => 'Sheer Linen Living Room Drapes',
+            'price' => '₹1,149',
+            'badge' => 'Trending',
         ],
     ];
 
-    // Column 2 (Scrolls DOWNWARD): Curated cards duplicated for seamless infinite loop
-    $col2Cards = [
+    // Row 2 (Scrolls RIGHTSIDE): Curated cards duplicated for seamless infinite loop
+    $row2Cards = [
         [
             'id' => 5,
             'title' => '600 GSM Combed Cotton',
             'category' => 'Bath & Wellness',
-            'chip' => '600 GSM Combed Cotton',
-            'action_label' => 'Try Out',
-            'image' => '/images/categories/towels.webp',
+            'chip' => 'Turkish Terry Weave',
+            'image' => '/images/products/towels-luxury.webp',
             'alt' => 'Luxury Bath Towels',
             'price' => '₹699',
             'badge' => 'BESTSELLER',
-            'height' => 'h-[310px] sm:h-[330px]',
         ],
         [
             'id' => 6,
-            'title' => 'Woven Cotton Rugs',
+            'title' => 'Woven Wool & Jute Rugs',
             'category' => 'Floor Accents',
             'chip' => 'Hand-Knotted Geometric',
-            'action_label' => 'Discover Rugs',
-            'image' => '/images/categories/rugs.webp',
+            'image' => '/images/products/rugs-artisan.webp',
             'alt' => 'Handcrafted Rugs',
-            'price' => '₹2,199',
-            'badge' => 'TRY OUT ↗',
-            'height' => 'h-[320px] sm:h-[340px]',
+            'price' => '₹2,499',
+            'badge' => '★ 5.0',
         ],
         [
             'id' => 3,
-            'title' => 'Handcrafted Table Linens',
+            'title' => 'Handcrafted Table Runner',
             'category' => 'Dining Suite',
             'chip' => 'Stain-Resistant Pure Linen',
-            'action_label' => 'Shop Dining',
-            'image' => '/images/categories/table-decor.webp',
+            'image' => '/images/products/table-runner.webp',
             'alt' => 'Table Runners & Mats',
             'price' => '₹799',
             'badge' => 'ARTISANAL',
-            'height' => 'h-[280px] sm:h-[300px]',
         ],
         [
-            'id' => 1,
-            'title' => 'Curated Living Showcase',
-            'category' => 'Signature Collection',
-            'chip' => 'Bespoke Interior Harmony',
-            'action_label' => 'Explore All',
-            'image' => '/images/hero/hero-lifestyle.webp',
-            'alt' => 'Menahem Curated Living Showcase',
-            'price' => '₹2,499',
-            'badge' => '★ 5.0',
-            'height' => 'h-[340px] sm:h-[360px]',
+            'id' => 10,
+            'title' => 'Botanical Table Cloth',
+            'category' => 'Dining Suite',
+            'chip' => 'Hand-Block Floral Linen',
+            'image' => '/images/products/table-cloth.webp',
+            'alt' => 'Artisan Block Print Dining Table Cloth',
+            'price' => '₹899',
+            'badge' => '★ 4.9',
+        ],
+        [
+            'id' => 11,
+            'title' => 'Quilted Sofa Protector',
+            'category' => 'Comfort Living',
+            'chip' => 'Anti-Slip Velvet Backing',
+            'image' => '/images/products/sofa-cover.webp',
+            'alt' => 'Quilted Anti-Slip Sofa Cover Set',
+            'price' => '₹1,299',
+            'badge' => 'POPULAR',
         ],
     ];
 @endphp
@@ -116,11 +120,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- ===================================================================
-             MOBILE-ONLY LAYOUT (< lg): Matches User's Reference Screenshot
+             MOBILE-ONLY LAYOUT (< lg)
              1. Centered Hero Typography (Eyebrow, Title, Description, 2 Buttons)
-             2. 2-Column Vertical Scrolling Gallery (The Image Sliding Portion)
-             3. 4 Categories Attached Just Behind (Below) The Image Sliding Portion
-             (Wired with scroll-motion reveal curves and smooth stagger)
+             2. 2-Row Horizontal Counter-Marquee Gallery (Leftside & Rightside)
+             3. 4 Categories Attached Directly Underneath
              =================================================================== -->
         <div class="lg:hidden flex flex-col items-center text-center">
             
@@ -170,190 +173,165 @@
                 </div>
             </x-reveal>
 
-            <!-- 5. Two-Column Vertical Masonry-Style Gallery (The Image Sliding Portion) -->
-            <!-- Left column scrolls UPWARD, Right column scrolls DOWNWARD, Portrait 3:4 cards -->
+            <!-- 5. Two-Row Horizontal Counter-Marquee Gallery (Leftside & Rightside) -->
             <x-reveal delay="250" class="w-full">
-                <div class="mt-6 w-full max-w-sm sm:max-w-md mx-auto">
-                    <div class="relative h-[530px] sm:h-[580px] overflow-hidden rounded-[26px] sm:rounded-[30px] bg-[#F8EAF3]/35 border border-[#23121F]/10 p-2 sm:p-2.5 shadow-sm">
+                <div class="mt-6 w-full max-w-xl mx-auto">
+                    <div class="hero-marquee-container relative overflow-hidden rounded-[26px] sm:rounded-[30px] bg-[#F8EAF3]/35 border border-[#23121F]/10 py-3 sm:py-3.5 shadow-sm">
                         
-                        <!-- Top Soft Vignette Mask -->
-                        <div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#FCF8FA] via-[#FCF8FA]/80 to-transparent z-20 pointer-events-none"></div>
+                        <!-- Left Soft Vignette Mask -->
+                        <div class="absolute top-0 bottom-0 left-0 w-12 sm:w-16 bg-gradient-to-r from-[#FCF8FA] via-[#FCF8FA]/85 to-transparent z-20 pointer-events-none"></div>
                         
-                        <!-- Bottom Soft Vignette Mask -->
-                        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#FCF8FA] via-[#FCF8FA]/80 to-transparent z-20 pointer-events-none"></div>
+                        <!-- Right Soft Vignette Mask -->
+                        <div class="absolute top-0 bottom-0 right-0 w-12 sm:w-16 bg-gradient-to-l from-[#FCF8FA] via-[#FCF8FA]/85 to-transparent z-20 pointer-events-none"></div>
 
-                        <!-- Dual Opposite-Direction Vertical Columns Container -->
-                        <div class="grid grid-cols-2 gap-2.5 sm:gap-3 h-full overflow-hidden">
+                        <!-- Dual Opposite-Direction Horizontal Rows Container -->
+                        <div class="flex flex-col gap-2.5 sm:gap-3 overflow-hidden">
                             
-                            <!-- LEFT COLUMN: Scrolls UPWARD from bottom to top -->
-                            <div class="flex flex-col gap-2.5 sm:gap-3 animate-marquee-up hover:[animation-play-state:paused]">
+                            <!-- ROW 1: Scrolls LEFTSIDE from right to left -->
+                            <div class="animate-marquee-left flex flex-row gap-2.5 sm:gap-3 hover:[animation-play-state:paused]">
                                 
                                 <!-- Set 1 (Original) -->
-                                @foreach($col1Cards as $idx => $item)
-                                    <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0">
-                                        <!-- Portrait Background Image -->
+                                @foreach($row1Cards as $item)
+                                    <a
+                                        href="{{ route('products.show', $item['id']) }}"
+                                        title="{{ $item['title'] }}"
+                                        class="relative w-[210px] sm:w-[235px] h-[170px] sm:h-[185px] rounded-[20px] sm:rounded-[22px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
+                                    >
+                                        <!-- Background Image -->
                                         <img
                                             src="{{ asset($item['image']) }}"
                                             alt="{{ $item['alt'] }}"
                                             loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                                         />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 transition-opacity duration-300 group-hover:opacity-90"></div>
 
-                                        <!-- Top Spacer -->
-                                        <div></div>
+                                        <!-- Top Row: Badge & Price -->
+                                        <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between pointer-events-none">
+                                            <span class="px-2 py-0.5 rounded-full bg-[#23121F]/80 backdrop-blur-md text-white text-[9px] font-bold tracking-wider uppercase border border-white/20">
+                                                {{ $item['badge'] }}
+                                            </span>
+                                            <span class="px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[#22121E] text-[10px] font-bold shadow-xs">
+                                                {{ $item['price'] }}
+                                            </span>
+                                        </div>
 
                                         <!-- Bottom Action Pill: Floating dark pill with title & arrow -->
-                                        <div class="relative z-10 p-2 sm:p-2.5">
-                                            <a
-                                                href="{{ route('products.show', $item['id']) }}"
-                                                class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
-                                            >
+                                        <div class="relative z-10 p-2 sm:p-2.5 pointer-events-none">
+                                            <div class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 group-hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all">
                                                 <span class="truncate">{{ $item['title'] }}</span>
-                                                <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <!-- Upward Scroll Indicator Pill between Card 1 and Card 2 -->
-                                    @if($idx === 0)
-                                        <div class="flex justify-center -my-2 relative z-20 pointer-events-none">
-                                            <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
-                                                </svg>
+                                                <span class="text-[10px] text-[#e68bbe] font-mono group-hover:translate-x-0.5 transition-transform">↗</span>
                                             </div>
                                         </div>
-                                    @endif
+                                    </a>
                                 @endforeach
 
                                 <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
-                                @foreach($col1Cards as $idx => $item)
-                                    <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0" aria-hidden="true">
+                                @foreach($row1Cards as $item)
+                                    <a
+                                        href="{{ route('products.show', $item['id']) }}"
+                                        title="{{ $item['title'] }}"
+                                        aria-hidden="true"
+                                        tabindex="-1"
+                                        class="relative w-[210px] sm:w-[235px] h-[170px] sm:h-[185px] rounded-[20px] sm:rounded-[22px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
+                                    >
                                         <img
                                             src="{{ asset($item['image']) }}"
                                             alt="{{ $item['alt'] }}"
                                             loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                                         />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 transition-opacity duration-300 group-hover:opacity-90"></div>
 
-                                        <div></div>
-
-                                        <div class="relative z-10 p-2 sm:p-2.5">
-                                            <a
-                                                href="{{ route('products.show', $item['id']) }}"
-                                                class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
-                                            >
-                                                <span class="truncate">{{ $item['title'] }}</span>
-                                                <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
-                                            </a>
+                                        <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between pointer-events-none">
+                                            <span class="px-2 py-0.5 rounded-full bg-[#23121F]/80 backdrop-blur-md text-white text-[9px] font-bold tracking-wider uppercase border border-white/20">
+                                                {{ $item['badge'] }}
+                                            </span>
+                                            <span class="px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[#22121E] text-[10px] font-bold shadow-xs">
+                                                {{ $item['price'] }}
+                                            </span>
                                         </div>
-                                    </div>
 
-                                    @if($idx === 0)
-                                        <div class="flex justify-center -my-2 relative z-20 pointer-events-none" aria-hidden="true">
-                                            <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
-                                                </svg>
+                                        <div class="relative z-10 p-2 sm:p-2.5 pointer-events-none">
+                                            <div class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 group-hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all">
+                                                <span class="truncate">{{ $item['title'] }}</span>
+                                                <span class="text-[10px] text-[#e68bbe] font-mono group-hover:translate-x-0.5 transition-transform">↗</span>
                                             </div>
                                         </div>
-                                    @endif
+                                    </a>
                                 @endforeach
 
                             </div>
 
-                            <!-- RIGHT COLUMN: Scrolls DOWNWARD from top to bottom -->
-                            <div class="flex flex-col gap-2.5 sm:gap-3 animate-marquee-down hover:[animation-play-state:paused]">
+                            <!-- ROW 2: Scrolls RIGHTSIDE from left to right -->
+                            <div class="animate-marquee-right flex flex-row gap-2.5 sm:gap-3 hover:[animation-play-state:paused]">
                                 
                                 <!-- Set 1 (Original) -->
-                                @foreach($col2Cards as $idx => $item)
-                                    <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0">
+                                @foreach($row2Cards as $item)
+                                    <a
+                                        href="{{ route('products.show', $item['id']) }}"
+                                        title="{{ $item['title'] }}"
+                                        class="relative w-[210px] sm:w-[235px] h-[170px] sm:h-[185px] rounded-[20px] sm:rounded-[22px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
+                                    >
                                         <img
                                             src="{{ asset($item['image']) }}"
                                             alt="{{ $item['alt'] }}"
                                             loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                                         />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 transition-opacity duration-300 group-hover:opacity-90"></div>
 
-                                        <!-- Top Badges Row -->
-                                        <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between">
+                                        <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between pointer-events-none">
                                             <span class="px-2 py-0.5 rounded-full {{ $item['badge'] === 'BESTSELLER' ? 'bg-[#23121F]/80 text-white' : 'bg-[#e68bbe] text-white' }} backdrop-blur-md text-[9px] font-bold tracking-wider uppercase border border-white/20">
                                                 {{ $item['badge'] }}
                                             </span>
-                                            
-                                            <!-- Wishlist Heart Icon Button -->
-                                            <span class="w-6 h-6 rounded-full bg-black/30 backdrop-blur-md text-white flex items-center justify-center text-[10px] hover:bg-white hover:text-[#22121E] transition-colors">
-                                                ♡
+                                            <span class="px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[#22121E] text-[10px] font-bold shadow-xs">
+                                                {{ $item['price'] }}
                                             </span>
                                         </div>
 
-                                        <!-- Bottom Action Pill -->
-                                        <div class="relative z-10 p-2 sm:p-2.5">
-                                            <a
-                                                href="{{ route('products.show', $item['id']) }}"
-                                                class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
-                                            >
+                                        <div class="relative z-10 p-2 sm:p-2.5 pointer-events-none">
+                                            <div class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 group-hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all">
                                                 <span class="truncate">{{ $item['title'] }}</span>
-                                                <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <!-- Downward Scroll Indicator Pill between Card 1 and Card 2 -->
-                                    @if($idx === 0)
-                                        <div class="flex justify-center -my-2 relative z-20 pointer-events-none">
-                                            <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                                </svg>
+                                                <span class="text-[10px] text-[#e68bbe] font-mono group-hover:translate-x-0.5 transition-transform">↗</span>
                                             </div>
                                         </div>
-                                    @endif
+                                    </a>
                                 @endforeach
 
                                 <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
-                                @foreach($col2Cards as $idx => $item)
-                                    <div class="relative w-full aspect-[3/4] rounded-[22px] sm:rounded-[24px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0" aria-hidden="true">
+                                @foreach($row2Cards as $item)
+                                    <a
+                                        href="{{ route('products.show', $item['id']) }}"
+                                        title="{{ $item['title'] }}"
+                                        aria-hidden="true"
+                                        tabindex="-1"
+                                        class="relative w-[210px] sm:w-[235px] h-[170px] sm:h-[185px] rounded-[20px] sm:rounded-[22px] overflow-hidden bg-white shadow-md border border-white/70 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
+                                    >
                                         <img
                                             src="{{ asset($item['image']) }}"
                                             alt="{{ $item['alt'] }}"
                                             loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                                         />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/5 pointer-events-none"></div>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 transition-opacity duration-300 group-hover:opacity-90"></div>
 
-                                        <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between">
+                                        <div class="relative z-10 p-2 sm:p-2.5 flex items-center justify-between pointer-events-none">
                                             <span class="px-2 py-0.5 rounded-full {{ $item['badge'] === 'BESTSELLER' ? 'bg-[#23121F]/80 text-white' : 'bg-[#e68bbe] text-white' }} backdrop-blur-md text-[9px] font-bold tracking-wider uppercase border border-white/20">
                                                 {{ $item['badge'] }}
                                             </span>
-                                            <span class="w-6 h-6 rounded-full bg-black/30 backdrop-blur-md text-white flex items-center justify-center text-[10px]">
-                                                ♡
+                                            <span class="px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[#22121E] text-[10px] font-bold shadow-xs">
+                                                {{ $item['price'] }}
                                             </span>
                                         </div>
 
-                                        <div class="relative z-10 p-2 sm:p-2.5">
-                                            <a
-                                                href="{{ route('products.show', $item['id']) }}"
-                                                class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all group/btn"
-                                            >
+                                        <div class="relative z-10 p-2 sm:p-2.5 pointer-events-none">
+                                            <div class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-full bg-[#23121F]/90 group-hover:bg-[#23121F] backdrop-blur-md text-white border border-white/20 text-[10px] sm:text-[11px] font-semibold transition-all">
                                                 <span class="truncate">{{ $item['title'] }}</span>
-                                                <span class="text-[9px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">›</span>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    @if($idx === 0)
-                                        <div class="flex justify-center -my-2 relative z-20 pointer-events-none" aria-hidden="true">
-                                            <div class="w-7 h-7 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-black/5 flex items-center justify-center text-[#22121E]">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                                </svg>
+                                                <span class="text-[10px] text-[#e68bbe] font-mono group-hover:translate-x-0.5 transition-transform">↗</span>
                                             </div>
                                         </div>
-                                    @endif
+                                    </a>
                                 @endforeach
 
                             </div>
@@ -433,13 +411,15 @@
         </div>
 
         <!-- ===================================================================
-             DESKTOP-ONLY LAYOUT (lg:grid): Exactly Preserved Without Any Modification
-             Left Editorial Column + Floating Quick-Action Pill + Right Dual Marquee
+             DESKTOP-ONLY LAYOUT (lg:grid)
+             Left Column: Editorial Typography & Dual Action Buttons
+             Center Column: Floating Quick-Action Pill
+             Right Column: Dual Counter-Marquee Horizontal Carousel (Leftside & Rightside)
              =================================================================== -->
         <div class="hidden lg:grid grid-cols-12 gap-8 items-center">
             
             <!-- Left Column: Editorial Typography, Action Pills & Feature Tags -->
-            <div class="lg:col-span-6 flex flex-col items-start text-left z-10">
+            <div class="lg:col-span-6 xl:col-span-5 flex flex-col items-start text-left z-10">
                 
                 <!-- Eyebrow Pill -->
                 <x-reveal delay="100">
@@ -451,7 +431,7 @@
 
                 <!-- Main Editorial Headline in Playfair Display -->
                 <x-reveal delay="150">
-                    <h1 class="text-4xl sm:text-5xl lg:text-[58px] xl:text-[66px] font-bold text-[#22121E] leading-[1.08] tracking-tight font-serif">
+                    <h1 class="text-4xl sm:text-5xl lg:text-[54px] xl:text-[62px] font-bold text-[#22121E] leading-[1.08] tracking-tight font-serif">
                         Transform Living <br />
                         Spaces with <br />
                         <span class="italic text-[#e68bbe]">Menahem</span>
@@ -510,7 +490,7 @@
             </div>
 
             <!-- Center Vertical Floating Quick-Action Pill -->
-            <div class="hidden xl:flex lg:col-span-1 justify-center z-20">
+            <div class="hidden xl:flex xl:col-span-1 justify-center z-20">
                 <div class="flex flex-col items-center gap-3 p-2 rounded-full bg-white/90 backdrop-blur-md border border-[#23121F]/10 shadow-lg">
                     <a href="{{ route('products.index') }}" title="Wishlist Favorites" class="w-10 h-10 rounded-full bg-[#fde4f2] hover:bg-[#f9cee7] text-[#e68bbe] flex items-center justify-center transition-all duration-200 hover:scale-110">
                         <svg class="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24">
@@ -535,174 +515,203 @@
                 </div>
             </div>
 
-            <!-- Right Column: Dual Counter-Marquee Vertical Scrolling Showcase (Desktop) -->
-            <div class="lg:col-span-6 xl:col-span-5 relative mt-6 lg:mt-0">
+            <!-- Right Column: Dual Counter-Marquee Horizontal Scrolling Showcase (Desktop) -->
+            <div class="lg:col-span-6 xl:col-span-6 relative mt-6 lg:mt-0">
                 <x-reveal delay="250">
-                    <div class="hero-marquee-container relative h-[520px] sm:h-[580px] lg:h-[640px] overflow-hidden rounded-[32px] bg-[#F8EAF3]/40 border border-[#23121F]/10 p-2 sm:p-3 shadow-sm">
+                    <div class="hero-marquee-container relative overflow-hidden rounded-[32px] bg-[#F8EAF3]/45 border border-[#23121F]/10 p-3 sm:p-4 shadow-sm">
                         
-                        <div class="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-[#FCF8FA] via-[#FCF8FA]/85 to-transparent z-20 pointer-events-none"></div>
-                        <div class="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#FCF8FA] via-[#FCF8FA]/85 to-transparent z-20 pointer-events-none"></div>
+                        <!-- Left Soft Vignette Mask -->
+                        <div class="absolute top-0 bottom-0 left-0 w-16 sm:w-20 bg-gradient-to-r from-[#FCF8FA] via-[#FCF8FA]/90 to-transparent z-20 pointer-events-none"></div>
+                        
+                        <!-- Right Soft Vignette Mask -->
+                        <div class="absolute top-0 bottom-0 right-0 w-16 sm:w-20 bg-gradient-to-l from-[#FCF8FA] via-[#FCF8FA]/90 to-transparent z-20 pointer-events-none"></div>
 
-                        <div class="grid grid-cols-2 gap-3 sm:gap-4 h-full overflow-hidden">
+                        <!-- Dual Opposite-Direction Horizontal Rows Container (Clean, no text banners) -->
+                        <div class="flex flex-col gap-3.5 sm:gap-4 overflow-hidden">
                             
-                            <!-- 1ST SECTION: SCROLLS UPWARD -->
-                            <div class="flex flex-col gap-3.5 sm:gap-4 animate-marquee-up hover:[animation-play-state:paused]">
-                                @foreach($col1Cards as $item)
-                                    <div class="relative w-full {{ $item['height'] }} rounded-[24px] sm:rounded-[28px] overflow-hidden bg-white shadow-md border border-white/80 group flex flex-col justify-between flex-shrink-0">
+                            <!-- ROW 1: SCROLLS LEFTSIDE -->
+                            <div class="animate-marquee-left flex flex-row gap-3.5 sm:gap-4 hover:[animation-play-state:paused]">
+                                
+                                <!-- Set 1 (Original) -->
+                                @foreach($row1Cards as $item)
+                                    <a
+                                        href="{{ route('products.show', $item['id']) }}"
+                                        title="{{ $item['title'] }}"
+                                        class="relative w-[260px] lg:w-[280px] xl:w-[300px] h-[205px] lg:h-[215px] xl:h-[225px] rounded-[24px] sm:rounded-[28px] overflow-hidden bg-white shadow-md border border-white/80 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
+                                    >
                                         <img
                                             src="{{ asset($item['image']) }}"
                                             alt="{{ $item['alt'] }}"
                                             loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                                         />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10"></div>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 transition-opacity duration-300 group-hover:opacity-90"></div>
 
-                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between">
+                                        <!-- Top Row: Badge & Price -->
+                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between pointer-events-none">
                                             <span class="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] font-bold tracking-wider uppercase border border-white/20">
                                                 {{ $item['badge'] }}
                                             </span>
-                                            <span class="w-6 h-6 rounded-full bg-white/30 backdrop-blur-md text-white flex items-center justify-center text-xs font-bold hover:bg-white hover:text-[#22121E] transition-colors">
-                                                ×
+                                            <span class="px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[#22121E] text-xs font-bold shadow-xs">
+                                                {{ $item['price'] }}
                                             </span>
                                         </div>
 
-                                        <div class="relative z-10 px-3 sm:px-3.5">
+                                        <!-- Middle Feature Chip -->
+                                        <div class="relative z-10 px-3 sm:px-3.5 pointer-events-none">
                                             <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] sm:text-[11px] font-medium shadow-xs">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-[#f4b8da]"></span>
                                                 <span class="line-clamp-1">{{ $item['chip'] }}</span>
                                             </div>
                                         </div>
 
-                                        <div class="relative z-10 p-2.5 sm:p-3">
-                                            <a
-                                                href="{{ route('products.show', $item['id']) }}"
-                                                class="flex items-center justify-between gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white shadow-lg border border-white/20 transition-all group/btn"
-                                            >
+                                        <!-- Bottom Action Pill with Title & Arrow -->
+                                        <div class="relative z-10 p-2.5 sm:p-3 pointer-events-none">
+                                            <div class="flex items-center justify-between gap-2 px-3 sm:px-4 py-2 rounded-full bg-[#23121F]/90 group-hover:bg-[#23121F] backdrop-blur-md text-white shadow-lg border border-white/20 transition-all">
                                                 <span class="text-[11px] sm:text-xs font-semibold truncate">{{ $item['title'] }}</span>
-                                                <span class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform flex-shrink-0">
+                                                <span class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform flex-shrink-0 text-[#e68bbe]">
                                                     ↗
                                                 </span>
-                                            </a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 @endforeach
 
-                                @foreach($col1Cards as $item)
-                                    <div class="relative w-full {{ $item['height'] }} rounded-[24px] sm:rounded-[28px] overflow-hidden bg-white shadow-md border border-white/80 group flex flex-col justify-between flex-shrink-0" aria-hidden="true">
+                                <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
+                                @foreach($row1Cards as $item)
+                                    <a
+                                        href="{{ route('products.show', $item['id']) }}"
+                                        title="{{ $item['title'] }}"
+                                        aria-hidden="true"
+                                        tabindex="-1"
+                                        class="relative w-[260px] lg:w-[280px] xl:w-[300px] h-[205px] lg:h-[215px] xl:h-[225px] rounded-[24px] sm:rounded-[28px] overflow-hidden bg-white shadow-md border border-white/80 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
+                                    >
                                         <img
                                             src="{{ asset($item['image']) }}"
                                             alt="{{ $item['alt'] }}"
                                             loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                                         />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10"></div>
-                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 transition-opacity duration-300 group-hover:opacity-90"></div>
+
+                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between pointer-events-none">
                                             <span class="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] font-bold tracking-wider uppercase border border-white/20">
                                                 {{ $item['badge'] }}
                                             </span>
-                                            <span class="w-6 h-6 rounded-full bg-white/30 backdrop-blur-md text-white flex items-center justify-center text-xs font-bold hover:bg-white hover:text-[#22121E] transition-colors">
-                                                ×
+                                            <span class="px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[#22121E] text-xs font-bold shadow-xs">
+                                                {{ $item['price'] }}
                                             </span>
                                         </div>
-                                        <div class="relative z-10 px-3 sm:px-3.5">
+
+                                        <div class="relative z-10 px-3 sm:px-3.5 pointer-events-none">
                                             <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] sm:text-[11px] font-medium shadow-xs">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-[#f4b8da]"></span>
                                                 <span class="line-clamp-1">{{ $item['chip'] }}</span>
                                             </div>
                                         </div>
-                                        <div class="relative z-10 p-2.5 sm:p-3">
-                                            <a
-                                                href="{{ route('products.show', $item['id']) }}"
-                                                class="flex items-center justify-between gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white shadow-lg border border-white/20 transition-all group/btn"
-                                            >
+
+                                        <div class="relative z-10 p-2.5 sm:p-3 pointer-events-none">
+                                            <div class="flex items-center justify-between gap-2 px-3 sm:px-4 py-2 rounded-full bg-[#23121F]/90 group-hover:bg-[#23121F] backdrop-blur-md text-white shadow-lg border border-white/20 transition-all">
                                                 <span class="text-[11px] sm:text-xs font-semibold truncate">{{ $item['title'] }}</span>
-                                                <span class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform flex-shrink-0">
+                                                <span class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform flex-shrink-0 text-[#e68bbe]">
                                                     ↗
                                                 </span>
-                                            </a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 @endforeach
+
                             </div>
 
-                            <!-- 2ND SECTION: SCROLLS DOWNWARD -->
-                            <div class="flex flex-col gap-3.5 sm:gap-4 animate-marquee-down hover:[animation-play-state:paused]">
-                                @foreach($col2Cards as $item)
-                                    <div class="relative w-full {{ $item['height'] }} rounded-[24px] sm:rounded-[28px] overflow-hidden bg-white shadow-md border border-white/80 group flex flex-col justify-between flex-shrink-0">
+                            <!-- ROW 2: SCROLLS RIGHTSIDE -->
+                            <div class="animate-marquee-right flex flex-row gap-3.5 sm:gap-4 hover:[animation-play-state:paused]">
+                                
+                                <!-- Set 1 (Original) -->
+                                @foreach($row2Cards as $item)
+                                    <a
+                                        href="{{ route('products.show', $item['id']) }}"
+                                        title="{{ $item['title'] }}"
+                                        class="relative w-[260px] lg:w-[280px] xl:w-[300px] h-[205px] lg:h-[215px] xl:h-[225px] rounded-[24px] sm:rounded-[28px] overflow-hidden bg-white shadow-md border border-white/80 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
+                                    >
                                         <img
                                             src="{{ asset($item['image']) }}"
                                             alt="{{ $item['alt'] }}"
                                             loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                                         />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10"></div>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 transition-opacity duration-300 group-hover:opacity-90"></div>
 
-                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between">
-                                            <span class="px-2.5 py-1 rounded-full bg-[#e68bbe] text-white text-[10px] font-bold tracking-wider uppercase shadow-xs">
+                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between pointer-events-none">
+                                            <span class="px-2.5 py-1 rounded-full {{ $item['badge'] === 'BESTSELLER' ? 'bg-[#23121F]/80 text-white' : 'bg-[#e68bbe] text-white' }} backdrop-blur-md text-[10px] font-bold tracking-wider uppercase border border-white/20 shadow-xs">
                                                 {{ $item['badge'] }}
                                             </span>
-                                            <span class="w-6 h-6 rounded-full bg-white/30 backdrop-blur-md text-white flex items-center justify-center text-xs font-bold hover:bg-white hover:text-[#22121E] transition-colors">
-                                                ×
+                                            <span class="px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[#22121E] text-xs font-bold shadow-xs">
+                                                {{ $item['price'] }}
                                             </span>
                                         </div>
 
-                                        <div class="relative z-10 px-3 sm:px-3.5">
+                                        <div class="relative z-10 px-3 sm:px-3.5 pointer-events-none">
                                             <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] sm:text-[11px] font-medium shadow-xs">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-[#e68bbe]"></span>
                                                 <span class="line-clamp-1">{{ $item['chip'] }}</span>
                                             </div>
                                         </div>
 
-                                        <div class="relative z-10 p-2.5 sm:p-3">
-                                            <a
-                                                href="{{ route('products.show', $item['id']) }}"
-                                                class="flex items-center justify-between gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white shadow-lg border border-white/20 transition-all group/btn"
-                                            >
+                                        <div class="relative z-10 p-2.5 sm:p-3 pointer-events-none">
+                                            <div class="flex items-center justify-between gap-2 px-3 sm:px-4 py-2 rounded-full bg-[#23121F]/90 group-hover:bg-[#23121F] backdrop-blur-md text-white shadow-lg border border-white/20 transition-all">
                                                 <span class="text-[11px] sm:text-xs font-semibold truncate">{{ $item['title'] }}</span>
-                                                <span class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform flex-shrink-0">
+                                                <span class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform flex-shrink-0 text-[#e68bbe]">
                                                     ↗
                                                 </span>
-                                            </a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 @endforeach
 
-                                @foreach($col2Cards as $item)
-                                    <div class="relative w-full {{ $item['height'] }} rounded-[24px] sm:rounded-[28px] overflow-hidden bg-white shadow-md border border-white/80 group flex flex-col justify-between flex-shrink-0" aria-hidden="true">
+                                <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
+                                @foreach($row2Cards as $item)
+                                    <a
+                                        href="{{ route('products.show', $item['id']) }}"
+                                        title="{{ $item['title'] }}"
+                                        aria-hidden="true"
+                                        tabindex="-1"
+                                        class="relative w-[260px] lg:w-[280px] xl:w-[300px] h-[205px] lg:h-[215px] xl:h-[225px] rounded-[24px] sm:rounded-[28px] overflow-hidden bg-white shadow-md border border-white/80 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
+                                    >
                                         <img
                                             src="{{ asset($item['image']) }}"
                                             alt="{{ $item['alt'] }}"
                                             loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                                         />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10"></div>
-                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between">
-                                            <span class="px-2.5 py-1 rounded-full bg-[#e68bbe] text-white text-[10px] font-bold tracking-wider uppercase shadow-xs">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 transition-opacity duration-300 group-hover:opacity-90"></div>
+
+                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between pointer-events-none">
+                                            <span class="px-2.5 py-1 rounded-full {{ $item['badge'] === 'BESTSELLER' ? 'bg-[#23121F]/80 text-white' : 'bg-[#e68bbe] text-white' }} backdrop-blur-md text-[10px] font-bold tracking-wider uppercase border border-white/20 shadow-xs">
                                                 {{ $item['badge'] }}
                                             </span>
-                                            <span class="w-6 h-6 rounded-full bg-white/30 backdrop-blur-md text-white flex items-center justify-center text-xs font-bold hover:bg-white hover:text-[#22121E] transition-colors">
-                                                ×
+                                            <span class="px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[#22121E] text-xs font-bold shadow-xs">
+                                                {{ $item['price'] }}
                                             </span>
                                         </div>
-                                        <div class="relative z-10 px-3 sm:px-3.5">
+
+                                        <div class="relative z-10 px-3 sm:px-3.5 pointer-events-none">
                                             <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] sm:text-[11px] font-medium shadow-xs">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-[#e68bbe]"></span>
                                                 <span class="line-clamp-1">{{ $item['chip'] }}</span>
                                             </div>
                                         </div>
-                                        <div class="relative z-10 p-2.5 sm:p-3">
-                                            <a
-                                                href="{{ route('products.show', $item['id']) }}"
-                                                class="flex items-center justify-between gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full bg-[#23121F]/90 hover:bg-[#23121F] backdrop-blur-md text-white shadow-lg border border-white/20 transition-all group/btn"
-                                            >
+
+                                        <div class="relative z-10 p-2.5 sm:p-3 pointer-events-none">
+                                            <div class="flex items-center justify-between gap-2 px-3 sm:px-4 py-2 rounded-full bg-[#23121F]/90 group-hover:bg-[#23121F] backdrop-blur-md text-white shadow-lg border border-white/20 transition-all">
                                                 <span class="text-[11px] sm:text-xs font-semibold truncate">{{ $item['title'] }}</span>
-                                                <span class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform flex-shrink-0">
+                                                <span class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform flex-shrink-0 text-[#e68bbe]">
                                                     ↗
                                                 </span>
-                                            </a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 @endforeach
+
                             </div>
 
                         </div>
