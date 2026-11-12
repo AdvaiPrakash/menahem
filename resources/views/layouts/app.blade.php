@@ -77,7 +77,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon-192x192.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-    <meta name="theme-color" content="#23121F">
+    <meta name="theme-color" content="#162B1F">
 
     <!-- Google Web Fonts (Playfair Display & Plus Jakarta Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,7 +91,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[var(--color-canvas)] text-[var(--color-charcoal)] font-sans antialiased relative selection:bg-[#e68bbe] selection:text-white">
+<body class="bg-[var(--color-canvas)] text-[var(--color-charcoal)] font-sans antialiased relative selection:bg-[#96D4AF] selection:text-[#14281E]">
     {{ $slot }}
 </body>
 </html>

@@ -7,22 +7,22 @@
     $whatsappUrl = $brand['whatsapp_url'] ?? 'https://wa.me/919876543210';
 @endphp
 
-<section id="contact" class="py-16 sm:py-24 bg-[#FCF8FA] border-b border-[#23121F]/10">
+<section id="contact" class="py-16 sm:py-24 bg-[#F6FAF7] border-b border-[#162B1F]/10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <x-reveal delay="100">
-            <div class="rounded-3xl bg-white border border-[#23121F]/10 p-6 sm:p-10 lg:p-14 shadow-sm">
+            <div class="rounded-3xl bg-white border border-[#162B1F]/10 p-6 sm:p-10 lg:p-14 shadow-sm">
                 
                 <!-- Section Header -->
                 <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fde4f2] text-[#e68bbe] border border-[#f4b8da]/60 text-xs font-bold uppercase tracking-wider mb-3.5">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D5F0C0] text-[#2E7D5B] border border-[#B5DFB2]/60 text-xs font-bold uppercase tracking-wider mb-3.5">
                         <span>★</span>
                         <span>ATELIER CONCIERGE & STYLING</span>
                     </div>
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-[#22121E] tracking-tight leading-tight">
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-[#14281E] tracking-tight leading-tight">
                         Make Your Home More Beautiful
                     </h2>
-                    <p class="text-xs sm:text-sm sm:text-base text-[#6E5666] mt-3 leading-relaxed">
+                    <p class="text-xs sm:text-sm sm:text-base text-[#4E6858] mt-3 leading-relaxed">
                         Have a question about bespoke drapery measurements, fabric samples, or custom bedding sets? Share your requirements and our interior styling concierge will guide you.
                     </p>
                 </div>
@@ -44,15 +44,15 @@
                 >
                     
                     <!-- Left: Elegant Form -->
-                    <div class="lg:col-span-7 bg-[#FCF8FA] p-6 sm:p-8 rounded-2xl border border-[#23121F]/10">
+                    <div class="lg:col-span-7 bg-[#F6FAF7] p-6 sm:p-8 rounded-2xl border border-[#162B1F]/10">
                         <!-- Success Banner after Submission -->
-                        <div x-show="submitted" x-cloak class="p-6 rounded-xl bg-[#F8EAF3] border border-[#e68bbe]/40 text-center">
-                            <div class="w-12 h-12 rounded-full bg-[#e68bbe] text-white flex items-center justify-center mx-auto mb-3 shadow-sm text-xl font-bold">
+                        <div x-show="submitted" x-cloak class="p-6 rounded-xl bg-[#EAF4EE] border border-[#2E7D5B]/40 text-center">
+                            <div class="w-12 h-12 rounded-full bg-[#2E7D5B] text-white flex items-center justify-center mx-auto mb-3 shadow-sm text-xl font-bold">
                                 ✓
                             </div>
-                            <h3 class="text-lg font-bold font-serif text-[#22121E]">Inquiry Received with Thanks!</h3>
-                            <p class="text-xs sm:text-sm text-[#6E5666] mt-1.5 leading-relaxed">
-                                Dear <strong x-text="name || 'Valued Guest'"></strong>, our design master has received your note regarding <span x-text="inquiryType" class="text-[#22121E] font-semibold"></span> and will get in touch shortly via WhatsApp or Email.
+                            <h3 class="text-lg font-bold font-serif text-[#14281E]">Inquiry Received with Thanks!</h3>
+                            <p class="text-xs sm:text-sm text-[#4E6858] mt-1.5 leading-relaxed">
+                                Dear <strong x-text="name || 'Valued Guest'"></strong>, our design master has received your note regarding <span x-text="inquiryType" class="text-[#14281E] font-semibold"></span> and will get in touch shortly via WhatsApp or Email.
                             </p>
                             <a
                                 :href="'https://wa.me/919876543210?text=Hello%20Menahem!%20My%20name%20is%20' + encodeURIComponent(name) + '.%20I%20just%20submitted%20an%20inquiry%20regarding%20' + encodeURIComponent(inquiryType) + ':%20' + encodeURIComponent(message)"
@@ -70,27 +70,27 @@
                             <!-- Row 1: Name & Phone -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-[#22121E] uppercase tracking-wider mb-1.5">
-                                        Your Full Name <span class="text-[#e68bbe]">*</span>
+                                    <label class="block text-xs font-bold text-[#14281E] uppercase tracking-wider mb-1.5">
+                                        Your Full Name <span class="text-[#2E7D5B]">*</span>
                                     </label>
                                     <input
                                         type="text"
                                         x-model="name"
                                         required
                                         placeholder="e.g. Radhika Sharma"
-                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#23121F]/15 text-xs sm:text-sm text-[#22121E] placeholder-[#6E5666]/50 focus:outline-hidden focus:border-[#e68bbe] focus:ring-1 focus:ring-[#e68bbe] transition-colors"
+                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#162B1F]/15 text-xs sm:text-sm text-[#14281E] placeholder-[#4E6858]/50 focus:outline-hidden focus:border-[#2E7D5B] focus:ring-1 focus:ring-[#2E7D5B] transition-colors"
                                     />
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-[#22121E] uppercase tracking-wider mb-1.5">
-                                        Phone / WhatsApp <span class="text-[#e68bbe]">*</span>
+                                    <label class="block text-xs font-bold text-[#14281E] uppercase tracking-wider mb-1.5">
+                                        Phone / WhatsApp <span class="text-[#2E7D5B]">*</span>
                                     </label>
                                     <input
                                         type="tel"
                                         x-model="phone"
                                         required
                                         placeholder="+91 98765 43210"
-                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#23121F]/15 text-xs sm:text-sm text-[#22121E] placeholder-[#6E5666]/50 focus:outline-hidden focus:border-[#e68bbe] focus:ring-1 focus:ring-[#e68bbe] transition-colors"
+                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#162B1F]/15 text-xs sm:text-sm text-[#14281E] placeholder-[#4E6858]/50 focus:outline-hidden focus:border-[#2E7D5B] focus:ring-1 focus:ring-[#2E7D5B] transition-colors"
                                     />
                                 </div>
                             </div>
@@ -98,24 +98,24 @@
                             <!-- Row 2: Email & Category Selection -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-[#22121E] uppercase tracking-wider mb-1.5">
-                                        Email Address <span class="text-[#e68bbe]">*</span>
+                                    <label class="block text-xs font-bold text-[#14281E] uppercase tracking-wider mb-1.5">
+                                        Email Address <span class="text-[#2E7D5B]">*</span>
                                     </label>
                                     <input
                                         type="email"
                                         x-model="email"
                                         required
                                         placeholder="radhika@example.com"
-                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#23121F]/15 text-xs sm:text-sm text-[#22121E] placeholder-[#6E5666]/50 focus:outline-hidden focus:border-[#e68bbe] focus:ring-1 focus:ring-[#e68bbe] transition-colors"
+                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#162B1F]/15 text-xs sm:text-sm text-[#14281E] placeholder-[#4E6858]/50 focus:outline-hidden focus:border-[#2E7D5B] focus:ring-1 focus:ring-[#2E7D5B] transition-colors"
                                     />
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-[#22121E] uppercase tracking-wider mb-1.5">
+                                    <label class="block text-xs font-bold text-[#14281E] uppercase tracking-wider mb-1.5">
                                         Interest / Requirement
                                     </label>
                                     <select
                                         x-model="inquiryType"
-                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#23121F]/15 text-xs sm:text-sm text-[#22121E] focus:outline-hidden focus:border-[#e68bbe] focus:ring-1 focus:ring-[#e68bbe] transition-colors cursor-pointer"
+                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#162B1F]/15 text-xs sm:text-sm text-[#14281E] focus:outline-hidden focus:border-[#2E7D5B] focus:ring-1 focus:ring-[#2E7D5B] transition-colors cursor-pointer"
                                     >
                                         <option value="Curtains & Drapes">Curtains & Custom Drapes</option>
                                         <option value="Bedsheets & Dohars">Bedsheets & Mulmul Dohars</option>
@@ -129,15 +129,15 @@
 
                             <!-- Row 3: Message / Notes -->
                             <div>
-                                <label class="block text-xs font-bold text-[#22121E] uppercase tracking-wider mb-1.5">
-                                    Message or Specific Dimensions <span class="text-[#e68bbe]">*</span>
+                                <label class="block text-xs font-bold text-[#14281E] uppercase tracking-wider mb-1.5">
+                                    Message or Specific Dimensions <span class="text-[#2E7D5B]">*</span>
                                 </label>
                                 <textarea
                                     x-model="message"
                                     required
                                     rows="4"
                                     placeholder="Tell us about your room, window heights, fabric preferences, or questions..."
-                                    class="w-full px-4 py-3 rounded-xl bg-white border border-[#23121F]/15 text-xs sm:text-sm text-[#22121E] placeholder-[#6E5666]/50 focus:outline-hidden focus:border-[#e68bbe] focus:ring-1 focus:ring-[#e68bbe] transition-colors resize-none"
+                                    class="w-full px-4 py-3 rounded-xl bg-white border border-[#162B1F]/15 text-xs sm:text-sm text-[#14281E] placeholder-[#4E6858]/50 focus:outline-hidden focus:border-[#2E7D5B] focus:ring-1 focus:ring-[#2E7D5B] transition-colors resize-none"
                                 ></textarea>
                             </div>
 
@@ -145,12 +145,12 @@
                             <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
                                 <button
                                     type="submit"
-                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#23121F] hover:bg-[#341B2E] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-sm hover:shadow-md cursor-pointer"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-[#162B1F] hover:bg-[#223F2E] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-sm hover:shadow-md cursor-pointer"
                                 >
                                     <span>Send Consultation Request</span>
                                     <span>↗</span>
                                 </button>
-                                <span class="text-[11px] text-[#6E5666]">
+                                <span class="text-[11px] text-[#4E6858]">
                                     Protected by privacy guarantee • No spam
                                 </span>
                             </div>
@@ -161,17 +161,17 @@
                     <div class="lg:col-span-5 space-y-4">
                         
                         <!-- WhatsApp Direct Concierge Card -->
-                        <div class="p-6 rounded-2xl bg-[#F8EAF3] border border-[#e68bbe]/30 flex flex-col justify-between">
+                        <div class="p-6 rounded-2xl bg-[#EAF4EE] border border-[#2E7D5B]/30 flex flex-col justify-between">
                             <div>
-                                <span class="text-[10px] uppercase font-bold tracking-wider text-[#e68bbe]">Fastest Response</span>
-                                <h3 class="text-base sm:text-lg font-bold font-serif text-[#22121E] mt-1">
+                                <span class="text-[10px] uppercase font-bold tracking-wider text-[#2E7D5B]">Fastest Response</span>
+                                <h3 class="text-base sm:text-lg font-bold font-serif text-[#14281E] mt-1">
                                     Need Real-Time Guidance?
                                 </h3>
-                                <p class="text-xs text-[#6E5666] mt-1.5 leading-relaxed">
+                                <p class="text-xs text-[#4E6858] mt-1.5 leading-relaxed">
                                     Chat directly with our senior fabric stylist on WhatsApp. Share room photos for instant drapery sizing recommendations.
                                 </p>
                             </div>
-                            <div class="mt-4 pt-4 border-t border-[#23121F]/10">
+                            <div class="mt-4 pt-4 border-t border-[#162B1F]/10">
                                 <a
                                     href="{{ $whatsappUrl }}"
                                     target="_blank"
@@ -188,26 +188,26 @@
                         </div>
 
                         <!-- Contact Details List -->
-                        <div class="p-6 rounded-2xl bg-[#FCF8FA] border border-[#23121F]/10 space-y-3.5 text-xs">
+                        <div class="p-6 rounded-2xl bg-[#F6FAF7] border border-[#162B1F]/10 space-y-3.5 text-xs">
                             <div class="flex items-start gap-3">
-                                <span class="text-[#e68bbe] text-sm mt-0.5">📞</span>
+                                <span class="text-[#2E7D5B] text-sm mt-0.5">📞</span>
                                 <div>
-                                    <strong class="block text-[#22121E]">Styling Helpline</strong>
-                                    <span class="text-[#6E5666]">+91 98765 43210 (Mon – Sat, 9:30 AM – 8:00 PM IST)</span>
+                                    <strong class="block text-[#14281E]">Styling Helpline</strong>
+                                    <span class="text-[#4E6858]">+91 98765 43210 (Mon – Sat, 9:30 AM – 8:00 PM IST)</span>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
-                                <span class="text-[#e68bbe] text-sm mt-0.5">✉️</span>
+                                <span class="text-[#2E7D5B] text-sm mt-0.5">✉️</span>
                                 <div>
-                                    <strong class="block text-[#22121E]">Email Concierge</strong>
-                                    <span class="text-[#6E5666]">care@menahemhome.in</span>
+                                    <strong class="block text-[#14281E]">Email Concierge</strong>
+                                    <span class="text-[#4E6858]">care@menahemhome.in</span>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
-                                <span class="text-[#e68bbe] text-sm mt-0.5">✂️</span>
+                                <span class="text-[#2E7D5B] text-sm mt-0.5">✂️</span>
                                 <div>
-                                    <strong class="block text-[#22121E]">Bespoke Tailoring Studio</strong>
-                                    <span class="text-[#6E5666]">Pan-India door-to-door delivery & custom stitches</span>
+                                    <strong class="block text-[#14281E]">Bespoke Tailoring Studio</strong>
+                                    <span class="text-[#4E6858]">Pan-India door-to-door delivery & custom stitches</span>
                                 </div>
                             </div>
                         </div>

@@ -7,20 +7,20 @@
     $items = $categories['items'] ?? [];
 @endphp
 
-<section id="shop-categories" class="hidden lg:block py-16 sm:py-20 bg-[#FCF8FA] border-b border-[#23121F]/10">
+<section id="shop-categories" class="hidden lg:block py-16 sm:py-20 bg-[#F6FAF7] border-b border-[#162B1F]/10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header: Title & View All Link -->
         <div class="flex items-center justify-between mb-8 sm:mb-10">
             <div>
-                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#22121E] font-serif">
+                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#14281E] font-serif">
                     {{ $categories['heading'] ?? 'Shop by Category' }}
                 </h2>
-                <p class="text-xs sm:text-sm text-[#6E5666] mt-1">
+                <p class="text-xs sm:text-sm text-[#4E6858] mt-1">
                     Bedsheets, Curtains, Table Decor, Rugs, Towels & Sofa Essentials
                 </p>
             </div>
-            <a href="#collections" class="text-sm font-semibold text-[#22121E] hover:text-[#e68bbe] transition-colors flex items-center gap-1.5 group">
+            <a href="#collections" class="text-sm font-semibold text-[#14281E] hover:text-[#2E7D5B] transition-colors flex items-center gap-1.5 group">
                 <span>{{ $categories['view_all_label'] ?? 'View all collections' }}</span>
                 <span class="transition-transform group-hover:translate-x-1">→</span>
             </a>
@@ -32,7 +32,7 @@
                 <x-reveal delay="{{ 50 * ($index + 1) }}">
                     <a href="#collections" class="group flex flex-col items-center text-center">
                         <!-- Rounded Card Box -->
-                        <div class="w-full aspect-square rounded-2xl bg-[#F8EAF3] group-hover:shadow-md transition-all duration-300 flex items-center justify-center relative overflow-hidden">
+                        <div class="w-full aspect-square rounded-2xl bg-[#EAF4EE] group-hover:shadow-md transition-all duration-300 flex items-center justify-center relative overflow-hidden">
                             
                             <!-- Real Image / Photographic preview covering full canvas -->
                             @if(!empty($item['image']))
@@ -46,7 +46,7 @@
                             @endif
 
                             <!-- Fallback Elegant Icon / Graphic in Rose -->
-                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white/80 items-center justify-center text-[#e68bbe] group-hover:scale-110 transition-transform duration-300 shadow-xs {{ !empty($item['image']) ? 'hidden' : 'flex' }}">
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white/80 items-center justify-center text-[#2E7D5B] group-hover:scale-110 transition-transform duration-300 shadow-xs {{ !empty($item['image']) ? 'hidden' : 'flex' }}">
                                 @if($item['slug'] === 'curtains')
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4 4h16v2H4V4zm2 2v14h4V6H6zm8 0v14h4V6h-4z"/>
@@ -87,11 +87,11 @@
                         </div>
 
                         <!-- Category Name Underneath -->
-                        <span class="mt-2.5 text-xs sm:text-sm font-semibold text-[#22121E] group-hover:text-[#e68bbe] transition-colors line-clamp-1">
+                        <span class="mt-2.5 text-xs sm:text-sm font-semibold text-[#14281E] group-hover:text-[#2E7D5B] transition-colors line-clamp-1">
                             {{ $item['name'] }}
                         </span>
                         @if(!empty($item['desc']))
-                            <span class="text-[10px] text-[#6E5666] line-clamp-1">
+                            <span class="text-[10px] text-[#4E6858] line-clamp-1">
                                 {{ $item['desc'] }}
                             </span>
                         @endif

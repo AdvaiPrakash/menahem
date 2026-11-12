@@ -101,18 +101,18 @@
         x-transition:leave-end="translate-x-full"
         class="fixed inset-y-0 right-0 max-w-full flex pl-10"
     >
-        <div class="w-screen max-w-md bg-[#FCF8FA] shadow-2xl flex flex-col justify-between border-l border-[#23121F]/10">
+        <div class="w-screen max-w-md bg-[#F6FAF7] shadow-2xl flex flex-col justify-between border-l border-[#162B1F]/10">
             
             <!-- Drawer Header -->
-            <div class="p-5 sm:p-6 border-b border-[#23121F]/10 bg-white flex items-center justify-between">
+            <div class="p-5 sm:p-6 border-b border-[#162B1F]/10 bg-white flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
-                    <svg class="w-5 h-5 text-[#3c3d1b]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-[#2E7D5B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
-                    <h2 class="text-lg font-bold font-serif text-[#22121E]">
+                    <h2 class="text-lg font-bold font-serif text-[#14281E]">
                         Your Shopping Bag
                     </h2>
-                    <span x-text="count + ' items'" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#fde4f2] text-[#e68bbe]">
+                    <span x-text="count + ' items'" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#D5F0C0] text-[#2E7D5B]">
                     </span>
                 </div>
 
@@ -121,28 +121,28 @@
                     type="button"
                     @click="open = false"
                     aria-label="Close cart"
-                    class="w-8 h-8 rounded-full bg-[#FCF8FA] hover:bg-[#F8EAF3] text-[#22121E] flex items-center justify-center transition-colors text-base font-bold cursor-pointer"
+                    class="w-8 h-8 rounded-full bg-[#F6FAF7] hover:bg-[#EAF4EE] text-[#14281E] flex items-center justify-center transition-colors text-base font-bold cursor-pointer"
                 >
                     ✕
                 </button>
             </div>
 
             <!-- Free Shipping Progress Tracker -->
-            <div class="px-5 sm:px-6 py-3 bg-[#F8EAF3]/70 border-b border-[#23121F]/10">
+            <div class="px-5 sm:px-6 py-3 bg-[#EAF4EE]/70 border-b border-[#162B1F]/10">
                 <template x-if="subtotal >= 999">
-                    <div class="flex items-center gap-2 text-xs font-semibold text-[#22121E]">
+                    <div class="flex items-center gap-2 text-xs font-semibold text-[#14281E]">
                         <span>🎉</span>
                         <span>Congratulations! You've unlocked <strong>Free Express Shipping</strong>.</span>
                     </div>
                 </template>
                 <template x-if="subtotal < 999">
                     <div>
-                        <div class="flex items-center justify-between text-xs text-[#6E5666] mb-1.5 font-medium">
-                            <span>Add <strong class="text-[#22121E]">₹<span x-text="freeShippingDiff"></span></strong> for Free Shipping</span>
+                        <div class="flex items-center justify-between text-xs text-[#4E6858] mb-1.5 font-medium">
+                            <span>Add <strong class="text-[#14281E]">₹<span x-text="freeShippingDiff"></span></strong> for Free Shipping</span>
                             <span x-text="freeShippingPercent + '%'"></span>
                         </div>
-                        <div class="w-full bg-white rounded-full h-2 overflow-hidden border border-[#23121F]/10">
-                            <div class="bg-[#e68bbe] h-full rounded-full transition-all duration-300" :style="'width: ' + freeShippingPercent + '%'"></div>
+                        <div class="w-full bg-white rounded-full h-2 overflow-hidden border border-[#162B1F]/10">
+                            <div class="bg-[#2E7D5B] h-full rounded-full transition-all duration-300" :style="'width: ' + freeShippingPercent + '%'"></div>
                         </div>
                     </div>
                 </template>
@@ -153,19 +153,19 @@
                 <!-- If Cart is Empty -->
                 <template x-if="items.length === 0">
                     <div class="py-16 text-center flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center text-[#6E5666] shadow-sm mb-4 border border-[#23121F]/10">
-                            <svg class="w-8 h-8 text-[#e68bbe]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center text-[#4E6858] shadow-sm mb-4 border border-[#162B1F]/10">
+                            <svg class="w-8 h-8 text-[#2E7D5B]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>
                         </div>
-                        <h3 class="text-base font-bold font-serif text-[#22121E]">Your Bag is Empty</h3>
-                        <p class="text-xs text-[#6E5666] mt-1 max-w-xs">
+                        <h3 class="text-base font-bold font-serif text-[#14281E]">Your Bag is Empty</h3>
+                        <p class="text-xs text-[#4E6858] mt-1 max-w-xs">
                             Discover handpicked curtains, bedsheets, and towels to fill your living space with comfort.
                         </p>
                         <a
                             href="{{ route('products.index') }}"
                             @click="open = false"
-                            class="mt-6 px-6 py-2.5 rounded-xl bg-[#3c3d1b] text-white text-xs font-bold hover:bg-[#2e2f14] transition-colors"
+                            class="mt-6 px-6 py-2.5 rounded-xl bg-[#162B1F] text-white text-xs font-bold hover:bg-[#223F2E] transition-colors"
                         >
                             Explore Collections →
                         </a>
@@ -174,33 +174,33 @@
 
                 <!-- Items Loop -->
                 <template x-for="item in items" :key="item.id">
-                    <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white border border-[#23121F]/10 shadow-2xs">
+                    <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white border border-[#162B1F]/10 shadow-2xs">
                         <!-- Product Thumbnail -->
-                        <img :src="item.image" :alt="item.name" class="w-20 h-20 rounded-xl object-cover bg-[#F8EAF3] flex-shrink-0 border border-[#23121F]/10" />
+                        <img :src="item.image" :alt="item.name" class="w-20 h-20 rounded-xl object-cover bg-[#EAF4EE] flex-shrink-0 border border-[#162B1F]/10" />
 
                         <!-- Details -->
                         <div class="flex-1 min-w-0">
-                            <span x-text="item.category" class="text-[10px] uppercase font-bold text-[#e68bbe] tracking-wider block"></span>
-                            <h4 x-text="item.name" class="text-xs sm:text-sm font-bold text-[#22121E] truncate mt-0.5"></h4>
-                            <div class="text-xs font-extrabold text-[#22121E] mt-1">
+                            <span x-text="item.category" class="text-[10px] uppercase font-bold text-[#2E7D5B] tracking-wider block"></span>
+                            <h4 x-text="item.name" class="text-xs sm:text-sm font-bold text-[#14281E] truncate mt-0.5"></h4>
+                            <div class="text-xs font-extrabold text-[#14281E] mt-1">
                                 ₹<span x-text="item.price.toLocaleString()"></span>
                             </div>
 
                             <!-- Quantity Counter + Remove -->
                             <div class="mt-2.5 flex items-center justify-between">
-                                <div class="flex items-center rounded-lg bg-[#FCF8FA] border border-[#23121F]/15 px-1 py-0.5">
+                                <div class="flex items-center rounded-lg bg-[#F6FAF7] border border-[#162B1F]/15 px-1 py-0.5">
                                     <button
                                         type="button"
                                         @click="updateQuantity(item.id, -1)"
-                                        class="w-6 h-6 flex items-center justify-center text-xs font-bold text-[#22121E] hover:text-[#e68bbe] cursor-pointer"
+                                        class="w-6 h-6 flex items-center justify-center text-xs font-bold text-[#14281E] hover:text-[#2E7D5B] cursor-pointer"
                                     >
                                         −
                                     </button>
-                                    <span x-text="item.quantity" class="w-6 text-center text-xs font-bold text-[#22121E]"></span>
+                                    <span x-text="item.quantity" class="w-6 text-center text-xs font-bold text-[#14281E]"></span>
                                     <button
                                         type="button"
                                         @click="updateQuantity(item.id, 1)"
-                                        class="w-6 h-6 flex items-center justify-center text-xs font-bold text-[#22121E] hover:text-[#e68bbe] cursor-pointer"
+                                        class="w-6 h-6 flex items-center justify-center text-xs font-bold text-[#14281E] hover:text-[#2E7D5B] cursor-pointer"
                                     >
                                         +
                                     </button>
@@ -209,7 +209,7 @@
                                 <button
                                     type="button"
                                     @click="removeItem(item.id)"
-                                    class="text-[11px] text-[#6E5666] hover:text-red-500 transition-colors cursor-pointer"
+                                    class="text-[11px] text-[#4E6858] hover:text-red-500 transition-colors cursor-pointer"
                                 >
                                     Remove
                                 </button>
@@ -220,19 +220,19 @@
             </div>
 
             <!-- Drawer Footer (Subtotal & WhatsApp Checkout) -->
-            <div class="p-5 sm:p-6 bg-white border-t border-[#23121F]/10">
+            <div class="p-5 sm:p-6 bg-white border-t border-[#162B1F]/10">
                 <div class="space-y-1.5 mb-4 text-xs">
-                    <div class="flex items-center justify-between text-[#6E5666]">
+                    <div class="flex items-center justify-between text-[#4E6858]">
                         <span>Subtotal</span>
-                        <span class="font-bold text-[#22121E]">₹<span x-text="subtotal.toLocaleString()"></span></span>
+                        <span class="font-bold text-[#14281E]">₹<span x-text="subtotal.toLocaleString()"></span></span>
                     </div>
-                    <div class="flex items-center justify-between text-[#6E5666]">
+                    <div class="flex items-center justify-between text-[#4E6858]">
                         <span>Express Delivery</span>
-                        <span x-text="shipping === 0 ? 'FREE' : '₹99'" class="font-bold" :class="shipping === 0 ? 'text-[#e68bbe]' : 'text-[#22121E]'"></span>
+                        <span x-text="shipping === 0 ? 'FREE' : '₹99'" class="font-bold" :class="shipping === 0 ? 'text-[#2E7D5B]' : 'text-[#14281E]'"></span>
                     </div>
-                    <div class="pt-2 border-t border-[#23121F]/10 flex items-center justify-between text-sm font-bold text-[#22121E]">
+                    <div class="pt-2 border-t border-[#162B1F]/10 flex items-center justify-between text-sm font-bold text-[#14281E]">
                         <span>Estimated Total</span>
-                        <span class="text-base text-[#3c3d1b] font-extrabold">₹<span x-text="total.toLocaleString()"></span></span>
+                        <span class="text-base text-[#162B1F] font-extrabold">₹<span x-text="total.toLocaleString()"></span></span>
                     </div>
                 </div>
 
@@ -255,7 +255,7 @@
                 <button
                     type="button"
                     @click="open = false"
-                    class="w-full mt-2.5 py-2 text-center text-xs font-semibold text-[#6E5666] hover:text-[#22121E] transition-colors cursor-pointer"
+                    class="w-full mt-2.5 py-2 text-center text-xs font-semibold text-[#4E6858] hover:text-[#14281E] transition-colors cursor-pointer"
                 >
                     Continue Browsing
                 </button>

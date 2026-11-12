@@ -1,37 +1,49 @@
 @import "tailwindcss";
 
 @theme {
-  /* Exact User Provided Brand Palette */
-  /* Color 1: #fde4f2 | Color 2: #f9cee7 | Color 3: #f4b8da | Color 4: #eea1cd | Color 5: #e68bbe */
-  --color-rose-1: #fde4f2;            /* Lightest Pale Blush / Whisper Rose */
-  --color-rose-2: #f9cee7;            /* Soft Petal Pink */
-  --color-rose-3: #f4b8da;            /* Muted Blossom Pink */
-  --color-rose-4: #eea1cd;            /* Medium Peony Rose */
-  --color-rose-5: #e68bbe;            /* Deep Vibrant Peony / Rose Accent */
+  /* Exact User Provided Brand Palette: Light Green Shades Color Scheme */
+  /* Color 1: #D5F0C0 | Color 2: #B5DFB2 | Color 3: #96D4AF | Color 4: #9EDBC5 | Color 5: #BCEBD7 */
+  --color-green-1: #D5F0C0;           /* Shade 1: Light Pastel Celadon / Tea Green */
+  --color-green-2: #B5DFB2;           /* Shade 2: Soft Celadon Mint Sage */
+  --color-green-3: #96D4AF;           /* Shade 3: Medium Fresh Mint / Seafoam */
+  --color-green-4: #9EDBC5;           /* Shade 4: Aquamarine Mint */
+  --color-green-5: #BCEBD7;           /* Shade 5: Whisper Mint Tint */
 
-  --color-camel: #e68bbe;             /* Primary Rose Accent, Buttons, Badges */
-  --color-camel-hover: #d272a8;       /* Rose Hover State */
-  --color-camel-light: #fde4f2;       /* Subtle Rose Light Tint */
-  --color-camel-subtle: rgba(230, 139, 190, 0.16);
+  /* Semantic Brand Roles */
+  --color-camel: #2E7D5B;             /* Primary Green Brand Accent (Buttons, Active Elements) */
+  --color-camel-hover: #246548;       /* Deep Forest Hover State */
+  --color-camel-light: #D5F0C0;       /* Light Tea Green Tint */
+  --color-camel-subtle: rgba(150, 212, 175, 0.22); /* Soft Mint Glow */
 
-  --color-khaki-1: #23121F;           /* Deep Velvet Plum (Announcement Bar, Primary Dark) */
-  --color-khaki-2: #1D0B19;           /* Deepest Velvet Noir (Footer, Deep Accent) */
-  --color-khaki-3: #2C1628;           /* Rich Velvet Plum (Promo Panels) */
-  --color-khaki-4: #341B2E;           /* Velvet Dark Surface (Cards) */
+  --color-mint: #96D4AF;              /* Signature Fresh Mint Accent */
+  --color-mint-light: #BCEBD7;        /* Soft Whisper Mint */
+  --color-sage: #B5DFB2;              /* Soft Celadon Sage */
+  --color-aqua: #9EDBC5;              /* Aquamarine Mint */
 
-  --color-canvas: #FCF8FA;            /* Crisp Rose-Alabaster Luxury Canvas */
-  --color-card-bg: #F8EAF3;           /* Soft Rose-Tinted Card Background */
-  --color-charcoal: #22121E;          /* High Contrast Velvet Noir Heading Text */
-  --color-subtext: #6E5666;           /* Clean Muted Rose-Plum Subtext */
-  --color-border-subtle: rgba(35, 18, 31, 0.10); /* Delicate Divider */
-  --color-star: #e68bbe;              /* Rating Stars in Brand Peony Rose */
+  --color-khaki-1: #162B1F;           /* Deep Forest Evergreen (Navbar, Primary Dark) */
+  --color-khaki-2: #102016;           /* Deepest Forest Noir (Footer, Deep Accent) */
+  --color-khaki-3: #1C3526;           /* Rich Forest Green (Promo Panels) */
+  --color-khaki-4: #223F2E;           /* Forest Dark Surface (Cards) */
+
+  --color-canvas: #F6FAF7;            /* Crisp Celadon-Alabaster Luxury Canvas */
+  --color-card-bg: #EAF4EE;           /* Soft Mint-Tinted Card Background */
+  --color-charcoal: #14281E;          /* High Contrast Forest Noir Heading Text */
+  --color-subtext: #4E6858;           /* Clean Muted Forest-Sage Subtext */
+  --color-border-subtle: rgba(22, 43, 31, 0.10); /* Delicate Divider */
+  --color-star: #2E7D5B;              /* Rating Stars in Brand Forest Emerald */
 
   /* Legacy variable mapping to keep full backward compatibility */
-  --color-olive-dark: #23121F;
-  --color-olive-card: #2C1628;
-  --color-amber-brown: #e68bbe;
-  --color-amber-hover: #d272a8;
-  --color-amber-light: #fde4f2;
+  --color-rose-1: #D5F0C0;
+  --color-rose-2: #BCEBD7;
+  --color-rose-3: #B5DFB2;
+  --color-rose-4: #9EDBC5;
+  --color-rose-5: #96D4AF;
+
+  --color-olive-dark: #162B1F;
+  --color-olive-card: #1C3526;
+  --color-amber-brown: #2E7D5B;
+  --color-amber-hover: #246548;
+  --color-amber-light: #D5F0C0;
 
   /* Fonts */
   --font-display: "Playfair Display", Georgia, serif;
@@ -58,13 +70,13 @@ body {
 }
 
 ::selection {
-  background-color: #e68bbe;
-  color: #ffffff;
+  background-color: #96D4AF;
+  color: #14281E;
 }
 
 /* Glassmorphism */
 @utility glass {
-  background: rgba(252, 248, 250, 0.94);
+  background: rgba(246, 250, 247, 0.94);
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
   border-bottom: 1px solid var(--color-border-subtle);
@@ -114,7 +126,7 @@ body {
   background: var(--color-canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(230, 139, 190, 0.35);
+  background: rgba(150, 212, 175, 0.45);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {

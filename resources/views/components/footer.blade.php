@@ -8,7 +8,7 @@
     $whatsappUrl = $brand['whatsapp_url'] ?? '#';
 @endphp
 
-<footer class="bg-[#23121F] text-white pt-14 pb-10 border-t border-black/20">
+<footer class="bg-[#162B1F] text-white pt-14 pb-10 border-t border-black/20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Main Footer Columns Grid in Deep Velvet & Rose -->
@@ -26,7 +26,7 @@
                         <span class="text-xl font-bold tracking-tight text-white leading-none">
                             Menahem
                         </span>
-                        <span class="text-[9px] uppercase tracking-wider text-[#e68bbe] font-semibold mt-1">
+                        <span class="text-[9px] uppercase tracking-wider text-[#96D4AF] font-semibold mt-1">
                             The one that comforts you
                         </span>
                     </div>
@@ -38,13 +38,13 @@
 
                 <!-- Social Icons (Facebook, Instagram, Twitter, WhatsApp) -->
                 <div class="flex items-center gap-3 text-white/80">
-                    <a href="#" class="w-7 h-7 rounded-full bg-white/10 hover:bg-[#e68bbe] transition-colors flex items-center justify-center text-xs" aria-label="Facebook">
+                    <a href="#" class="w-7 h-7 rounded-full bg-white/10 hover:bg-[#96D4AF] hover:text-[#14281E] transition-colors flex items-center justify-center text-xs" aria-label="Facebook">
                         f
                     </a>
-                    <a href="#" class="w-7 h-7 rounded-full bg-white/10 hover:bg-[#e68bbe] transition-colors flex items-center justify-center text-xs" aria-label="Instagram">
+                    <a href="#" class="w-7 h-7 rounded-full bg-white/10 hover:bg-[#96D4AF] hover:text-[#14281E] transition-colors flex items-center justify-center text-xs" aria-label="Instagram">
                         ig
                     </a>
-                    <a href="#" class="w-7 h-7 rounded-full bg-white/10 hover:bg-[#e68bbe] transition-colors flex items-center justify-center text-xs" aria-label="Twitter">
+                    <a href="#" class="w-7 h-7 rounded-full bg-white/10 hover:bg-[#96D4AF] hover:text-[#14281E] transition-colors flex items-center justify-center text-xs" aria-label="Twitter">
                         𝕏
                     </a>
                     <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="w-7 h-7 rounded-full bg-white/10 hover:bg-[#25d366] transition-colors flex items-center justify-center text-xs" aria-label="WhatsApp">
@@ -59,7 +59,7 @@
                 <ul class="space-y-2.5">
                     @foreach($footer['shop_links'] ?? [] as $link)
                         <li>
-                            <a href="{{ $link['url'] }}" class="text-xs text-white/70 hover:text-[#e68bbe] transition-colors">
+                            <a href="{{ $link['url'] }}" class="text-xs text-white/70 hover:text-[#96D4AF] transition-colors">
                                 {{ $link['label'] }}
                             </a>
                         </li>
@@ -73,7 +73,7 @@
                 <ul class="space-y-2.5">
                     @foreach($footer['collections_links'] ?? [] as $link)
                         <li>
-                            <a href="{{ $link['url'] }}" class="text-xs text-white/70 hover:text-[#e68bbe] transition-colors">
+                            <a href="{{ $link['url'] }}" class="text-xs text-white/70 hover:text-[#96D4AF] transition-colors">
                                 {{ $link['label'] }}
                             </a>
                         </li>
@@ -87,7 +87,7 @@
                 <ul class="space-y-2.5">
                     @foreach($footer['customer_service_links'] ?? [] as $link)
                         <li>
-                            <a href="{{ $link['url'] }}" class="text-xs text-white/70 hover:text-[#e68bbe] transition-colors">
+                            <a href="{{ $link['url'] }}" class="text-xs text-white/70 hover:text-[#96D4AF] transition-colors">
                                 {{ $link['label'] }}
                             </a>
                         </li>
@@ -109,7 +109,7 @@
                 </div>
 
                 <div class="pt-2">
-                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs text-[#f4b8da] hover:underline font-semibold">
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs text-[#B5DFB2] hover:underline font-semibold">
                         <span>Direct WhatsApp Concierge</span>
                         <span>→</span>
                     </a>
