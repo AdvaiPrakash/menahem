@@ -7,7 +7,7 @@
     $whatsappUrl = $brand['whatsapp_url'] ?? '#';
 @endphp
 
-<div class="min-h-screen flex flex-col justify-between relative selection:bg-[#2E7D5B] selection:text-white">
+<div class="min-h-screen flex flex-col justify-between relative selection:bg-[#B5C1A5] selection:text-[#2B3326]">
     <!-- Navbar Component -->
     <x-navbar :content="$content" />
 

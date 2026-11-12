@@ -1,49 +1,55 @@
 @import "tailwindcss";
 
 @theme {
-  /* Exact User Provided Brand Palette: Light Green Shades Color Scheme */
-  /* Color 1: #D5F0C0 | Color 2: #B5DFB2 | Color 3: #96D4AF | Color 4: #9EDBC5 | Color 5: #BCEBD7 */
-  --color-green-1: #D5F0C0;           /* Shade 1: Light Pastel Celadon / Tea Green */
-  --color-green-2: #B5DFB2;           /* Shade 2: Soft Celadon Mint Sage */
-  --color-green-3: #96D4AF;           /* Shade 3: Medium Fresh Mint / Seafoam */
-  --color-green-4: #9EDBC5;           /* Shade 4: Aquamarine Mint */
-  --color-green-5: #BCEBD7;           /* Shade 5: Whisper Mint Tint */
+  /* Exact User Provided Brand Palette: Premium Linen & Sage Palette */
+  /* Swatch 1: #F6F4EB (Cream) | Swatch 2: #D7C7B2 (Sand) | Swatch 3: #B5C1A5 (Sage) | Swatch 4: #74826B (Olive Moss) */
+  --color-cream: #F6F4EB;             /* Swatch 1: Warm Linen Cream / Alabaster */
+  --color-sand: #D7C7B2;              /* Swatch 2: Warm Sand / Oatmeal Beige */
+  --color-sage: #B5C1A5;              /* Swatch 3: Soft Celadon Sage */
+  --color-olive: #74826B;             /* Swatch 4: Earthy Olive Moss */
 
-  /* Semantic Brand Roles */
-  --color-camel: #2E7D5B;             /* Primary Green Brand Accent (Buttons, Active Elements) */
-  --color-camel-hover: #246548;       /* Deep Forest Hover State */
-  --color-camel-light: #D5F0C0;       /* Light Tea Green Tint */
-  --color-camel-subtle: rgba(150, 212, 175, 0.22); /* Soft Mint Glow */
+  --color-green-1: #F6F4EB;
+  --color-green-2: #D7C7B2;
+  --color-green-3: #B5C1A5;
+  --color-green-4: #74826B;
+  --color-green-5: #E8E2D5;
 
-  --color-mint: #96D4AF;              /* Signature Fresh Mint Accent */
-  --color-mint-light: #BCEBD7;        /* Soft Whisper Mint */
-  --color-sage: #B5DFB2;              /* Soft Celadon Sage */
-  --color-aqua: #9EDBC5;              /* Aquamarine Mint */
+  /* Semantic Brand Roles (Premium Organic Linen & Sage Light Aesthetic) */
+  --color-camel: #74826B;             /* Primary Earthy Olive Moss Accent */
+  --color-camel-hover: #636F5A;       /* Deep Olive Moss Hover State */
+  --color-camel-light: #B5C1A5;       /* Soft Celadon Sage Tint */
+  --color-camel-subtle: rgba(181, 193, 165, 0.28); /* Soft Sage Glow */
 
-  --color-khaki-1: #162B1F;           /* Deep Forest Evergreen (Navbar, Primary Dark) */
-  --color-khaki-2: #102016;           /* Deepest Forest Noir (Footer, Deep Accent) */
-  --color-khaki-3: #1C3526;           /* Rich Forest Green (Promo Panels) */
-  --color-khaki-4: #223F2E;           /* Forest Dark Surface (Cards) */
+  --color-mint: #B5C1A5;              /* Signature Soft Sage Accent */
+  --color-mint-light: #E8E2D5;        /* Soft Linen Oat Tint */
+  --color-aqua: #B5C1A5;              /* Soft Sage */
+  --color-celadon: #F6F4EB;           /* Warm Alabaster Cream */
 
-  --color-canvas: #F6FAF7;            /* Crisp Celadon-Alabaster Luxury Canvas */
-  --color-card-bg: #EAF4EE;           /* Soft Mint-Tinted Card Background */
-  --color-charcoal: #14281E;          /* High Contrast Forest Noir Heading Text */
-  --color-subtext: #4E6858;           /* Clean Muted Forest-Sage Subtext */
-  --color-border-subtle: rgba(22, 43, 31, 0.10); /* Delicate Divider */
-  --color-star: #2E7D5B;              /* Rating Stars in Brand Forest Emerald */
+  /* Light Surface Roles */
+  --color-khaki-1: #F3EFE6;           /* Soft Oat Surface */
+  --color-khaki-2: #EAE4D7;           /* Warm Linen Sand Base (Footer / Section Bottom) */
+  --color-khaki-3: #D7C7B2;           /* Sand Beige Accent Panel */
+  --color-khaki-4: #E8E2D5;           /* Soft Linen Card Surface */
+
+  --color-canvas: #FAF7F0;            /* Warm Alabaster Linen Luxury Canvas */
+  --color-card-bg: #F3EFE6;           /* Soft Oat-Tinted Card Background */
+  --color-charcoal: #2B3326;          /* Deep Olive Timber Heading Text (WCAG AAA) */
+  --color-subtext: #5C6654;           /* Clean Muted Earthy Sage Subtext (WCAG AA) */
+  --color-border-subtle: rgba(215, 199, 178, 0.55); /* Delicate Sand Beige Divider */
+  --color-star: #74826B;              /* Rating Stars in Earthy Olive */
 
   /* Legacy variable mapping to keep full backward compatibility */
-  --color-rose-1: #D5F0C0;
-  --color-rose-2: #BCEBD7;
-  --color-rose-3: #B5DFB2;
-  --color-rose-4: #9EDBC5;
-  --color-rose-5: #96D4AF;
+  --color-rose-1: #F6F4EB;
+  --color-rose-2: #E8E2D5;
+  --color-rose-3: #D7C7B2;
+  --color-rose-4: #B5C1A5;
+  --color-rose-5: #74826B;
 
-  --color-olive-dark: #162B1F;
-  --color-olive-card: #1C3526;
-  --color-amber-brown: #2E7D5B;
-  --color-amber-hover: #246548;
-  --color-amber-light: #D5F0C0;
+  --color-olive-dark: #F3EFE6;
+  --color-olive-card: #EAE4D7;
+  --color-amber-brown: #74826B;
+  --color-amber-hover: #636F5A;
+  --color-amber-light: #B5C1A5;
 
   /* Fonts */
   --font-display: "Playfair Display", Georgia, serif;
@@ -70,15 +76,15 @@ body {
 }
 
 ::selection {
-  background-color: #96D4AF;
-  color: #14281E;
+  background-color: #B5C1A5;
+  color: #2B3326;
 }
 
 /* Glassmorphism */
 @utility glass {
-  background: rgba(246, 250, 247, 0.94);
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  background: rgba(250, 247, 240, 0.92);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
@@ -126,7 +132,7 @@ body {
   background: var(--color-canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(150, 212, 175, 0.45);
+  background: rgba(181, 193, 165, 0.55);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {

@@ -68,24 +68,24 @@
                     return 'https://wa.me/919876543210?text=' + msg;
                 }
             }"
-            class="pt-24 sm:pt-28 lg:pt-30 pb-20 bg-[#F6FAF7] min-h-screen text-[#14281E]"
+            class="pt-24 sm:pt-28 lg:pt-30 pb-20 bg-[#FAF7F0] min-h-screen text-[#2B3326]"
         >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 <!-- Breadcrumbs Navigation: Clean, aligned distance below the fixed navbar -->
-                <nav class="flex items-center flex-wrap gap-2 text-xs text-[#4E6858] mb-5 sm:mb-6 font-medium" aria-label="Breadcrumb">
-                    <a href="{{ route('home') }}" class="hover:text-[#2E7D5B] transition-colors flex items-center gap-1.5 group">
+                <nav class="flex items-center flex-wrap gap-2 text-xs text-[#5C6654] mb-5 sm:mb-6 font-medium" aria-label="Breadcrumb">
+                    <a href="{{ route('home') }}" class="hover:text-[#74826B] transition-colors flex items-center gap-1.5 group">
                         <svg class="w-3.5 h-3.5 opacity-70 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
                         <span>Home</span>
                     </a>
                     <span class="text-gray-300">/</span>
-                    <a href="{{ route('products.index') }}" class="hover:text-[#2E7D5B] transition-colors">Shop</a>
+                    <a href="{{ route('products.index') }}" class="hover:text-[#74826B] transition-colors">Shop</a>
                     <span class="text-gray-300">/</span>
-                    <a href="{{ route('products.index', ['category' => $categorySlug]) }}" class="hover:text-[#2E7D5B] transition-colors">{{ $category }}</a>
+                    <a href="{{ route('products.index', ['category' => $categorySlug]) }}" class="hover:text-[#74826B] transition-colors">{{ $category }}</a>
                     <span class="text-gray-300">/</span>
-                    <span class="text-[#14281E] font-semibold truncate max-w-xs">{{ $name }}</span>
+                    <span class="text-[#2B3326] font-semibold truncate max-w-xs">{{ $name }}</span>
                 </nav>
 
                 <!-- Product Showcase Grid (Sticky Gallery on Left, Detailed Panel on Right) -->
@@ -101,8 +101,8 @@
                                     <button
                                         type="button"
                                         @click="selectImage(idx)"
-                                        :class="activeIndex === idx ? 'ring-2 ring-[#2E7D5B] border-[#2E7D5B] shadow-sm opacity-100 scale-102' : 'border-[#162B1F]/10 opacity-70 hover:opacity-100 hover:border-[#2E7D5B]/50'"
-                                        class="relative w-16 sm:w-20 aspect-square rounded-2xl overflow-hidden bg-[#EAF4EE] border-2 transition-all duration-200 cursor-pointer flex-shrink-0"
+                                        :class="activeIndex === idx ? 'ring-2 ring-[#74826B] border-[#74826B] shadow-sm opacity-100 scale-102' : 'border-[#D7C7B2] opacity-70 hover:opacity-100 hover:border-[#74826B]/50'"
+                                        class="relative w-16 sm:w-20 aspect-square rounded-2xl overflow-hidden bg-[#F3EFE6] border-2 transition-all duration-200 cursor-pointer flex-shrink-0"
                                         :aria-label="'View photo ' + (idx + 1)"
                                     >
                                         <img :src="thumb" :alt="'Thumbnail ' + (idx + 1)" class="w-full h-full object-cover" />
@@ -111,10 +111,10 @@
                             </div>
 
                             <!-- Main Product Image (Tailored, Compact & Elegant: max-h ~460px) -->
-                            <div class="relative flex-1 w-full aspect-[4/4.2] sm:aspect-square max-h-[440px] sm:max-h-[460px] rounded-3xl overflow-hidden bg-[#EAF4EE] border border-[#162B1F]/10 shadow-sm group">
+                            <div class="relative flex-1 w-full aspect-[4/4.2] sm:aspect-square max-h-[440px] sm:max-h-[460px] rounded-3xl overflow-hidden bg-[#F3EFE6] border border-[#D7C7B2] shadow-sm group">
                                 <!-- Floating Badge -->
                                 @if($badge)
-                                    <span class="absolute top-3.5 left-3.5 z-10 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#162B1F] text-white shadow-md">
+                                    <span class="absolute top-3.5 left-3.5 z-10 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] shadow-sm">
                                         {{ $badge }}
                                     </span>
                                 @endif
@@ -130,7 +130,7 @@
                                 <button
                                     type="button"
                                     @click="prevImage()"
-                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#14281E] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer hover:scale-105"
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#2B3326] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer hover:scale-105"
                                     aria-label="Previous image"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
@@ -138,7 +138,7 @@
                                 <button
                                     type="button"
                                     @click="nextImage()"
-                                    class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#14281E] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer hover:scale-105"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#2B3326] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer hover:scale-105"
                                     aria-label="Next image"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
@@ -152,7 +152,7 @@
                                 </div>
 
                                 <!-- Subtle Zoom Hint -->
-                                <div class="absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full bg-white/85 backdrop-blur-md text-[10px] font-medium text-[#14281E] shadow-xs hidden sm:flex items-center gap-1">
+                                <div class="absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full bg-white/85 backdrop-blur-md text-[10px] font-medium text-[#2B3326] shadow-xs hidden sm:flex items-center gap-1">
                                     <span>Artisanal Weave View</span>
                                 </div>
                             </div>
@@ -160,15 +160,15 @@
                         </div>
 
                         <!-- Quick Shipping / Return Assurance Strip below gallery -->
-                        <div class="hidden sm:flex items-center justify-between text-[11px] text-[#4E6858] pt-1 px-1">
+                        <div class="hidden sm:flex items-center justify-between text-[11px] text-[#5C6654] pt-1 px-1">
                             <span class="flex items-center gap-1">
-                                <span class="text-[#2E7D5B]">✓</span> In Stock & Ready to Ship
+                                <span class="text-[#74826B]">✓</span> In Stock & Ready to Ship
                             </span>
                             <span class="flex items-center gap-1">
-                                <span class="text-[#2E7D5B]">✓</span> 100% Genuine Handcrafted
+                                <span class="text-[#74826B]">✓</span> 100% Genuine Handcrafted
                             </span>
                             <span class="flex items-center gap-1">
-                                <span class="text-[#2E7D5B]">✓</span> Free Delivery
+                                <span class="text-[#74826B]">✓</span> Free Delivery
                             </span>
                         </div>
                     </div>
@@ -177,94 +177,94 @@
                     <div class="lg:col-span-6 flex flex-col text-left">
                         
                         <!-- Eyebrow Pill -->
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D5F0C0] text-[#2E7D5B] border border-[#B5DFB2]/60 text-xs font-bold uppercase tracking-wider mb-3 w-fit">
-                            <span>★</span>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] text-xs font-bold uppercase tracking-wider mb-3 w-fit">
+                            <span class="text-[#74826B]">★</span>
                             <span>{{ $material }}</span>
                         </div>
 
                         <!-- Product Title in Playfair Display Font -->
-                        <h1 class="text-3xl sm:text-4xl font-bold font-serif tracking-tight text-[#14281E] leading-tight">
+                        <h1 class="text-3xl sm:text-4xl font-bold font-serif tracking-tight text-[#2B3326] leading-tight">
                             {{ $name }}
                         </h1>
 
                         <!-- Rating & Review Count -->
-                        <div class="flex items-center gap-3 mt-3.5 pb-4 border-b border-[#162B1F]/10">
-                            <div class="flex text-[#2E7D5B]">
+                        <div class="flex items-center gap-3 mt-3.5 pb-4 border-b border-[#D7C7B2]">
+                            <div class="flex text-[#74826B]">
                                 @for($i = 0; $i < 5; $i++)
                                     <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                         <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
                                     </svg>
                                 @endfor
                             </div>
-                            <span class="text-xs font-bold text-[#14281E]">{{ number_format($rating, 1) }} / 5.0</span>
-                            <span class="text-xs text-[#4E6858]">({{ $reviews }} Verified Reviews)</span>
+                            <span class="text-xs font-bold text-[#2B3326]">{{ number_format($rating, 1) }} / 5.0</span>
+                            <span class="text-xs text-[#5C6654]">({{ $reviews }} Verified Reviews)</span>
                         </div>
 
                         <!-- Price Section -->
                         <div class="mt-5 flex items-baseline gap-3.5">
-                            <span class="text-3xl sm:text-4xl font-extrabold text-[#14281E] tracking-tight">
+                            <span class="text-3xl sm:text-4xl font-extrabold text-[#2B3326] tracking-tight">
                                 {{ $price }}
                             </span>
                             @if(!empty($originalPrice))
-                                <span class="text-lg text-[#4E6858]/70 line-through font-medium">
+                                <span class="text-lg text-[#5C6654]/70 line-through font-medium">
                                     {{ $originalPrice }}
                                 </span>
-                                <span class="px-2.5 py-0.5 rounded-full bg-[#D5F0C0] text-[#2E7D5B] text-xs font-bold">
+                                <span class="px-2.5 py-0.5 rounded-full bg-[#E8E2D5] text-[#74826B] border border-[#D7C7B2] text-xs font-bold">
                                     Save 25%
                                 </span>
                             @endif
                         </div>
-                        <p class="text-[11px] text-[#4E6858] mt-1 font-medium">Inclusive of all taxes • Free shipping across India</p>
+                        <p class="text-[11px] text-[#5C6654] mt-1 font-medium">Inclusive of all taxes • Free shipping across India</p>
 
                         <!-- Description Snippet -->
-                        <p class="mt-4 text-sm text-[#4E6858] leading-relaxed">
+                        <p class="mt-4 text-sm text-[#5C6654] leading-relaxed">
                             {{ $desc }}
                         </p>
 
                         <!-- Highlights List -->
-                        <div class="mt-5 grid grid-cols-2 gap-2.5 text-xs text-[#14281E] font-medium">
-                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#162B1F]/10">
-                                <span class="text-[#2E7D5B] font-bold">✓</span>
+                        <div class="mt-5 grid grid-cols-2 gap-2.5 text-xs text-[#2B3326] font-medium">
+                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#D7C7B2]">
+                                <span class="text-[#74826B] font-bold">✓</span>
                                 <span>100% Breathable Weave</span>
                             </div>
-                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#162B1F]/10">
-                                <span class="text-[#2E7D5B] font-bold">✓</span>
+                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#D7C7B2]">
+                                <span class="text-[#74826B] font-bold">✓</span>
                                 <span>Zero Color Bleed</span>
                             </div>
-                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#162B1F]/10">
-                                <span class="text-[#2E7D5B] font-bold">✓</span>
+                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#D7C7B2]">
+                                <span class="text-[#74826B] font-bold">✓</span>
                                 <span>Pre-Washed & Soft</span>
                             </div>
-                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#162B1F]/10">
-                                <span class="text-[#2E7D5B] font-bold">✓</span>
+                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#D7C7B2]">
+                                <span class="text-[#74826B] font-bold">✓</span>
                                 <span>Bespoke Tailoring</span>
                             </div>
                         </div>
 
                         <!-- Quantity Selector -->
                         <div class="mt-6 flex items-center gap-4">
-                            <span class="text-xs font-bold text-[#14281E] uppercase tracking-wider">Quantity</span>
-                            <div class="flex items-center rounded-xl bg-white border border-[#162B1F]/20 p-1">
+                            <span class="text-xs font-bold text-[#2B3326] uppercase tracking-wider">Quantity</span>
+                            <div class="flex items-center rounded-xl bg-white border border-[#D7C7B2] p-1">
                                 <button
                                     type="button"
                                     @click="if(quantity > 1) quantity--"
-                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-[#14281E] hover:bg-[#EAF4EE] transition-colors cursor-pointer"
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-[#F3EFE6] transition-colors cursor-pointer"
                                     aria-label="Decrease quantity"
                                 >
                                     −
                                 </button>
-                                <span x-text="quantity" class="w-10 text-center text-sm font-bold text-[#14281E]">1</span>
+                                <span x-text="quantity" class="w-10 text-center text-sm font-bold text-[#2B3326]">1</span>
                                 <button
                                     type="button"
                                     @click="quantity++"
-                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-[#14281E] hover:bg-[#EAF4EE] transition-colors cursor-pointer"
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-[#F3EFE6] transition-colors cursor-pointer"
                                     aria-label="Increase quantity"
                                 >
                                     +
                                 </button>
                             </div>
-                            <span class="text-xs text-[#4E6858]">
-                                Total: <strong x-text="totalFormatted" class="text-[#14281E] font-bold"></strong>
+                            <span class="text-xs text-[#5C6654]">
+                                Total: <strong x-text="totalFormatted" class="text-[#2B3326] font-bold"></strong>
                             </span>
                         </div>
 
@@ -275,9 +275,9 @@
                                 :href="dynamicWhatsappUrl"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="flex-1 flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-[#162B1F] hover:bg-[#223F2E] text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 group"
+                                class="flex-1 flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-[#74826B] hover:bg-[#636F5A] text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 group"
                             >
-                                <svg class="w-5 h-5 fill-current text-[#25d366]" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
                                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
                                 </svg>
                                 <span>Buy via WhatsApp</span>
@@ -295,9 +295,9 @@
                                     image: activeImage,
                                     category: '{{ addslashes($category) }}'
                                 })"
-                                class="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white hover:bg-[#EAF4EE] text-[#14281E] border border-[#162B1F]/20 text-sm font-bold tracking-wide transition-all shadow-xs hover:border-[#2E7D5B] cursor-pointer"
+                                class="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white hover:bg-[#F3EFE6] text-[#2B3326] border border-[#D7C7B2] text-sm font-bold tracking-wide transition-all shadow-xs hover:border-[#74826B] cursor-pointer"
                             >
-                                <svg class="w-4.5 h-4.5 text-[#14281E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <svg class="w-4.5 h-4.5 text-[#2B3326]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                 </svg>
                                 <span>Add to Bag</span>
@@ -305,28 +305,28 @@
                         </div>
 
                         <!-- Trust Guarantee Box -->
-                        <div class="mt-6 p-4 rounded-2xl bg-white border border-[#162B1F]/10 flex flex-col gap-2.5">
-                            <div class="flex items-center gap-2.5 text-xs text-[#14281E] font-semibold">
-                                <span class="text-[#2E7D5B]">⚡</span>
+                        <div class="mt-6 p-4 rounded-2xl bg-white border border-[#D7C7B2] flex flex-col gap-2.5">
+                            <div class="flex items-center gap-2.5 text-xs text-[#2B3326] font-semibold">
+                                <span class="text-[#74826B]">⚡</span>
                                 <span>Free Pan-India Express Delivery on this product</span>
                             </div>
-                            <div class="flex items-center gap-2.5 text-xs text-[#4E6858]">
-                                <span class="text-[#2E7D5B]">🛡️</span>
+                            <div class="flex items-center gap-2.5 text-xs text-[#5C6654]">
+                                <span class="text-[#74826B]">🛡️</span>
                                 <span>30-Day Hassle-Free Returns & 100% Quality Assurance</span>
                             </div>
-                            <div class="flex items-center gap-2.5 text-xs text-[#4E6858]">
-                                <span class="text-[#2E7D5B]">💬</span>
+                            <div class="flex items-center gap-2.5 text-xs text-[#5C6654]">
+                                <span class="text-[#74826B]">💬</span>
                                 <span>Need custom sizes? Talk directly to our design master on WhatsApp</span>
                             </div>
                         </div>
 
                         <!-- Specifications & Craftsmanship Tabs inside details column (keeps sticky gallery visible while reading) -->
-                        <div class="mt-8 bg-white rounded-3xl p-5 sm:p-6 border border-[#162B1F]/10 shadow-xs">
-                            <div class="flex items-center gap-5 border-b border-[#162B1F]/10 pb-3">
+                        <div class="mt-8 bg-white rounded-3xl p-5 sm:p-6 border border-[#D7C7B2] shadow-xs">
+                            <div class="flex items-center gap-5 border-b border-[#D7C7B2] pb-3">
                                 <button
                                     type="button"
                                     @click="selectedTab = 'details'"
-                                    :class="selectedTab === 'details' ? 'text-[#14281E] border-[#2E7D5B] font-bold' : 'text-[#4E6858] border-transparent font-medium hover:text-[#14281E]'"
+                                    :class="selectedTab === 'details' ? 'text-[#2B3326] border-[#74826B] font-bold' : 'text-[#5C6654] border-transparent font-medium hover:text-[#2B3326]'"
                                     class="text-xs sm:text-sm pb-2 border-b-2 transition-colors cursor-pointer"
                                 >
                                     Fabric & Details
@@ -334,7 +334,7 @@
                                 <button
                                     type="button"
                                     @click="selectedTab = 'care'"
-                                    :class="selectedTab === 'care' ? 'text-[#14281E] border-[#2E7D5B] font-bold' : 'text-[#4E6858] border-transparent font-medium hover:text-[#14281E]'"
+                                    :class="selectedTab === 'care' ? 'text-[#2B3326] border-[#74826B] font-bold' : 'text-[#5C6654] border-transparent font-medium hover:text-[#2B3326]'"
                                     class="text-xs sm:text-sm pb-2 border-b-2 transition-colors cursor-pointer"
                                 >
                                     Wash & Care
@@ -342,7 +342,7 @@
                                 <button
                                     type="button"
                                     @click="selectedTab = 'shipping'"
-                                    :class="selectedTab === 'shipping' ? 'text-[#14281E] border-[#2E7D5B] font-bold' : 'text-[#4E6858] border-transparent font-medium hover:text-[#14281E]'"
+                                    :class="selectedTab === 'shipping' ? 'text-[#2B3326] border-[#74826B] font-bold' : 'text-[#5C6654] border-transparent font-medium hover:text-[#2B3326]'"
                                     class="text-xs sm:text-sm pb-2 border-b-2 transition-colors cursor-pointer"
                                 >
                                     Shipping & Returns
@@ -351,30 +351,30 @@
 
                             <!-- Tab 1: Fabric Details -->
                             <div x-show="selectedTab === 'details'" class="pt-5 space-y-4">
-                                <h3 class="text-base font-bold font-serif text-[#14281E]">Pure Artisanal Excellence</h3>
-                                <p class="text-xs sm:text-sm text-[#4E6858] leading-relaxed">
+                                <h3 class="text-base font-bold font-serif text-[#2B3326]">Pure Artisanal Excellence</h3>
+                                <p class="text-xs sm:text-sm text-[#5C6654] leading-relaxed">
                                     Every Menahem essential is woven with meticulous care using hand-selected yarn. Designed to balance everyday durability with cloud-like gentleness, our fabrics age gracefully through repeated washes without pilling or color degradation.
                                 </p>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                                    <div class="p-3 rounded-xl bg-[#F6FAF7] border border-[#162B1F]/10">
-                                        <span class="text-[10px] uppercase font-bold text-[#4E6858]">Composition</span>
-                                        <p class="text-xs font-bold text-[#14281E] mt-0.5">{{ $material }}</p>
+                                    <div class="p-3 rounded-xl bg-[#FAF7F0] border border-[#D7C7B2]">
+                                        <span class="text-[10px] uppercase font-bold text-[#5C6654]">Composition</span>
+                                        <p class="text-xs font-bold text-[#2B3326] mt-0.5">{{ $material }}</p>
                                     </div>
-                                    <div class="p-3 rounded-xl bg-[#F6FAF7] border border-[#162B1F]/10">
-                                        <span class="text-[10px] uppercase font-bold text-[#4E6858]">Weave Density</span>
-                                        <p class="text-xs font-bold text-[#14281E] mt-0.5">400+ Thread Count</p>
+                                    <div class="p-3 rounded-xl bg-[#FAF7F0] border border-[#D7C7B2]">
+                                        <span class="text-[10px] uppercase font-bold text-[#5C6654]">Weave Density</span>
+                                        <p class="text-xs font-bold text-[#2B3326] mt-0.5">400+ Thread Count</p>
                                     </div>
-                                    <div class="p-3 rounded-xl bg-[#F6FAF7] border border-[#162B1F]/10">
-                                        <span class="text-[10px] uppercase font-bold text-[#4E6858]">Craft Origin</span>
-                                        <p class="text-xs font-bold text-[#14281E] mt-0.5">Handcrafted, India</p>
+                                    <div class="p-3 rounded-xl bg-[#FAF7F0] border border-[#D7C7B2]">
+                                        <span class="text-[10px] uppercase font-bold text-[#5C6654]">Craft Origin</span>
+                                        <p class="text-xs font-bold text-[#2B3326] mt-0.5">Handcrafted, India</p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Tab 2: Wash & Care -->
                             <div x-show="selectedTab === 'care'" style="display: none;" class="pt-5 space-y-2.5">
-                                <h3 class="text-base font-bold font-serif text-[#14281E]">Gentle Care for Long Life</h3>
-                                <ul class="space-y-1.5 text-xs sm:text-sm text-[#4E6858] leading-relaxed">
+                                <h3 class="text-base font-bold font-serif text-[#2B3326]">Gentle Care for Long Life</h3>
+                                <ul class="space-y-1.5 text-xs sm:text-sm text-[#5C6654] leading-relaxed">
                                     <li>• Machine wash gentle on cold or 30°C cycle with mild natural liquid detergent.</li>
                                     <li>• Do not use harsh chemical bleach or optical brighteners.</li>
                                     <li>• Line dry in soft shade to preserve the organic luster of natural cotton fibers.</li>
@@ -384,11 +384,11 @@
 
                             <!-- Tab 3: Shipping & Returns -->
                             <div x-show="selectedTab === 'shipping'" style="display: none;" class="pt-5 space-y-2.5">
-                                <h3 class="text-base font-bold font-serif text-[#14281E]">Fast, Safe Delivery to Your Door</h3>
-                                <p class="text-xs sm:text-sm text-[#4E6858] leading-relaxed">
+                                <h3 class="text-base font-bold font-serif text-[#2B3326]">Fast, Safe Delivery to Your Door</h3>
+                                <p class="text-xs sm:text-sm text-[#5C6654] leading-relaxed">
                                     Orders are dispatched within 24 to 48 hours via top courier partners. Standard delivery takes 3 to 5 business days across metros.
                                 </p>
-                                <p class="text-xs sm:text-sm text-[#4E6858] leading-relaxed">
+                                <p class="text-xs sm:text-sm text-[#5C6654] leading-relaxed">
                                     If you are not completely enchanted with your purchase, initiate an exchange or return within 30 days of receiving your parcel.
                                 </p>
                             </div>
@@ -400,15 +400,15 @@
 
                 <!-- Related Products Section (4 cards in 1 row on desktop) -->
                 @if(!empty($relatedProducts))
-                    <div class="mt-16 pt-12 border-t border-[#162B1F]/10">
+                    <div class="mt-16 pt-12 border-t border-[#D7C7B2]">
                         <div class="flex items-center justify-between mb-8">
                             <div>
-                                <span class="text-xs font-bold text-[#2E7D5B] uppercase tracking-wider">Complete The Look</span>
-                                <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#14281E] tracking-tight mt-1">
+                                <span class="text-xs font-bold text-[#74826B] uppercase tracking-wider">Complete The Look</span>
+                                <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#2B3326] tracking-tight mt-1">
                                     You May Also Love
                                 </h2>
                             </div>
-                            <a href="{{ route('products.index') }}" class="text-sm font-bold text-[#14281E] hover:text-[#2E7D5B] transition-colors flex items-center gap-1 group">
+                            <a href="{{ route('products.index') }}" class="text-sm font-bold text-[#2B3326] hover:text-[#74826B] transition-colors flex items-center gap-1 group">
                                 <span>View All Catalog</span>
                                 <span class="group-hover:translate-x-1 transition-transform">→</span>
                             </a>
