@@ -137,7 +137,7 @@
                     <h2 class="text-lg font-bold font-serif text-[#2B3326]">
                         Your Shopping Bag
                     </h2>
-                    <span x-text="count + ' items'" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2]">
+                    <span x-text="count + ' items'" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2]">
                     </span>
                 </div>
 
@@ -146,7 +146,7 @@
                     type="button"
                     @click="open = false"
                     aria-label="Close cart"
-                    class="w-8 h-8 rounded-full bg-[#FAF7F0] hover:bg-[#E8E2D5] text-[#2B3326] flex items-center justify-center transition-colors text-base font-bold cursor-pointer"
+                    class="w-8 h-8 rounded-md bg-[#FAF7F0] hover:bg-[#E8E2D5] text-[#2B3326] flex items-center justify-center transition-colors text-base font-bold cursor-pointer"
                 >
                     ✕
                 </button>
@@ -178,7 +178,7 @@
                 <!-- If Cart is Empty -->
                 <template x-if="items.length === 0">
                     <div class="py-16 text-center flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center text-[#5C6654] shadow-sm mb-4 border border-[#D7C7B2]">
+                        <div class="w-16 h-16 rounded-md bg-white flex items-center justify-center text-[#5C6654] shadow-sm mb-4 border border-[#D7C7B2]">
                             <svg class="w-8 h-8 text-[#74826B]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>
@@ -190,7 +190,7 @@
                         <a
                             href="{{ route('products.index') }}"
                             @click="open = false"
-                            class="mt-6 px-6 py-2.5 rounded-xl bg-[#74826B] text-white text-xs font-bold hover:bg-[#636F5A] transition-colors shadow-xs"
+                            class="mt-6 px-6 py-2.5 rounded-lg bg-[#74826B] text-white text-xs font-bold hover:bg-[#636F5A] transition-colors shadow-xs"
                         >
                             Explore Collections →
                         </a>
@@ -199,9 +199,9 @@
 
                 <!-- Items Loop -->
                 <template x-for="item in items" :key="item.id">
-                    <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white border border-[#D7C7B2] shadow-2xs">
+                    <div class="flex items-start gap-3.5 p-3 rounded-lg bg-white border border-[#D7C7B2] shadow-2xs">
                         <!-- Product Thumbnail -->
-                        <img :src="item.image" :alt="item.name" class="w-20 h-20 rounded-xl object-cover bg-[#F3EFE6] flex-shrink-0 border border-[#D7C7B2]/70" />
+                        <img :src="item.image" :alt="item.name" class="w-20 h-20 rounded-md object-cover bg-[#F3EFE6] flex-shrink-0 border border-[#D7C7B2]/70" />
 
                         <!-- Details -->
                         <div class="flex-1 min-w-0">
@@ -213,7 +213,7 @@
 
                             <!-- Quantity Counter + Remove -->
                             <div class="mt-2.5 flex items-center justify-between">
-                                <div class="flex items-center rounded-lg bg-[#FAF7F0] border border-[#D7C7B2] px-1 py-0.5">
+                                <div class="flex items-center rounded-md bg-[#FAF7F0] border border-[#D7C7B2] px-1 py-0.5">
                                     <button
                                         type="button"
                                         @click="updateQuantity(item.id, -1)"
@@ -267,7 +267,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                     :class="items.length === 0 ? 'opacity-50 pointer-events-none' : ''"
-                    class="w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-xl bg-[#25d366] hover:bg-[#20ba5a] text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg transform active:scale-98"
+                    class="w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-lg bg-[#25d366] hover:bg-[#20ba5a] text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg transform active:scale-98"
                 >
                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
                         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>

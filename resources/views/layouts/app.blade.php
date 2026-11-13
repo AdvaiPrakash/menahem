@@ -77,7 +77,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon-192x192.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-    <meta name="theme-color" content="#FAF7F0">
+    <meta name="theme-color" content="#384230">
 
     <!-- Google Web Fonts (Playfair Display & Plus Jakarta Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

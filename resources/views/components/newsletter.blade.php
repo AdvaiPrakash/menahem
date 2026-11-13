@@ -11,11 +11,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <x-reveal delay="100">
-            <div class="rounded-3xl bg-white border border-[#D7C7B2] p-6 sm:p-10 lg:p-14 shadow-sm">
+            <div class="rounded-lg bg-white border border-[#D7C7B2] p-6 sm:p-10 lg:p-14 shadow-sm">
                 
                 <!-- Section Header -->
                 <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] text-xs font-bold uppercase tracking-wider mb-3.5 shadow-2xs">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-md bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] text-xs font-bold uppercase tracking-wider mb-3.5 shadow-2xs">
                         <span>★</span>
                         <span>ATELIER CONCIERGE & STYLING</span>
                     </div>
@@ -44,10 +44,10 @@
                 >
                     
                     <!-- Left: Elegant Form -->
-                    <div class="lg:col-span-7 bg-[#F3EFE6] p-6 sm:p-8 rounded-2xl border border-[#D7C7B2]">
+                    <div class="lg:col-span-7 bg-[#F3EFE6] p-6 sm:p-8 rounded-lg border border-[#D7C7B2]">
                         <!-- Success Banner after Submission -->
-                        <div x-show="submitted" x-cloak class="p-6 rounded-xl bg-white border border-[#74826B] text-center shadow-sm">
-                            <div class="w-12 h-12 rounded-full bg-[#74826B] text-white flex items-center justify-center mx-auto mb-3 shadow-sm text-xl font-bold">
+                        <div x-show="submitted" x-cloak class="p-6 rounded-md bg-white border border-[#74826B] text-center shadow-sm">
+                            <div class="w-10 h-10 rounded-md bg-[#74826B] text-white flex items-center justify-center mx-auto mb-3 shadow-sm text-xl font-bold">
                                 ✓
                             </div>
                             <h3 class="text-lg font-bold font-serif text-[#2B3326]">Inquiry Received with Thanks!</h3>
@@ -58,7 +58,7 @@
                                 :href="'https://wa.me/919876543210?text=Hello%20Menahem!%20My%20name%20is%20' + encodeURIComponent(name) + '.%20I%20just%20submitted%20an%20inquiry%20regarding%20' + encodeURIComponent(inquiryType) + ':%20' + encodeURIComponent(message)"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25d366] text-white text-xs font-bold hover:bg-[#20ba5a] transition-all shadow-xs"
+                                class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#25d366] text-white text-xs font-bold hover:bg-[#20ba5a] transition-all shadow-xs"
                             >
                                 <span>Continue on WhatsApp Immediately</span>
                                 <span>→</span>
@@ -78,7 +78,7 @@
                                         x-model="name"
                                         required
                                         placeholder="e.g. Radhika Sharma"
-                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
+                                        class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
                                     />
                                 </div>
                                 <div>
@@ -90,7 +90,7 @@
                                         x-model="phone"
                                         required
                                         placeholder="+91 98765 43210"
-                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
+                                        class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
                                     />
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                                         x-model="email"
                                         required
                                         placeholder="radhika@example.com"
-                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
+                                        class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
                                     />
                                 </div>
                                 <div>
@@ -115,7 +115,7 @@
                                     </label>
                                     <select
                                         x-model="inquiryType"
-                                        class="w-full px-4 py-3 rounded-xl bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors cursor-pointer"
+                                        class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors cursor-pointer"
                                     >
                                         <option value="Curtains & Drapes">Curtains & Custom Drapes</option>
                                         <option value="Bedsheets & Dohars">Bedsheets & Mulmul Dohars</option>
@@ -137,7 +137,7 @@
                                     required
                                     rows="4"
                                     placeholder="Tell us about your room, window heights, fabric preferences, or questions..."
-                                    class="w-full px-4 py-3 rounded-xl bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors resize-none"
+                                    class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors resize-none"
                                 ></textarea>
                             </div>
 
@@ -145,7 +145,7 @@
                             <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
                                 <button
                                     type="submit"
-                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full bg-[#74826B] hover:bg-[#636F5A] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md shadow-[#74826B]/25 cursor-pointer active:scale-98"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-md bg-[#74826B] hover:bg-[#636F5A] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md shadow-[#74826B]/25 cursor-pointer active:scale-98"
                                 >
                                     <span>Send Consultation Request</span>
                                     <span>↗</span>
@@ -161,7 +161,7 @@
                     <div class="lg:col-span-5 space-y-4">
                         
                         <!-- WhatsApp Direct Concierge Card -->
-                        <div class="p-6 rounded-2xl bg-[#E8E2D5] border border-[#D7C7B2] flex flex-col justify-between">
+                        <div class="p-6 rounded-lg bg-[#E8E2D5] border border-[#D7C7B2] flex flex-col justify-between">
                             <div>
                                 <span class="text-[10px] uppercase font-bold tracking-wider text-[#74826B]">Fastest Response</span>
                                 <h3 class="text-base sm:text-lg font-bold font-serif text-[#2B3326] mt-1">
@@ -176,7 +176,7 @@
                                     href="{{ $whatsappUrl }}"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    class="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-full bg-[#25d366] hover:bg-[#20ba5a] text-white text-xs font-bold tracking-wide transition-all shadow-sm"
+                                    class="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-md bg-[#25d366] hover:bg-[#20ba5a] text-white text-xs font-bold tracking-wide transition-all shadow-sm"
                                 >
                                     <svg class="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24">
                                         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
@@ -188,7 +188,7 @@
                         </div>
 
                         <!-- Contact Details List -->
-                        <div class="p-6 rounded-2xl bg-[#FAF7F0] border border-[#D7C7B2] space-y-3.5 text-xs">
+                        <div class="p-6 rounded-lg bg-[#FAF7F0] border border-[#D7C7B2] space-y-3.5 text-xs">
                             <div class="flex items-start gap-3">
                                 <span class="text-[#74826B] text-sm mt-0.5">📞</span>
                                 <div>

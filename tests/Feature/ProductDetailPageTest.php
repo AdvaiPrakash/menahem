@@ -14,8 +14,10 @@ class ProductDetailPageTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
-        $response->assertSee('Make Your Home More Beautiful');
+        $response->assertSee('Handcrafted Bedsheets & Mulmul Dohars');
+        $response->assertSee('Rooted in Simple Living, Crafted for Everyday Comfort');
         $response->assertSee('Trending Home Essentials');
+        $response->assertSee('Make Your Home More Beautiful');
     }
 
     /**

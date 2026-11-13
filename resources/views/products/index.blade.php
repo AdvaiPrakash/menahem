@@ -87,7 +87,7 @@
                     <div class="relative flex-shrink-0">
                         <select
                             x-model="selectedCategory"
-                            class="appearance-none pl-3.5 pr-8 py-2 rounded-xl bg-[#F3EFE6] border border-[#D7C7B2] text-xs font-bold text-[#2B3326] cursor-pointer hover:border-[#74826B] focus:outline-hidden focus:ring-1 focus:ring-[#74826B] transition-colors"
+                            class="appearance-none pl-3.5 pr-8 py-2 rounded-md bg-[#F3EFE6] border border-[#D7C7B2] text-xs font-bold text-[#2B3326] cursor-pointer hover:border-[#74826B] focus:outline-hidden focus:ring-1 focus:ring-[#74826B] transition-colors"
                         >
                             <option value="all">All Collections</option>
                             @foreach($categories as $cat)
@@ -106,7 +106,7 @@
                         type="button"
                         @click="quickFilter = (quickFilter === 'new' ? 'all' : 'new')"
                         :class="quickFilter === 'new' ? 'bg-[#74826B] text-white border-[#74826B]' : 'bg-white text-[#2B3326] border-[#D7C7B2] hover:border-[#74826B]'"
-                        class="px-3.5 py-2 rounded-xl border text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 cursor-pointer"
+                        class="px-3.5 py-2 rounded-md border text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 cursor-pointer"
                     >
                         New Arrivals
                     </button>
@@ -116,7 +116,7 @@
                         type="button"
                         @click="quickFilter = (quickFilter === 'sale' ? 'all' : 'sale')"
                         :class="quickFilter === 'sale' ? 'bg-[#74826B] text-white border-[#74826B]' : 'bg-white text-[#2B3326] border-[#D7C7B2] hover:border-[#74826B]'"
-                        class="px-3.5 py-2 rounded-xl border text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 cursor-pointer"
+                        class="px-3.5 py-2 rounded-md border text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 cursor-pointer"
                     >
                         Sale
                     </button>
@@ -126,7 +126,7 @@
                         type="button"
                         @click="quickFilter = (quickFilter === 'bestseller' ? 'all' : 'bestseller')"
                         :class="quickFilter === 'bestseller' ? 'bg-[#74826B] text-white border-[#74826B]' : 'bg-white text-[#2B3326] border-[#D7C7B2] hover:border-[#74826B]'"
-                        class="px-3.5 py-2 rounded-xl border text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 cursor-pointer"
+                        class="px-3.5 py-2 rounded-md border text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 cursor-pointer"
                     >
                         Bestsellers
                     </button>
@@ -140,7 +140,7 @@
                             type="text"
                             x-model="searchQuery"
                             placeholder="Search products..."
-                            class="w-full pl-9 pr-4 py-2 rounded-xl bg-white border border-[#D7C7B2] text-xs text-[#2B3326] placeholder-[#5C6654]/60 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
+                            class="w-full pl-9 pr-4 py-2 rounded-md bg-white border border-[#D7C7B2] text-xs text-[#2B3326] placeholder-[#5C6654]/60 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
                         />
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[#5C6654]">
                             <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +156,7 @@
                                 type="button"
                                 @click="selectedCategory = (selectedCategory === '{{ $cat['slug'] }}' ? 'all' : '{{ $cat['slug'] }}')"
                                 :class="selectedCategory === '{{ $cat['slug'] }}' ? 'bg-[#74826B] text-white border-[#74826B]' : 'bg-white text-[#5C6654] border-[#D7C7B2] hover:text-[#2B3326] hover:border-[#74826B]'"
-                                class="px-2.5 py-1.5 rounded-lg border text-[11px] font-medium transition-colors cursor-pointer"
+                                class="px-2.5 py-1.5 rounded-md border text-[11px] font-medium transition-colors cursor-pointer"
                             >
                                 {{ $cat['name'] }}
                             </button>
@@ -171,7 +171,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         
         <!-- Collection Hero Banner (Matches Reference Top Showcase) -->
-        <div class="rounded-3xl overflow-hidden bg-[#F3EFE6] border border-[#D7C7B2] shadow-xs mb-10">
+        <div class="rounded-lg overflow-hidden bg-[#F3EFE6] border border-[#D7C7B2] shadow-xs mb-10">
             <div class="grid grid-cols-1 md:grid-cols-12 items-center">
                 
                 <!-- Left Banner Graphic: Hanging Linens / Lifestyle Preview -->
@@ -211,7 +211,7 @@
                 <h2 class="text-2xl sm:text-3xl font-bold font-serif tracking-tight text-[#2B3326]">
                     Menahem Collection
                 </h2>
-                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-[#E8E2D5] text-[#5C6654] border border-[#D7C7B2]">
+                <span class="text-xs font-semibold px-3 py-1 rounded-md bg-[#E8E2D5] text-[#5C6654] border border-[#D7C7B2]">
                     {{ count($allProducts) }} products
                 </span>
             </div>
@@ -221,7 +221,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
             
             <!-- Left Column: Filter Sidebar (Matches Reference Layout) -->
-            <aside class="lg:col-span-3 bg-white rounded-3xl p-6 border border-[#D7C7B2] shadow-xs space-y-7 sticky top-36">
+            <aside class="lg:col-span-3 bg-white rounded-lg p-6 border border-[#D7C7B2] shadow-xs space-y-7 sticky top-36">
                 
                 <!-- Filter Section 1: Category -->
                 <div>
@@ -358,7 +358,7 @@
                     <button
                         type="button"
                         @click="resetAll()"
-                        class="w-full py-2.5 px-4 rounded-xl border border-[#D7C7B2] text-xs font-bold text-[#2B3326] hover:bg-[#74826B] hover:text-white transition-all text-center cursor-pointer"
+                        class="w-full py-2.5 px-4 rounded-md border border-[#D7C7B2] text-xs font-bold text-[#2B3326] hover:bg-[#74826B] hover:text-white transition-all text-center cursor-pointer"
                     >
                         Clear All Filters
                     </button>
@@ -388,9 +388,9 @@
                     x-show="true"
                     x-cloak
                     id="empty-state-card"
-                    class="hidden rounded-3xl bg-white p-12 text-center border border-[#D7C7B2] shadow-xs my-8"
+                    class="hidden rounded-lg bg-white p-12 text-center border border-[#D7C7B2] shadow-xs my-8"
                 >
-                    <div class="w-16 h-16 rounded-full bg-[#F3EFE6] text-[#74826B] flex items-center justify-center mx-auto mb-4">
+                    <div class="w-14 h-14 rounded-md bg-[#F3EFE6] text-[#74826B] flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8" width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -402,7 +402,7 @@
                     <button
                         type="button"
                         @click="resetAll()"
-                        class="mt-5 px-6 py-2.5 rounded-xl bg-[#74826B] text-white text-xs font-bold hover:bg-[#636F5A] transition-colors cursor-pointer"
+                        class="mt-5 px-6 py-2.5 rounded-md bg-[#74826B] text-white text-xs font-bold hover:bg-[#636F5A] transition-colors cursor-pointer"
                     >
                         Reset All Filters
                     </button>

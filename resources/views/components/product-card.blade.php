@@ -22,18 +22,18 @@
 
 <div
     x-data="{ liked: false }"
-    class="group bg-white rounded-3xl p-3.5 sm:p-4 border border-[#D7C7B2] hover:border-[#74826B] hover:shadow-xl hover:shadow-[#74826B]/10 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full relative"
+    class="group bg-white rounded-lg p-3.5 sm:p-4 border border-[#D7C7B2] hover:border-[#74826B] hover:shadow-xl hover:shadow-[#74826B]/10 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full relative"
     data-category="{{ strtolower($product['category_slug'] ?? $category) }}"
     data-material="{{ strtolower($material ?? '') }}"
     data-price="{{ $numericPrice }}"
     data-name="{{ strtolower($name) }}"
 >
     <!-- Top Image Container with Soft Rounded Corners -->
-    <a href="{{ $productUrl }}" class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#F3EFE6] flex items-center justify-center block">
+    <a href="{{ $productUrl }}" class="relative w-full aspect-[4/3] rounded-md overflow-hidden bg-[#F3EFE6] flex items-center justify-center block">
         <!-- Optional Floating Badge (Linen & Sage Palette) -->
         @if($badge)
             <div class="absolute top-3 left-3 z-10">
-                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-2xs {{ $badge === 'Sale' ? 'bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2]' : ($badge === 'New' ? 'bg-[#B5C1A5] text-[#2B3326] border border-[#74826B]/60' : 'bg-[#D7C7B2] text-[#2B3326] border border-[#74826B]/40') }}">
+                <span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider shadow-2xs {{ $badge === 'Sale' ? 'bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2]' : ($badge === 'New' ? 'bg-[#B5C1A5] text-[#2B3326] border border-[#74826B]/60' : 'bg-[#D7C7B2] text-[#2B3326] border border-[#74826B]/40') }}">
                     {{ $badge }}
                 </span>
             </div>
@@ -102,7 +102,7 @@
         <!-- Left: Buy Now Button -> navigates to Detail Page -->
         <a
             href="{{ $productUrl }}"
-            class="inline-flex items-center justify-center gap-1.5 px-4 sm:px-4.5 py-2 rounded-xl bg-[#74826B] hover:bg-[#636F5A] text-white text-xs sm:text-sm font-bold tracking-wide transition-all duration-200 shadow-2xs hover:shadow-md transform hover:scale-[1.02] active:scale-98"
+            class="inline-flex items-center justify-center gap-1.5 px-4 sm:px-4.5 py-2 rounded-md bg-[#74826B] hover:bg-[#636F5A] text-white text-xs sm:text-sm font-bold tracking-wide transition-all duration-200 shadow-2xs hover:shadow-md transform hover:scale-[1.02] active:scale-98"
         >
             <span>Buy Now</span>
             <svg class="w-3.5 h-3.5 text-white" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,7 +119,7 @@
                 :class="liked ? 'bg-[#E8E2D5] text-[#74826B] border-[#74826B]' : 'bg-white text-gray-400 border-[#D7C7B2] hover:text-[#74826B] hover:border-[#74826B]'"
                 aria-label="Add to wishlist"
                 title="Add to wishlist"
-                class="w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-200 shadow-2xs hover:scale-105 active:scale-95 cursor-pointer"
+                class="w-9 h-9 rounded-md border flex items-center justify-center transition-all duration-200 shadow-2xs hover:scale-105 active:scale-95 cursor-pointer"
             >
                 <svg
                     class="w-4 h-4 transition-transform duration-200"
@@ -151,7 +151,7 @@
                 })"
                 aria-label="Add to cart"
                 title="Add to cart"
-                class="w-9 h-9 rounded-full border border-[#D7C7B2] bg-white text-[#2B3326] hover:bg-[#E8E2D5] hover:border-[#74826B] hover:text-[#2B3326] flex items-center justify-center transition-all duration-200 shadow-2xs hover:scale-105 active:scale-95 cursor-pointer"
+                class="w-9 h-9 rounded-md border border-[#D7C7B2] bg-white text-[#2B3326] hover:bg-[#E8E2D5] hover:border-[#74826B] hover:text-[#2B3326] flex items-center justify-center transition-all duration-200 shadow-2xs hover:scale-105 active:scale-95 cursor-pointer"
             >
                 <svg class="w-4 h-4" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>

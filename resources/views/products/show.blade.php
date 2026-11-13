@@ -102,7 +102,7 @@
                                         type="button"
                                         @click="selectImage(idx)"
                                         :class="activeIndex === idx ? 'ring-2 ring-[#74826B] border-[#74826B] shadow-sm opacity-100 scale-102' : 'border-[#D7C7B2] opacity-70 hover:opacity-100 hover:border-[#74826B]/50'"
-                                        class="relative w-16 sm:w-20 aspect-square rounded-2xl overflow-hidden bg-[#F3EFE6] border-2 transition-all duration-200 cursor-pointer flex-shrink-0"
+                                        class="relative w-16 sm:w-20 aspect-square rounded-md overflow-hidden bg-[#F3EFE6] border-2 transition-all duration-200 cursor-pointer flex-shrink-0"
                                         :aria-label="'View photo ' + (idx + 1)"
                                     >
                                         <img :src="thumb" :alt="'Thumbnail ' + (idx + 1)" class="w-full h-full object-cover" />
@@ -111,10 +111,10 @@
                             </div>
 
                             <!-- Main Product Image (Tailored, Compact & Elegant: max-h ~460px) -->
-                            <div class="relative flex-1 w-full aspect-[4/4.2] sm:aspect-square max-h-[440px] sm:max-h-[460px] rounded-3xl overflow-hidden bg-[#F3EFE6] border border-[#D7C7B2] shadow-sm group">
+                            <div class="relative flex-1 w-full aspect-[4/4.2] sm:aspect-square max-h-[440px] sm:max-h-[460px] rounded-lg overflow-hidden bg-[#F3EFE6] border border-[#D7C7B2] shadow-sm group">
                                 <!-- Floating Badge -->
                                 @if($badge)
-                                    <span class="absolute top-3.5 left-3.5 z-10 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] shadow-sm">
+                                    <span class="absolute top-3.5 left-3.5 z-10 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] shadow-sm">
                                         {{ $badge }}
                                     </span>
                                 @endif
@@ -130,7 +130,7 @@
                                 <button
                                     type="button"
                                     @click="prevImage()"
-                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#2B3326] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer hover:scale-105"
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-md bg-white/90 hover:bg-white text-[#2B3326] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer hover:scale-105"
                                     aria-label="Previous image"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
@@ -138,21 +138,21 @@
                                 <button
                                     type="button"
                                     @click="nextImage()"
-                                    class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#2B3326] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer hover:scale-105"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-md bg-white/90 hover:bg-white text-[#2B3326] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer hover:scale-105"
                                     aria-label="Next image"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                                 </button>
 
                                 <!-- Slide Index Counter -->
-                                <div class="absolute bottom-3 right-3 z-10 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-semibold text-white tracking-wider flex items-center gap-1 shadow-xs">
+                                <div class="absolute bottom-3 right-3 z-10 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-[10px] font-semibold text-white tracking-wider flex items-center gap-1 shadow-xs">
                                     <span x-text="activeIndex + 1">1</span>
                                     <span>/</span>
                                     <span x-text="gallery.length">{{ count($gallery) }}</span>
                                 </div>
 
                                 <!-- Subtle Zoom Hint -->
-                                <div class="absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full bg-white/85 backdrop-blur-md text-[10px] font-medium text-[#2B3326] shadow-xs hidden sm:flex items-center gap-1">
+                                <div class="absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-md bg-white/85 backdrop-blur-md text-[10px] font-medium text-[#2B3326] shadow-xs hidden sm:flex items-center gap-1">
                                     <span>Artisanal Weave View</span>
                                 </div>
                             </div>
@@ -177,7 +177,7 @@
                     <div class="lg:col-span-6 flex flex-col text-left">
                         
                         <!-- Eyebrow Pill -->
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] text-xs font-bold uppercase tracking-wider mb-3 w-fit">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] text-xs font-bold uppercase tracking-wider mb-3 w-fit">
                             <span class="text-[#74826B]">★</span>
                             <span>{{ $material }}</span>
                         </div>
@@ -209,7 +209,7 @@
                                 <span class="text-lg text-[#5C6654]/70 line-through font-medium">
                                     {{ $originalPrice }}
                                 </span>
-                                <span class="px-2.5 py-0.5 rounded-full bg-[#E8E2D5] text-[#74826B] border border-[#D7C7B2] text-xs font-bold">
+                                <span class="px-2.5 py-0.5 rounded-md bg-[#E8E2D5] text-[#74826B] border border-[#D7C7B2] text-xs font-bold">
                                     Save 25%
                                 </span>
                             @endif
@@ -223,19 +223,19 @@
 
                         <!-- Highlights List -->
                         <div class="mt-5 grid grid-cols-2 gap-2.5 text-xs text-[#2B3326] font-medium">
-                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#D7C7B2]">
+                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-[#D7C7B2]">
                                 <span class="text-[#74826B] font-bold">✓</span>
                                 <span>100% Breathable Weave</span>
                             </div>
-                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#D7C7B2]">
+                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-[#D7C7B2]">
                                 <span class="text-[#74826B] font-bold">✓</span>
                                 <span>Zero Color Bleed</span>
                             </div>
-                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#D7C7B2]">
+                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-[#D7C7B2]">
                                 <span class="text-[#74826B] font-bold">✓</span>
                                 <span>Pre-Washed & Soft</span>
                             </div>
-                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#D7C7B2]">
+                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-[#D7C7B2]">
                                 <span class="text-[#74826B] font-bold">✓</span>
                                 <span>Bespoke Tailoring</span>
                             </div>
@@ -244,11 +244,11 @@
                         <!-- Quantity Selector -->
                         <div class="mt-6 flex items-center gap-4">
                             <span class="text-xs font-bold text-[#2B3326] uppercase tracking-wider">Quantity</span>
-                            <div class="flex items-center rounded-xl bg-white border border-[#D7C7B2] p-1">
+                            <div class="flex items-center rounded-md bg-white border border-[#D7C7B2] p-1">
                                 <button
                                     type="button"
                                     @click="if(quantity > 1) quantity--"
-                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-[#F3EFE6] transition-colors cursor-pointer"
+                                    class="w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-[#F3EFE6] transition-colors cursor-pointer"
                                     aria-label="Decrease quantity"
                                 >
                                     −
@@ -257,7 +257,7 @@
                                 <button
                                     type="button"
                                     @click="quantity++"
-                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-[#F3EFE6] transition-colors cursor-pointer"
+                                    class="w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-[#F3EFE6] transition-colors cursor-pointer"
                                     aria-label="Increase quantity"
                                 >
                                     +
@@ -275,7 +275,7 @@
                                 :href="dynamicWhatsappUrl"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="flex-1 flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-[#74826B] hover:bg-[#636F5A] text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 group"
+                                class="flex-1 flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#74826B] hover:bg-[#636F5A] text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 group"
                             >
                                 <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
                                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
@@ -295,7 +295,7 @@
                                     image: activeImage,
                                     category: '{{ addslashes($category) }}'
                                 })"
-                                class="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white hover:bg-[#F3EFE6] text-[#2B3326] border border-[#D7C7B2] text-sm font-bold tracking-wide transition-all shadow-xs hover:border-[#74826B] cursor-pointer"
+                                class="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-white hover:bg-[#F3EFE6] text-[#2B3326] border border-[#D7C7B2] text-sm font-bold tracking-wide transition-all shadow-xs hover:border-[#74826B] cursor-pointer"
                             >
                                 <svg class="w-4.5 h-4.5 text-[#2B3326]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
@@ -305,7 +305,7 @@
                         </div>
 
                         <!-- Trust Guarantee Box -->
-                        <div class="mt-6 p-4 rounded-2xl bg-white border border-[#D7C7B2] flex flex-col gap-2.5">
+                        <div class="mt-6 p-4 rounded-lg bg-white border border-[#D7C7B2] flex flex-col gap-2.5">
                             <div class="flex items-center gap-2.5 text-xs text-[#2B3326] font-semibold">
                                 <span class="text-[#74826B]">⚡</span>
                                 <span>Free Pan-India Express Delivery on this product</span>
@@ -321,7 +321,7 @@
                         </div>
 
                         <!-- Specifications & Craftsmanship Tabs inside details column (keeps sticky gallery visible while reading) -->
-                        <div class="mt-8 bg-white rounded-3xl p-5 sm:p-6 border border-[#D7C7B2] shadow-xs">
+                        <div class="mt-8 bg-white rounded-lg p-5 sm:p-6 border border-[#D7C7B2] shadow-xs">
                             <div class="flex items-center gap-5 border-b border-[#D7C7B2] pb-3">
                                 <button
                                     type="button"
@@ -356,15 +356,15 @@
                                     Every Menahem essential is woven with meticulous care using hand-selected yarn. Designed to balance everyday durability with cloud-like gentleness, our fabrics age gracefully through repeated washes without pilling or color degradation.
                                 </p>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                                    <div class="p-3 rounded-xl bg-[#FAF7F0] border border-[#D7C7B2]">
+                                    <div class="p-3 rounded-md bg-[#FAF7F0] border border-[#D7C7B2]">
                                         <span class="text-[10px] uppercase font-bold text-[#5C6654]">Composition</span>
                                         <p class="text-xs font-bold text-[#2B3326] mt-0.5">{{ $material }}</p>
                                     </div>
-                                    <div class="p-3 rounded-xl bg-[#FAF7F0] border border-[#D7C7B2]">
+                                    <div class="p-3 rounded-md bg-[#FAF7F0] border border-[#D7C7B2]">
                                         <span class="text-[10px] uppercase font-bold text-[#5C6654]">Weave Density</span>
                                         <p class="text-xs font-bold text-[#2B3326] mt-0.5">400+ Thread Count</p>
                                     </div>
-                                    <div class="p-3 rounded-xl bg-[#FAF7F0] border border-[#D7C7B2]">
+                                    <div class="p-3 rounded-md bg-[#FAF7F0] border border-[#D7C7B2]">
                                         <span class="text-[10px] uppercase font-bold text-[#5C6654]">Craft Origin</span>
                                         <p class="text-xs font-bold text-[#2B3326] mt-0.5">Handcrafted, India</p>
                                     </div>

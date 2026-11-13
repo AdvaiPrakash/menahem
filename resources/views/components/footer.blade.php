@@ -38,16 +38,16 @@
 
                 <!-- Social Icons in Sand & White -->
                 <div class="flex items-center gap-2.5 text-[#2B3326]">
-                    <a href="#" class="w-8 h-8 rounded-full bg-white hover:bg-[#74826B] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Facebook">
+                    <a href="#" class="w-8 h-8 rounded-md bg-white hover:bg-[#74826B] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Facebook">
                         f
                     </a>
-                    <a href="#" class="w-8 h-8 rounded-full bg-white hover:bg-[#74826B] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Instagram">
+                    <a href="#" class="w-8 h-8 rounded-md bg-white hover:bg-[#74826B] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Instagram">
                         ig
                     </a>
-                    <a href="#" class="w-8 h-8 rounded-full bg-white hover:bg-[#74826B] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Twitter">
+                    <a href="#" class="w-8 h-8 rounded-md bg-white hover:bg-[#74826B] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Twitter">
                         𝕏
                     </a>
-                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white hover:bg-[#25d366] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="WhatsApp">
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-md bg-white hover:bg-[#25d366] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="WhatsApp">
                         wa
                     </a>
                 </div>
@@ -125,7 +125,7 @@
             </div>
 
             <!-- Country/Currency Pill Dropdown in Crisp Sand -->
-            <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#D7C7B2] text-[#2B3326] text-[11px] font-bold shadow-2xs">
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-[#D7C7B2] text-[#2B3326] text-[11px] font-bold shadow-2xs">
                 <span>India | INR ₹</span>
                 <span class="text-[9px]">▼</span>
             </div>
