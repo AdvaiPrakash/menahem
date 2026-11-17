@@ -8,19 +8,19 @@
     $whatsappUrl = $brand['whatsapp_url'] ?? '#';
 @endphp
 
-<section id="promo-banner" class="py-16 sm:py-20 bg-[#FAF7F0]">
+<section id="promo-banner" class="py-16 sm:py-20 bg-white border-b border-neutral-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <x-reveal delay="150">
-            <!-- Split Promo Banner Container: Warm Linen, Sand & Sage Gradient -->
-            <div class="rounded-lg overflow-hidden shadow-sm border border-[#D7C7B2] grid grid-cols-1 lg:grid-cols-12 bg-gradient-to-br from-[#E8E2D5] via-[#D7C7B2]/50 to-[#B5C1A5]/40 relative">
+            <!-- Split Promo Banner Container: Pure White with Neutral Border -->
+            <div class="rounded-lg overflow-hidden shadow-sm border border-neutral-200 grid grid-cols-1 lg:grid-cols-12 bg-white relative">
                 
                 <!-- Left Column: Light Botanical Panel with Offer & Live Timer -->
-                <div class="lg:col-span-6 p-8 sm:p-12 lg:p-14 flex flex-col justify-between relative z-10">
+                <div class="lg:col-span-6 p-8 sm:p-12 lg:p-14 flex flex-col justify-between relative z-10 bg-white">
                     
                     <div>
                         <!-- Pill: LIMITED TIME OFFER -->
-                        <div class="inline-block px-3.5 py-1 rounded-md bg-white/90 backdrop-blur-md text-[#2B3326] border border-[#D7C7B2] text-[11px] font-bold uppercase tracking-wider mb-5 shadow-2xs">
+                        <div class="inline-block px-3.5 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-[11px] font-bold uppercase tracking-wider mb-5 shadow-2xs">
                             {{ $promo['label'] ?? 'LIMITED TIME OFFER' }}
                         </div>
 
@@ -45,7 +45,7 @@
 
                     <!-- Circular Countdown Timer Badge -->
                     <div class="mt-10 sm:mt-12 inline-flex items-center">
-                        <div class="bg-white/95 rounded-lg px-6 py-4 shadow-md border border-[#D7C7B2] flex flex-col items-center justify-center text-center">
+                        <div class="bg-white rounded-lg px-6 py-4 shadow-md border border-neutral-200 flex flex-col items-center justify-center text-center">
                             <span class="text-[10px] font-bold uppercase tracking-wider text-[#5C6654] mb-1">
                                 Hurry Up! Offer ends in
                             </span>
@@ -75,11 +75,11 @@
 
                 </div>
 
-                <!-- Right Column: Visual Imagery Grid in Warm Frame -->
-                <div class="lg:col-span-6 grid grid-cols-2 gap-3 p-3 sm:p-4 bg-[#F3EFE6]/70">
+                <!-- Right Column: Visual Imagery Grid in Frame -->
+                <div class="lg:col-span-6 grid grid-cols-2 gap-3 p-3 sm:p-4 bg-white border-t lg:border-t-0 lg:border-l border-neutral-200">
                     
                     <!-- Image Card 1: Folded Linens & Bedding -->
-                    <div class="relative rounded-md overflow-hidden bg-white border border-[#D7C7B2] flex flex-col justify-end p-6 min-h-[260px] lg:min-h-full group shadow-sm">
+                    <div class="relative rounded-md overflow-hidden bg-white border border-neutral-200 flex flex-col justify-end p-6 min-h-[260px] lg:min-h-full group shadow-sm">
                         <img src="{{ asset('/images/categories/dohars-quilts.webp') }}" alt="Artisanal Dohars & Quilts" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         <div class="absolute inset-0 bg-gradient-to-t from-[#2B3326]/80 via-[#2B3326]/25 to-transparent z-10"></div>
                         <div class="relative z-20 text-white">
@@ -90,7 +90,7 @@
                     </div>
 
                     <!-- Image Card 2: Modern Elegant Drapery & Living Space -->
-                    <div class="relative rounded-md overflow-hidden bg-white border border-[#D7C7B2] flex flex-col justify-end p-6 min-h-[260px] lg:min-h-full group shadow-sm">
+                    <div class="relative rounded-md overflow-hidden bg-white border border-neutral-200 flex flex-col justify-end p-6 min-h-[260px] lg:min-h-full group shadow-sm">
                         <img src="{{ asset('/images/categories/curtains.webp') }}" alt="Luxury Curtains & Drapes" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         <div class="absolute inset-0 bg-gradient-to-t from-[#2B3326]/80 via-[#2B3326]/25 to-transparent z-10"></div>
                         <div class="relative z-20 text-white">
@@ -101,6 +101,12 @@
                     </div>
 
                 </div>
+
+            </div>
+        </x-reveal>
+
+    </div>
+</section>
 
             </div>
         </x-reveal>

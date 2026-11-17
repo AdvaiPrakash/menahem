@@ -23,19 +23,19 @@
   --color-mint: #B5C1A5;              /* Signature Soft Sage Accent */
   --color-mint-light: #E8E2D5;        /* Soft Linen Oat Tint */
   --color-aqua: #B5C1A5;              /* Soft Sage */
-  --color-celadon: #F6F4EB;           /* Warm Alabaster Cream */
+  --color-celadon: #FFFFFF;           /* Pure White */
 
   /* Light Surface Roles */
-  --color-khaki-1: #F3EFE6;           /* Soft Oat Surface */
-  --color-khaki-2: #EAE4D7;           /* Warm Linen Sand Base (Footer / Section Bottom) */
-  --color-khaki-3: #D7C7B2;           /* Sand Beige Accent Panel */
-  --color-khaki-4: #E8E2D5;           /* Soft Linen Card Surface */
+  --color-khaki-1: #FFFFFF;           /* Pure White Surface */
+  --color-khaki-2: #FFFFFF;           /* Pure White Base */
+  --color-khaki-3: #E5E7EB;           /* Clean Light Divider */
+  --color-khaki-4: #FFFFFF;           /* Pure White Card Surface */
 
-  --color-canvas: #FAF7F0;            /* Warm Alabaster Linen Luxury Canvas */
-  --color-card-bg: #F3EFE6;           /* Soft Oat-Tinted Card Background */
+  --color-canvas: #FFFFFF;            /* Pure White Canvas */
+  --color-card-bg: #FFFFFF;           /* Pure White Card Background */
   --color-charcoal: #2B3326;          /* Deep Olive Timber Heading Text (WCAG AAA) */
   --color-subtext: #5C6654;           /* Clean Muted Earthy Sage Subtext (WCAG AA) */
-  --color-border-subtle: rgba(215, 199, 178, 0.55); /* Delicate Sand Beige Divider */
+  --color-border-subtle: #E5E7EB;     /* Subtle Neutral Border */
   --color-star: #74826B;              /* Rating Stars in Earthy Olive */
 
   /* Legacy variable mapping to keep full backward compatibility */
@@ -82,7 +82,7 @@ body {
 
 /* Glassmorphism */
 @utility glass {
-  background: rgba(250, 247, 240, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(14px) saturate(150%);
   -webkit-backdrop-filter: blur(14px) saturate(150%);
   border-bottom: 1px solid var(--color-border-subtle);

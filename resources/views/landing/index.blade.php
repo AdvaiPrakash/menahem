@@ -3,7 +3,7 @@
         <!-- 1. Hero Section with Single Direction Marquee & Editorial Banner -->
         <x-hero :content="$content" />
 
-        <!-- 2. Shop by Category (5 Images in 1 Row on Desktop, 2 on Mobile) -->
+        <!-- 2. Shop by Category (Multi-Level Category Navigation Flow) -->
         <x-categories :content="$content" />
 
         <!-- 3. Shop by Rooms (Shop for Bedroom, Shop for Livingroom, Shop for Kitchen) -->

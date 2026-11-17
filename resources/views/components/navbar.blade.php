@@ -58,13 +58,13 @@
                         </svg>
                     </a>
                     <!-- Dropdown -->
-                    <div class="absolute top-full left-0 mt-2 w-64 bg-[#FAF7F0] rounded-lg shadow-xl border border-[#D7C7B2] p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <a href="{{ route('products.index') }}" class="flex items-center justify-between px-3 py-2 text-xs font-bold text-[#2B3326] hover:bg-[#E8E2D5] hover:text-[#2B3326] rounded-md transition-colors border-b border-[#D7C7B2]/70 mb-1">
-                            <span>All Collections</span>
-                            <span class="text-[10px] text-[#74826B] font-semibold">View All →</span>
+                    <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-neutral-200 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <a href="{{ route('categories.index') }}" class="flex items-center justify-between px-3 py-2 text-xs font-bold text-[#2B3326] hover:bg-neutral-100 hover:text-[#74826B] rounded-md transition-colors border-b border-neutral-200 mb-1">
+                            <span>Shop by Category</span>
+                            <span class="text-[10px] text-[#74826B] font-semibold">Explore All →</span>
                         </a>
                         @foreach($nav['shop_categories'] ?? [] as $cat)
-                            <a href="{{ route('products.index', ['category' => $cat['slug']]) }}" class="flex items-center justify-between px-3 py-2 text-xs font-medium text-[#2B3326] hover:bg-[#E8E2D5] hover:text-[#2B3326] rounded-md transition-colors">
+                            <a href="{{ url('/categories/' . $cat['slug']) }}" class="flex items-center justify-between px-3 py-2 text-xs font-medium text-[#2B3326] hover:bg-neutral-100 hover:text-[#74826B] rounded-md transition-colors">
                                 <span>{{ $cat['name'] }}</span>
                                 <span class="text-[10px] text-[#5C6654]">{{ $cat['badge'] }}</span>
                             </a>
@@ -131,16 +131,19 @@
         <div id="mobile-menu-drawer" class="hidden lg:hidden mt-3 pt-3 border-t border-[#2C3424] pb-2">
             <div class="flex flex-col gap-2.5">
                 <a href="{{ route('home') }}" class="px-3 py-2 text-sm font-semibold text-white bg-white/10 rounded-md">Home</a>
-                <a href="{{ route('products.index') }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Shop Catalog</a>
-                <a href="{{ route('products.index', ['category' => 'curtains']) }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Curtains</a>
-                <a href="{{ route('products.index', ['category' => 'towels']) }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Towels</a>
-                <a href="{{ route('products.index', ['category' => 'table-decor']) }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Table Linen</a>
-                <a href="{{ route('products.index', ['category' => 'rugs']) }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Rugs</a>
+                <a href="{{ route('categories.index') }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Shop by Category</a>
+                <a href="{{ url('/categories/curtains-drapes') }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Curtains & Drapes</a>
+                <a href="{{ url('/categories/table-decor') }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Table Decor</a>
+                <a href="{{ url('/categories/sofa-decor') }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Sofa Decor</a>
+                <a href="{{ url('/categories/towels-wellness') }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Towels & Wellness</a>
+                <a href="{{ url('/categories/bedsheets-dohars') }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Bedsheets & Dohars</a>
+                <a href="{{ url('/categories/rugs') }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Rugs</a>
+                <a href="{{ route('products.index') }}" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">All Products</a>
                 <a href="{{ route('home') }}#contact" class="px-3 py-2 text-sm font-medium text-white/85 hover:text-white hover:bg-white/10 rounded-md">Contact Us</a>
                 <button
                     type="button"
                     @click="$dispatch('open-cart'); document.getElementById('mobile-menu-drawer').classList.add('hidden');"
-                    class="mt-2 w-full py-2.5 rounded-lg bg-[#E8E2D5] hover:bg-[#D7C7B2] text-[#2B3326] text-xs font-bold text-center flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-2xs"
+                    class="mt-2 w-full py-2.5 rounded-lg bg-white hover:bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold text-center flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-2xs"
                 >
                     <span>View Shopping Bag</span>
                     <span class="px-2 py-0.5 rounded-md bg-[#74826B] text-white text-[10px] font-bold">2</span>

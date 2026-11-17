@@ -126,10 +126,10 @@
         x-transition:leave-end="translate-x-full"
         class="fixed inset-y-0 right-0 max-w-full flex pl-10"
     >
-        <div class="w-screen max-w-md bg-[#FAF7F0] shadow-2xl flex flex-col justify-between border-l border-[#D7C7B2]">
+        <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between border-l border-neutral-200">
             
             <!-- Drawer Header -->
-            <div class="p-5 sm:p-6 border-b border-[#D7C7B2]/70 bg-white flex items-center justify-between">
+            <div class="p-5 sm:p-6 border-b border-neutral-200 bg-white flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <svg class="w-5 h-5 text-[#74826B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
@@ -137,7 +137,7 @@
                     <h2 class="text-lg font-bold font-serif text-[#2B3326]">
                         Your Shopping Bag
                     </h2>
-                    <span x-text="count + ' items'" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2]">
+                    <span x-text="count + ' items'" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-neutral-100 text-[#2B3326] border border-neutral-200">
                     </span>
                 </div>
 
@@ -146,14 +146,14 @@
                     type="button"
                     @click="open = false"
                     aria-label="Close cart"
-                    class="w-8 h-8 rounded-md bg-[#FAF7F0] hover:bg-[#E8E2D5] text-[#2B3326] flex items-center justify-center transition-colors text-base font-bold cursor-pointer"
+                    class="w-8 h-8 rounded-md bg-white hover:bg-neutral-100 border border-neutral-200 text-[#2B3326] flex items-center justify-center transition-colors text-base font-bold cursor-pointer"
                 >
                     ✕
                 </button>
             </div>
 
             <!-- Free Shipping Progress Tracker -->
-            <div class="px-5 sm:px-6 py-3 bg-[#F3EFE6] border-b border-[#D7C7B2]">
+            <div class="px-5 sm:px-6 py-3 bg-neutral-50 border-b border-neutral-200">
                 <template x-if="subtotal >= 999">
                     <div class="flex items-center gap-2 text-xs font-semibold text-[#2B3326]">
                         <span>🎉</span>
@@ -166,7 +166,7 @@
                             <span>Add <strong class="text-[#2B3326]">₹<span x-text="freeShippingDiff"></span></strong> for Free Shipping</span>
                             <span x-text="freeShippingPercent + '%'"></span>
                         </div>
-                        <div class="w-full bg-white rounded-full h-2 overflow-hidden border border-[#D7C7B2]">
+                        <div class="w-full bg-white rounded-full h-2 overflow-hidden border border-neutral-200">
                             <div class="bg-[#74826B] h-full rounded-full transition-all duration-300" :style="'width: ' + freeShippingPercent + '%'"></div>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                 <!-- If Cart is Empty -->
                 <template x-if="items.length === 0">
                     <div class="py-16 text-center flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-md bg-white flex items-center justify-center text-[#5C6654] shadow-sm mb-4 border border-[#D7C7B2]">
+                        <div class="w-16 h-16 rounded-md bg-white flex items-center justify-center text-[#5C6654] shadow-sm mb-4 border border-neutral-200">
                             <svg class="w-8 h-8 text-[#74826B]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>
@@ -199,9 +199,9 @@
 
                 <!-- Items Loop -->
                 <template x-for="item in items" :key="item.id">
-                    <div class="flex items-start gap-3.5 p-3 rounded-lg bg-white border border-[#D7C7B2] shadow-2xs">
+                    <div class="flex items-start gap-3.5 p-3 rounded-lg bg-white border border-neutral-200 shadow-2xs">
                         <!-- Product Thumbnail -->
-                        <img :src="item.image" :alt="item.name" class="w-20 h-20 rounded-md object-cover bg-[#F3EFE6] flex-shrink-0 border border-[#D7C7B2]/70" />
+                        <img :src="item.image" :alt="item.name" class="w-20 h-20 rounded-md object-cover bg-white flex-shrink-0 border border-neutral-200" />
 
                         <!-- Details -->
                         <div class="flex-1 min-w-0">
@@ -213,7 +213,7 @@
 
                             <!-- Quantity Counter + Remove -->
                             <div class="mt-2.5 flex items-center justify-between">
-                                <div class="flex items-center rounded-md bg-[#FAF7F0] border border-[#D7C7B2] px-1 py-0.5">
+                                <div class="flex items-center rounded-md bg-white border border-neutral-200 px-1 py-0.5">
                                     <button
                                         type="button"
                                         @click="updateQuantity(item.id, -1)"
@@ -245,7 +245,7 @@
             </div>
 
             <!-- Drawer Footer (Subtotal & WhatsApp Checkout) -->
-            <div class="p-5 sm:p-6 bg-white border-t border-[#D7C7B2]">
+            <div class="p-5 sm:p-6 bg-white border-t border-neutral-200">
                 <div class="space-y-1.5 mb-4 text-xs">
                     <div class="flex items-center justify-between text-[#5C6654] font-medium">
                         <span>Subtotal</span>
@@ -255,7 +255,7 @@
                         <span>Express Delivery</span>
                         <span x-text="shipping === 0 ? 'FREE' : '₹99'" class="font-bold" :class="shipping === 0 ? 'text-[#74826B]' : 'text-[#2B3326]'"></span>
                     </div>
-                    <div class="pt-2 border-t border-[#D7C7B2]/70 flex items-center justify-between text-sm font-bold text-[#2B3326]">
+                    <div class="pt-2 border-t border-neutral-200 flex items-center justify-between text-sm font-bold text-[#2B3326]">
                         <span>Estimated Total</span>
                         <span class="text-base text-[#2B3326] font-extrabold">₹<span x-text="total.toLocaleString()"></span></span>
                     </div>

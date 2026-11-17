@@ -10,11 +10,7 @@
     $stats = $about['stats'] ?? [];
 @endphp
 
-<section id="about" class="py-18 sm:py-24 bg-[#F3EFE6]/55 border-b border-[#D7C7B2]/70 relative overflow-hidden">
-    <!-- Subtle Ambient Glow -->
-    <div class="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-[#B5C1A5]/15 blur-3xl pointer-events-none -z-10"></div>
-    <div class="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-[#D7C7B2]/20 blur-3xl pointer-events-none -z-10"></div>
-
+<section id="about" class="py-18 sm:py-24 bg-white border-b border-neutral-200 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
@@ -24,7 +20,7 @@
                 <x-reveal delay="100">
                     <div class="relative">
                         <!-- Main Lifestyle Image Frame -->
-                        <div class="relative rounded-lg overflow-hidden border border-[#D7C7B2] shadow-sm bg-white aspect-[4/4.6] group">
+                        <div class="relative rounded-lg overflow-hidden border border-neutral-200 shadow-sm bg-white aspect-[4/4.6] group">
                             <img
                                 src="{{ asset($about['image'] ?? '/images/hero/hero-lifestyle.webp') }}"
                                 alt="{{ $about['image_alt'] ?? 'Menahem Artisanal Home Essentials' }}"
@@ -36,11 +32,11 @@
 
                             <!-- Bottom Floating Caption inside Image -->
                             <div class="absolute bottom-4 left-4 right-4 z-20 text-white">
-                                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] border border-[#D7C7B2] text-[10px] font-bold uppercase tracking-wider mb-2 shadow-2xs">
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] border border-neutral-200 text-[10px] font-bold uppercase tracking-wider mb-2 shadow-2xs">
                                     <span class="w-1.5 h-1.5 rounded-full bg-[#74826B]"></span>
                                     <span>{{ $about['tag'] ?? 'The one that comforts you' }}</span>
                                 </div>
-                                <p class="text-xs sm:text-sm text-[#FAF7F0] font-serif italic drop-shadow-xs">
+                                <p class="text-xs sm:text-sm text-white font-serif italic drop-shadow-xs">
                                     "{{ $about['quote'] ?? 'A home shouldn’t demand your attention. It should cradle your days and soften your evenings.' }}"
                                 </p>
                             </div>
@@ -48,7 +44,7 @@
 
                         <!-- Quiet Craft Stats Strip Below Image -->
                         @if(!empty($stats))
-                            <div class="grid grid-cols-3 gap-2.5 sm:gap-3 mt-3.5 p-3.5 rounded-lg bg-white border border-[#D7C7B2] shadow-2xs">
+                            <div class="grid grid-cols-3 gap-2.5 sm:gap-3 mt-3.5 p-3.5 rounded-lg bg-white border border-neutral-200 shadow-2xs">
                                 @foreach($stats as $stat)
                                     <div class="text-center">
                                         <div class="text-base sm:text-lg font-bold font-serif text-[#2B3326] tracking-tight">
@@ -74,7 +70,7 @@
             <div class="lg:col-span-7 flex flex-col justify-center">
                 <x-reveal delay="150">
                     <!-- Eyebrow Pill -->
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] text-xs font-bold uppercase tracking-wider mb-3 w-fit shadow-2xs">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-3 w-fit shadow-2xs">
                         <span>★</span>
                         <span>{{ $about['badge'] ?? 'Our Essence & Story' }}</span>
                     </div>
@@ -98,11 +94,11 @@
                 <!-- 3 Minimalist Value Pillars -->
                 @if(!empty($pillars))
                     <x-reveal delay="200">
-                        <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-[#D7C7B2]">
+                        <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-neutral-200">
                             @foreach($pillars as $index => $pillar)
-                                <div class="p-3.5 rounded-lg bg-[#FAF7F0] border border-[#D7C7B2] shadow-2xs flex flex-col justify-between">
+                                <div class="p-3.5 rounded-lg bg-white border border-neutral-200 shadow-2xs flex flex-col justify-between">
                                     <div>
-                                        <div class="w-8 h-8 rounded-md bg-[#E8E2D5] border border-[#D7C7B2] flex items-center justify-center text-[#74826B] mb-2.5 shadow-2xs">
+                                        <div class="w-8 h-8 rounded-md bg-neutral-100 border border-neutral-200 flex items-center justify-center text-[#74826B] mb-2.5 shadow-2xs">
                                             @if($index === 0)
                                                 <!-- Natural Weave Icon -->
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -148,7 +144,7 @@
                             href="{{ $whatsappUrl }}"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-white hover:bg-[#FAF7F0] text-[#2B3326] border border-[#D7C7B2] text-xs sm:text-sm font-bold tracking-wide transition-colors shadow-2xs group"
+                            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-white hover:bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs sm:text-sm font-bold tracking-wide transition-colors shadow-2xs group"
                         >
                             <svg class="w-4 h-4 fill-current text-[#25d366]" viewBox="0 0 24 24">
                                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>

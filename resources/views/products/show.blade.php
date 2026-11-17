@@ -68,7 +68,7 @@
                     return 'https://wa.me/919876543210?text=' + msg;
                 }
             }"
-            class="pt-24 sm:pt-28 lg:pt-30 pb-20 bg-[#FAF7F0] min-h-screen text-[#2B3326]"
+            class="pt-24 sm:pt-28 lg:pt-30 pb-20 bg-white min-h-screen text-[#2B3326]"
         >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -101,8 +101,8 @@
                                     <button
                                         type="button"
                                         @click="selectImage(idx)"
-                                        :class="activeIndex === idx ? 'ring-2 ring-[#74826B] border-[#74826B] shadow-sm opacity-100 scale-102' : 'border-[#D7C7B2] opacity-70 hover:opacity-100 hover:border-[#74826B]/50'"
-                                        class="relative w-16 sm:w-20 aspect-square rounded-md overflow-hidden bg-[#F3EFE6] border-2 transition-all duration-200 cursor-pointer flex-shrink-0"
+                                        :class="activeIndex === idx ? 'ring-2 ring-[#74826B] border-[#74826B] shadow-sm opacity-100 scale-102' : 'border-neutral-200 opacity-70 hover:opacity-100 hover:border-[#74826B]/50'"
+                                        class="relative w-16 sm:w-20 aspect-square rounded-md overflow-hidden bg-white border-2 transition-all duration-200 cursor-pointer flex-shrink-0"
                                         :aria-label="'View photo ' + (idx + 1)"
                                     >
                                         <img :src="thumb" :alt="'Thumbnail ' + (idx + 1)" class="w-full h-full object-cover" />
@@ -111,10 +111,10 @@
                             </div>
 
                             <!-- Main Product Image (Tailored, Compact & Elegant: max-h ~460px) -->
-                            <div class="relative flex-1 w-full aspect-[4/4.2] sm:aspect-square max-h-[440px] sm:max-h-[460px] rounded-lg overflow-hidden bg-[#F3EFE6] border border-[#D7C7B2] shadow-sm group">
+                            <div class="relative flex-1 w-full aspect-[4/4.2] sm:aspect-square max-h-[440px] sm:max-h-[460px] rounded-lg overflow-hidden bg-white border border-neutral-200 shadow-sm group">
                                 <!-- Floating Badge -->
                                 @if($badge)
-                                    <span class="absolute top-3.5 left-3.5 z-10 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] shadow-sm">
+                                    <span class="absolute top-3.5 left-3.5 z-10 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-neutral-100 text-[#2B3326] border border-neutral-200 shadow-sm">
                                         {{ $badge }}
                                     </span>
                                 @endif
@@ -177,7 +177,7 @@
                     <div class="lg:col-span-6 flex flex-col text-left">
                         
                         <!-- Eyebrow Pill -->
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] text-xs font-bold uppercase tracking-wider mb-3 w-fit">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-3 w-fit">
                             <span class="text-[#74826B]">★</span>
                             <span>{{ $material }}</span>
                         </div>
@@ -188,7 +188,7 @@
                         </h1>
 
                         <!-- Rating & Review Count -->
-                        <div class="flex items-center gap-3 mt-3.5 pb-4 border-b border-[#D7C7B2]">
+                        <div class="flex items-center gap-3 mt-3.5 pb-4 border-b border-neutral-200">
                             <div class="flex text-[#74826B]">
                                 @for($i = 0; $i < 5; $i++)
                                     <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
@@ -209,7 +209,7 @@
                                 <span class="text-lg text-[#5C6654]/70 line-through font-medium">
                                     {{ $originalPrice }}
                                 </span>
-                                <span class="px-2.5 py-0.5 rounded-md bg-[#E8E2D5] text-[#74826B] border border-[#D7C7B2] text-xs font-bold">
+                                <span class="px-2.5 py-0.5 rounded-md bg-neutral-100 text-[#74826B] border border-neutral-200 text-xs font-bold">
                                     Save 25%
                                 </span>
                             @endif
@@ -223,19 +223,19 @@
 
                         <!-- Highlights List -->
                         <div class="mt-5 grid grid-cols-2 gap-2.5 text-xs text-[#2B3326] font-medium">
-                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-[#D7C7B2]">
+                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-neutral-200">
                                 <span class="text-[#74826B] font-bold">✓</span>
                                 <span>100% Breathable Weave</span>
                             </div>
-                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-[#D7C7B2]">
+                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-neutral-200">
                                 <span class="text-[#74826B] font-bold">✓</span>
                                 <span>Zero Color Bleed</span>
                             </div>
-                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-[#D7C7B2]">
+                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-neutral-200">
                                 <span class="text-[#74826B] font-bold">✓</span>
                                 <span>Pre-Washed & Soft</span>
                             </div>
-                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-[#D7C7B2]">
+                            <div class="flex items-center gap-2 p-2.5 rounded-md bg-white border border-neutral-200">
                                 <span class="text-[#74826B] font-bold">✓</span>
                                 <span>Bespoke Tailoring</span>
                             </div>
@@ -244,11 +244,11 @@
                         <!-- Quantity Selector -->
                         <div class="mt-6 flex items-center gap-4">
                             <span class="text-xs font-bold text-[#2B3326] uppercase tracking-wider">Quantity</span>
-                            <div class="flex items-center rounded-md bg-white border border-[#D7C7B2] p-1">
+                            <div class="flex items-center rounded-md bg-white border border-neutral-200 p-1">
                                 <button
                                     type="button"
                                     @click="if(quantity > 1) quantity--"
-                                    class="w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-[#F3EFE6] transition-colors cursor-pointer"
+                                    class="w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-neutral-100 transition-colors cursor-pointer"
                                     aria-label="Decrease quantity"
                                 >
                                     −
@@ -257,7 +257,7 @@
                                 <button
                                     type="button"
                                     @click="quantity++"
-                                    class="w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-[#F3EFE6] transition-colors cursor-pointer"
+                                    class="w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold text-[#2B3326] hover:bg-neutral-100 transition-colors cursor-pointer"
                                     aria-label="Increase quantity"
                                 >
                                     +
@@ -295,7 +295,7 @@
                                     image: activeImage,
                                     category: '{{ addslashes($category) }}'
                                 })"
-                                class="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-white hover:bg-[#F3EFE6] text-[#2B3326] border border-[#D7C7B2] text-sm font-bold tracking-wide transition-all shadow-xs hover:border-[#74826B] cursor-pointer"
+                                class="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-white hover:bg-neutral-100 text-[#2B3326] border border-neutral-200 text-sm font-bold tracking-wide transition-all shadow-xs hover:border-[#74826B] cursor-pointer"
                             >
                                 <svg class="w-4.5 h-4.5 text-[#2B3326]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
@@ -305,7 +305,7 @@
                         </div>
 
                         <!-- Trust Guarantee Box -->
-                        <div class="mt-6 p-4 rounded-lg bg-white border border-[#D7C7B2] flex flex-col gap-2.5">
+                        <div class="mt-6 p-4 rounded-lg bg-white border border-neutral-200 flex flex-col gap-2.5">
                             <div class="flex items-center gap-2.5 text-xs text-[#2B3326] font-semibold">
                                 <span class="text-[#74826B]">⚡</span>
                                 <span>Free Pan-India Express Delivery on this product</span>
@@ -321,8 +321,8 @@
                         </div>
 
                         <!-- Specifications & Craftsmanship Tabs inside details column (keeps sticky gallery visible while reading) -->
-                        <div class="mt-8 bg-white rounded-lg p-5 sm:p-6 border border-[#D7C7B2] shadow-xs">
-                            <div class="flex items-center gap-5 border-b border-[#D7C7B2] pb-3">
+                        <div class="mt-8 bg-white rounded-lg p-5 sm:p-6 border border-neutral-200 shadow-xs">
+                            <div class="flex items-center gap-5 border-b border-neutral-200 pb-3">
                                 <button
                                     type="button"
                                     @click="selectedTab = 'details'"
@@ -356,15 +356,15 @@
                                     Every Menahem essential is woven with meticulous care using hand-selected yarn. Designed to balance everyday durability with cloud-like gentleness, our fabrics age gracefully through repeated washes without pilling or color degradation.
                                 </p>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                                    <div class="p-3 rounded-md bg-[#FAF7F0] border border-[#D7C7B2]">
+                                    <div class="p-3 rounded-md bg-white border border-neutral-200">
                                         <span class="text-[10px] uppercase font-bold text-[#5C6654]">Composition</span>
                                         <p class="text-xs font-bold text-[#2B3326] mt-0.5">{{ $material }}</p>
                                     </div>
-                                    <div class="p-3 rounded-md bg-[#FAF7F0] border border-[#D7C7B2]">
+                                    <div class="p-3 rounded-md bg-white border border-neutral-200">
                                         <span class="text-[10px] uppercase font-bold text-[#5C6654]">Weave Density</span>
                                         <p class="text-xs font-bold text-[#2B3326] mt-0.5">400+ Thread Count</p>
                                     </div>
-                                    <div class="p-3 rounded-md bg-[#FAF7F0] border border-[#D7C7B2]">
+                                    <div class="p-3 rounded-md bg-white border border-neutral-200">
                                         <span class="text-[10px] uppercase font-bold text-[#5C6654]">Craft Origin</span>
                                         <p class="text-xs font-bold text-[#2B3326] mt-0.5">Handcrafted, India</p>
                                     </div>
@@ -400,7 +400,7 @@
 
                 <!-- Related Products Section (4 cards in 1 row on desktop) -->
                 @if(!empty($relatedProducts))
-                    <div class="mt-16 pt-12 border-t border-[#D7C7B2]">
+                    <div class="mt-16 pt-12 border-t border-neutral-200">
                         <div class="flex items-center justify-between mb-8">
                             <div>
                                 <span class="text-xs font-bold text-[#74826B] uppercase tracking-wider">Complete The Look</span>

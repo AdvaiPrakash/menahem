@@ -11,14 +11,14 @@
     $trendingItems = array_slice($products, 0, 4);
 @endphp
 
-<section id="trending" class="py-16 sm:py-24 bg-[#FAF7F0] border-b border-[#D7C7B2]/70">
+<section id="trending" class="py-16 sm:py-24 bg-white border-b border-neutral-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Section Header: Title, Subtitle & View All Products Link -->
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-12 gap-4">
             <div>
                 <x-reveal delay="100">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] text-xs font-bold uppercase tracking-wider mb-2.5 shadow-2xs">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-2.5 shadow-2xs">
                         <span>★</span>
                         <span>Curated Essentials</span>
                     </div>

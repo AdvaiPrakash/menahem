@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -17,10 +18,37 @@ class ProductController extends Controller
         $catalog = $content['CATALOG'] ?? [];
         $selectedCategory = $request->query('category', 'all');
 
+        $categoryInfo = null;
+        $breadcrumbs = null;
+        $parentBackUrl = route('categories.index');
+        $parentBackName = 'Shop by Category';
+        $targetCategorySlugs = [$selectedCategory];
+
+        if ($selectedCategory !== 'all') {
+            $resolved = CategoryService::findBySlug($selectedCategory);
+
+            if ($resolved) {
+                $categoryInfo = $resolved['node'];
+                $breadcrumbs = CategoryService::getBreadcrumbs($resolved);
+                $targetCategorySlugs = CategoryService::getAllLeafSlugs($categoryInfo);
+                $targetCategorySlugs[] = $selectedCategory;
+
+                if (! empty($resolved['parent']) && ! empty($resolved['parent_path'])) {
+                    $parentBackName = $resolved['parent']['name'];
+                    $parentBackUrl = url('/categories/'.$resolved['parent_path']);
+                }
+            }
+        }
+
         return view('products.index', [
             'content' => $content,
             'catalog' => $catalog,
             'selectedCategory' => $selectedCategory,
+            'categoryInfo' => $categoryInfo,
+            'breadcrumbs' => $breadcrumbs,
+            'parentBackUrl' => $parentBackUrl,
+            'parentBackName' => $parentBackName,
+            'targetCategorySlugs' => $targetCategorySlugs,
         ]);
     }
 

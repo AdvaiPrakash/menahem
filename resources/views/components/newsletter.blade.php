@@ -7,15 +7,15 @@
     $whatsappUrl = $brand['whatsapp_url'] ?? 'https://wa.me/919876543210';
 @endphp
 
-<section id="contact" class="py-16 sm:py-24 bg-[#FAF7F0] border-b border-[#D7C7B2]/70">
+<section id="contact" class="py-16 sm:py-24 bg-white border-b border-neutral-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <x-reveal delay="100">
-            <div class="rounded-lg bg-white border border-[#D7C7B2] p-6 sm:p-10 lg:p-14 shadow-sm">
+            <div class="rounded-lg bg-white border border-neutral-200 p-6 sm:p-10 lg:p-14 shadow-sm">
                 
                 <!-- Section Header -->
                 <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-md bg-[#E8E2D5] text-[#2B3326] border border-[#D7C7B2] text-xs font-bold uppercase tracking-wider mb-3.5 shadow-2xs">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-3.5 shadow-2xs">
                         <span>★</span>
                         <span>ATELIER CONCIERGE & STYLING</span>
                     </div>
@@ -44,7 +44,7 @@
                 >
                     
                     <!-- Left: Elegant Form -->
-                    <div class="lg:col-span-7 bg-[#F3EFE6] p-6 sm:p-8 rounded-lg border border-[#D7C7B2]">
+                    <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-lg border border-neutral-200 shadow-xs">
                         <!-- Success Banner after Submission -->
                         <div x-show="submitted" x-cloak class="p-6 rounded-md bg-white border border-[#74826B] text-center shadow-sm">
                             <div class="w-10 h-10 rounded-md bg-[#74826B] text-white flex items-center justify-center mx-auto mb-3 shadow-sm text-xl font-bold">
@@ -78,7 +78,7 @@
                                         x-model="name"
                                         required
                                         placeholder="e.g. Radhika Sharma"
-                                        class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
+                                        class="w-full px-4 py-3 rounded-md bg-white border border-neutral-200 text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
                                     />
                                 </div>
                                 <div>
@@ -90,7 +90,7 @@
                                         x-model="phone"
                                         required
                                         placeholder="+91 98765 43210"
-                                        class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
+                                        class="w-full px-4 py-3 rounded-md bg-white border border-neutral-200 text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
                                     />
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                                         x-model="email"
                                         required
                                         placeholder="radhika@example.com"
-                                        class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
+                                        class="w-full px-4 py-3 rounded-md bg-white border border-neutral-200 text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors"
                                     />
                                 </div>
                                 <div>
@@ -115,7 +115,7 @@
                                     </label>
                                     <select
                                         x-model="inquiryType"
-                                        class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors cursor-pointer"
+                                        class="w-full px-4 py-3 rounded-md bg-white border border-neutral-200 text-xs sm:text-sm text-[#2B3326] focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors cursor-pointer"
                                     >
                                         <option value="Curtains & Drapes">Curtains & Custom Drapes</option>
                                         <option value="Bedsheets & Dohars">Bedsheets & Mulmul Dohars</option>
@@ -137,7 +137,7 @@
                                     required
                                     rows="4"
                                     placeholder="Tell us about your room, window heights, fabric preferences, or questions..."
-                                    class="w-full px-4 py-3 rounded-md bg-white border border-[#D7C7B2] text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors resize-none"
+                                    class="w-full px-4 py-3 rounded-md bg-white border border-neutral-200 text-xs sm:text-sm text-[#2B3326] placeholder-[#5C6654]/50 focus:outline-hidden focus:border-[#74826B] focus:ring-1 focus:ring-[#74826B] transition-colors resize-none"
                                 ></textarea>
                             </div>
 
@@ -161,7 +161,7 @@
                     <div class="lg:col-span-5 space-y-4">
                         
                         <!-- WhatsApp Direct Concierge Card -->
-                        <div class="p-6 rounded-lg bg-[#E8E2D5] border border-[#D7C7B2] flex flex-col justify-between">
+                        <div class="p-6 rounded-lg bg-white border border-neutral-200 shadow-xs flex flex-col justify-between">
                             <div>
                                 <span class="text-[10px] uppercase font-bold tracking-wider text-[#74826B]">Fastest Response</span>
                                 <h3 class="text-base sm:text-lg font-bold font-serif text-[#2B3326] mt-1">
@@ -171,7 +171,7 @@
                                     Chat directly with our senior fabric stylist on WhatsApp. Share room photos for instant drapery sizing recommendations.
                                 </p>
                             </div>
-                            <div class="mt-4 pt-4 border-t border-[#D7C7B2]">
+                            <div class="mt-4 pt-4 border-t border-neutral-200">
                                 <a
                                     href="{{ $whatsappUrl }}"
                                     target="_blank"
@@ -188,7 +188,7 @@
                         </div>
 
                         <!-- Contact Details List -->
-                        <div class="p-6 rounded-lg bg-[#FAF7F0] border border-[#D7C7B2] space-y-3.5 text-xs">
+                        <div class="p-6 rounded-lg bg-white border border-neutral-200 shadow-xs space-y-3.5 text-xs">
                             <div class="flex items-start gap-3">
                                 <span class="text-[#74826B] text-sm mt-0.5">📞</span>
                                 <div>

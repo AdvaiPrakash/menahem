@@ -8,11 +8,11 @@
     $whatsappUrl = $brand['whatsapp_url'] ?? '#';
 @endphp
 
-<footer class="bg-gradient-to-b from-[#F3EFE6] to-[#E8E2D5] text-[#2B3326] pt-14 pb-10 border-t border-[#D7C7B2]">
+<footer class="bg-white text-[#2B3326] pt-14 pb-10 border-t border-neutral-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Main Footer Columns Grid in Linen & Sand Palette -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-[#D7C7B2]/70">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-neutral-200">
             
             <!-- Brand & Socials Column -->
             <div class="lg:col-span-3 flex flex-col items-start">
@@ -38,16 +38,16 @@
 
                 <!-- Social Icons in Sand & White -->
                 <div class="flex items-center gap-2.5 text-[#2B3326]">
-                    <a href="#" class="w-8 h-8 rounded-md bg-white hover:bg-[#74826B] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Facebook">
+                    <a href="#" class="w-8 h-8 rounded-md bg-white hover:bg-[#74826B] hover:text-white border border-neutral-200 transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Facebook">
                         f
                     </a>
-                    <a href="#" class="w-8 h-8 rounded-md bg-white hover:bg-[#74826B] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Instagram">
+                    <a href="#" class="w-8 h-8 rounded-md bg-white hover:bg-[#74826B] hover:text-white border border-neutral-200 transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Instagram">
                         ig
                     </a>
-                    <a href="#" class="w-8 h-8 rounded-md bg-white hover:bg-[#74826B] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Twitter">
+                    <a href="#" class="w-8 h-8 rounded-md bg-white hover:bg-[#74826B] hover:text-white border border-neutral-200 transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="Twitter">
                         𝕏
                     </a>
-                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-md bg-white hover:bg-[#25d366] hover:text-white border border-[#D7C7B2] transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="WhatsApp">
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-md bg-white hover:bg-[#25d366] hover:text-white border border-neutral-200 transition-colors flex items-center justify-center text-xs font-bold shadow-2xs" aria-label="WhatsApp">
                         wa
                     </a>
                 </div>
@@ -101,11 +101,11 @@
                 
                 <!-- Payment Badges -->
                 <div class="flex flex-wrap items-center gap-2 mb-6">
-                    <span class="px-3 py-1 rounded-lg bg-white border border-[#D7C7B2] text-[#1a1f71] text-[11px] font-extrabold tracking-tight shadow-2xs">VISA</span>
-                    <span class="px-3 py-1 rounded-lg bg-white border border-[#D7C7B2] text-[#eb001b] text-[11px] font-extrabold tracking-tight shadow-2xs">Mastercard</span>
+                    <span class="px-3 py-1 rounded-lg bg-white border border-neutral-200 text-[#1a1f71] text-[11px] font-extrabold tracking-tight shadow-2xs">VISA</span>
+                    <span class="px-3 py-1 rounded-lg bg-white border border-neutral-200 text-[#eb001b] text-[11px] font-extrabold tracking-tight shadow-2xs">Mastercard</span>
                     <span class="px-3 py-1 rounded-lg bg-[#006fcf] text-white text-[11px] font-extrabold tracking-tight shadow-2xs">RuPay</span>
-                    <span class="px-3 py-1 rounded-lg bg-white border border-[#D7C7B2] text-[#097939] text-[11px] font-extrabold tracking-tight shadow-2xs">UPI</span>
-                    <span class="px-3 py-1 rounded-lg bg-white border border-[#D7C7B2] text-black text-[11px] font-bold tracking-tight shadow-2xs">GPay</span>
+                    <span class="px-3 py-1 rounded-lg bg-white border border-neutral-200 text-[#097939] text-[11px] font-extrabold tracking-tight shadow-2xs">UPI</span>
+                    <span class="px-3 py-1 rounded-lg bg-white border border-neutral-200 text-black text-[11px] font-bold tracking-tight shadow-2xs">GPay</span>
                 </div>
 
                 <div class="pt-2">
@@ -125,7 +125,7 @@
             </div>
 
             <!-- Country/Currency Pill Dropdown in Crisp Sand -->
-            <div class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-[#D7C7B2] text-[#2B3326] text-[11px] font-bold shadow-2xs">
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-neutral-200 text-[#2B3326] text-[11px] font-bold shadow-2xs">
                 <span>India | INR ₹</span>
                 <span class="text-[9px]">▼</span>
             </div>
