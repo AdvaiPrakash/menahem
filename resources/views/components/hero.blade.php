@@ -109,7 +109,18 @@
             <x-reveal delay="100">
                 <h1 class="text-3xl sm:text-4xl font-bold text-[#74826B] leading-[1.15] tracking-tight font-serif max-w-sm sm:max-w-md mx-auto">
                     Transform Living <br />
-                    Spaces with <span class="italic text-[#2B3326] text-[1.18em]">Menahem</span>
+                    Spaces with <span class="magic italic text-[#2B3326] text-[1.18em]">
+                        <span class="magic-star">
+                            <svg viewBox="0 0 512 512"><path d="M512 255.999L350.211 202.936L256 0L161.789 202.936L0 255.999L161.789 309.064L256 512L350.211 309.064L512 255.999Z"/></svg>
+                        </span>
+                        <span class="magic-star">
+                            <svg viewBox="0 0 512 512"><path d="M512 255.999L350.211 202.936L256 0L161.789 202.936L0 255.999L161.789 309.064L256 512L350.211 309.064L512 255.999Z"/></svg>
+                        </span>
+                        <span class="magic-star">
+                            <svg viewBox="0 0 512 512"><path d="M512 255.999L350.211 202.936L256 0L161.789 202.936L0 255.999L161.789 309.064L256 512L350.211 309.064L512 255.999Z"/></svg>
+                        </span>
+                        <span class="magic-text">Menahem</span>
+                    </span>
                 </h1>
             </x-reveal>
 
@@ -217,7 +228,18 @@
                     <h1 class="text-3xl sm:text-4xl lg:text-[36px] xl:text-[44px] font-bold text-[#74826B] leading-[1.12] tracking-tight font-serif">
                         Transform Living <br />
                         Spaces with <br />
-                        <span class="italic text-[#2B3326] text-[1.15em]">Menahem</span>
+                        <span class="magic italic text-[#2B3326] text-[1.15em]">
+                            <span class="magic-star">
+                                <svg viewBox="0 0 512 512"><path d="M512 255.999L350.211 202.936L256 0L161.789 202.936L0 255.999L161.789 309.064L256 512L350.211 309.064L512 255.999Z"/></svg>
+                            </span>
+                            <span class="magic-star">
+                                <svg viewBox="0 0 512 512"><path d="M512 255.999L350.211 202.936L256 0L161.789 202.936L0 255.999L161.789 309.064L256 512L350.211 309.064L512 255.999Z"/></svg>
+                            </span>
+                            <span class="magic-star">
+                                <svg viewBox="0 0 512 512"><path d="M512 255.999L350.211 202.936L256 0L161.789 202.936L0 255.999L161.789 309.064L256 512L350.211 309.064L512 255.999Z"/></svg>
+                            </span>
+                            <span class="magic-text">Menahem</span>
+                        </span>
                     </h1>
                 </x-reveal>
 

@@ -69,4 +69,16 @@ class HeroCarouselTest extends TestCase
         $response->assertSee('aria-hidden="true"', false);
         $response->assertSee('tabindex="-1"', false);
     }
+
+    /**
+     * Test the Hero renders the magic sparkle effect branding for Menahem.
+     */
+    public function test_hero_renders_magic_sparkle_branding(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+        $response->assertSee('magic-star', false);
+        $response->assertSee('magic-text', false);
+    }
 }

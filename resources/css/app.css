@@ -261,6 +261,91 @@ html.lenis, html.lenis body {
   animation-play-state: paused;
 }
 
+/* Magic Sparkle Effect for "Menahem" in Hero */
+@keyframes background-pan {
+  from {
+    background-position: 0% center;
+  }
+  to {
+    background-position: -200% center;
+  }
+}
+
+@keyframes scale {
+  from, to {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+.magic {
+  display: inline-block;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.magic > .magic-star {
+  --size: clamp(14px, 1.4vw, 22px);
+  transform: scale(0);
+  animation: scale 700ms ease forwards;
+  display: block;
+  height: var(--size);
+  left: var(--star-left, 0%);
+  position: absolute;
+  top: var(--star-top, 0%);
+  width: var(--size);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.magic > .magic-star > svg {
+  animation: rotate 1000ms linear infinite;
+  display: block;
+  opacity: 0.85;
+  width: 100%;
+  height: 100%;
+}
+
+.magic > .magic-star > svg > path {
+  fill: #384230;
+}
+
+.magic > .magic-star:nth-child(2) > svg > path {
+  fill: #74826B;
+}
+
+.magic > .magic-star:nth-child(3) > svg > path {
+  fill: #4A5840;
+}
+
+.magic > .magic-text {
+  animation: background-pan 4s linear infinite;
+  background: linear-gradient(
+    to right,
+    #2B3326 0%,
+    #384230 25%,
+    #5C6654 50%,
+    #74826B 75%,
+    #2B3326 100%
+  );
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+  display: inline-block;
+}
+
 /* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
@@ -277,6 +362,12 @@ html.lenis, html.lenis body {
   .animate-marquee-down,
   .animate-marquee-left,
   .animate-marquee-right {
+    animation: none !important;
+  }
+  .magic > .magic-star {
+    display: none !important;
+  }
+  .magic > .magic-text {
     animation: none !important;
   }
 }
