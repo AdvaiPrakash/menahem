@@ -1,5 +1,7 @@
 import Lenis from 'lenis';
 import Alpine from 'alpinejs';
+import { initHeroCarousel } from './hero-carousel.js';
+import { initMenahemAnimation } from './menahem-animation.js';
 
 window.Alpine = Alpine;
 Alpine.start();
@@ -22,11 +24,26 @@ document.addEventListener('DOMContentLoaded', () => {
             wheelMultiplier: 0.95,
         });
 
+        let lenisRafId = null;
         function raf(time) {
             lenis.raf(time);
-            requestAnimationFrame(raf);
+            lenisRafId = requestAnimationFrame(raf);
         }
-        requestAnimationFrame(raf);
+        lenisRafId = requestAnimationFrame(raf);
+
+        // Pause Lenis RAF loop when tab is backgrounded to prevent unnecessary CPU/GPU usage
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (lenisRafId) {
+                    cancelAnimationFrame(lenisRafId);
+                    lenisRafId = null;
+                }
+            } else {
+                if (!lenisRafId) {
+                    lenisRafId = requestAnimationFrame(raf);
+                }
+            }
+        });
 
         // Smooth scroll for internal in-page anchor links
         document.addEventListener('click', (e) => {
@@ -135,6 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 1000);
     }
+
+    // 6. Hero Spotlight Infinite Interactive Carousel
+    initHeroCarousel();
+
+    // 7. Hero "Menahem" Wordmark Interactive Color Palette Shimmer
+    initMenahemAnimation();
 
     // Expose lenis instance globally if needed
     window.Menahem = {

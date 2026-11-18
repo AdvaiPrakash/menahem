@@ -107,7 +107,7 @@
             <x-reveal delay="100">
                 <h1 class="text-3xl sm:text-4xl font-bold text-[#74826B] leading-[1.15] tracking-tight font-serif max-w-sm sm:max-w-md mx-auto">
                     Transform Living <br />
-                    Spaces with <span class="italic text-[#2B3326] text-[1.18em]">Menahem</span>
+                    Spaces with <span class="menahem-animated-word italic text-[1.18em]" data-menahem-word>Menahem</span>
                 </h1>
             </x-reveal>
 
@@ -121,99 +121,63 @@
             <!-- 3. Single Horizontal Scrolling Gallery (Edge-to-Edge, No Side Vignettes) -->
             <x-reveal delay="200" class="w-full">
                 <div class="mt-7 w-full max-w-xl mx-auto">
-                    <div class="hero-marquee-container relative overflow-hidden rounded-lg bg-white border border-neutral-200 p-2 sm:p-2.5 shadow-xs">
+                    <div class="hero-carousel-container relative overflow-hidden rounded-lg bg-white border border-neutral-200 p-2 sm:p-2.5 shadow-xs touch-pan-y select-none" data-hero-carousel>
                         
-                        <!-- Single Horizontal Scrolling Track (One-Way Continuous Glide) -->
-                        <div class="overflow-hidden">
-                            <div class="animate-marquee-left flex flex-row gap-3 hover:[animation-play-state:paused]">
-                                
-                                <!-- Set 1 (Original) -->
-                                @foreach($heroCards as $item)
-                                    <a
-                                        href="{{ route('products.show', $item['id']) }}"
-                                        title="{{ $item['title'] }}"
-                                        class="relative w-[230px] sm:w-[260px] h-[280px] sm:h-[310px] rounded-md overflow-hidden bg-white shadow-sm border border-neutral-200 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
-                                    >
-                                        <!-- Background Image -->
-                                        <img
-                                            src="{{ asset($item['image']) }}"
-                                            alt="{{ $item['alt'] }}"
-                                            loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
-                                        />
-                                        <!-- Soft Ambient Bottom Shading -->
-                                        <div class="absolute inset-0 bg-gradient-to-t from-[#2B3326]/75 via-[#2B3326]/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
+                        <!-- Single Horizontal Scrolling Track (Continuous Glide with Mobile Touch & Drag) -->
+                        <div class="overflow-hidden w-full">
+                            <div class="hero-carousel-track flex flex-row gap-3 will-change-transform cursor-grab active:cursor-grabbing select-none" data-carousel-track>
+                                @for($setIndex = 0; $setIndex < 3; $setIndex++)
+                                    <div class="hero-carousel-group flex flex-row gap-3 shrink-0" data-carousel-group="{{ $setIndex }}" @if($setIndex !== 1) aria-hidden="true" @endif>
+                                        @foreach($heroCards as $cardIndex => $item)
+                                            <a
+                                                href="{{ route('products.show', $item['id']) }}"
+                                                title="{{ $item['title'] }}"
+                                                @if($setIndex !== 1) tabindex="-1" @endif
+                                                draggable="false"
+                                                class="relative w-[230px] sm:w-[260px] h-[280px] sm:h-[310px] rounded-md overflow-hidden bg-white shadow-sm border border-neutral-200 group flex flex-col justify-between shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02] select-none"
+                                            >
+                                                <!-- Background Image -->
+                                                <img
+                                                    src="{{ asset($item['image']) }}"
+                                                    alt="{{ $item['alt'] }}"
+                                                    width="260"
+                                                    height="310"
+                                                    @if($setIndex === 1 && $cardIndex < 2) loading="eager" fetchpriority="high" @else loading="lazy" @endif
+                                                    draggable="false"
+                                                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108 select-none pointer-events-none"
+                                                />
+                                                <!-- Soft Ambient Bottom Shading -->
+                                                <div class="absolute inset-0 bg-gradient-to-t from-[#2B3326]/75 via-[#2B3326]/20 to-transparent transition-opacity duration-300 group-hover:opacity-90 pointer-events-none"></div>
 
-                                        <!-- Top Row: Badge & Price -->
-                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between pointer-events-none">
-                                            <span class="px-2.5 py-1 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] text-[10px] font-bold tracking-wider uppercase border border-neutral-200 shadow-2xs">
-                                                {{ $item['badge'] }}
-                                            </span>
-                                            <span class="px-2.5 py-1 rounded-md bg-neutral-100 backdrop-blur-md text-[#2B3326] text-xs font-extrabold border border-neutral-200 shadow-2xs">
-                                                {{ $item['price'] }}
-                                            </span>
-                                        </div>
+                                                <!-- Top Row: Badge & Price -->
+                                                <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between pointer-events-none">
+                                                    <span class="px-2.5 py-1 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] text-[10px] font-bold tracking-wider uppercase border border-neutral-200 shadow-2xs">
+                                                        {{ $item['badge'] }}
+                                                    </span>
+                                                    <span class="px-2.5 py-1 rounded-md bg-neutral-100 backdrop-blur-md text-[#2B3326] text-xs font-extrabold border border-neutral-200 shadow-2xs">
+                                                        {{ $item['price'] }}
+                                                    </span>
+                                                </div>
 
-                                        <!-- Middle Feature Chip -->
-                                        <div class="relative z-10 px-3 sm:px-3.5 pointer-events-none">
-                                            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/90 backdrop-blur-md border border-neutral-200 text-[#2B3326] text-[10px] sm:text-[11px] font-semibold shadow-xs">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-[#74826B]"></span>
-                                                <span class="line-clamp-1">{{ $item['chip'] }}</span>
-                                            </div>
-                                        </div>
+                                                <!-- Middle Feature Chip -->
+                                                <div class="relative z-10 px-3 sm:px-3.5 pointer-events-none">
+                                                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/90 backdrop-blur-md border border-neutral-200 text-[#2B3326] text-[10px] sm:text-[11px] font-semibold shadow-xs">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-[#74826B]"></span>
+                                                        <span class="line-clamp-1">{{ $item['chip'] }}</span>
+                                                    </div>
+                                                </div>
 
-                                        <!-- Bottom Action Pill: Floating Light Capsule with title & arrow -->
-                                        <div class="relative z-10 p-3 sm:p-3.5 pointer-events-none">
-                                            <div class="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-md bg-white/95 group-hover:bg-neutral-100 backdrop-blur-md text-[#2B3326] border border-neutral-200 text-xs font-bold transition-all shadow-md">
-                                                <span class="truncate">{{ $item['title'] }}</span>
-                                                <span class="text-xs text-[#74826B] font-mono group-hover:translate-x-0.5 transition-transform">↗</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
-
-                                <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
-                                @foreach($heroCards as $item)
-                                    <a
-                                        href="{{ route('products.show', $item['id']) }}"
-                                        title="{{ $item['title'] }}"
-                                        aria-hidden="true"
-                                        tabindex="-1"
-                                        class="relative w-[230px] sm:w-[260px] h-[280px] sm:h-[310px] rounded-md overflow-hidden bg-white shadow-sm border border-neutral-200 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
-                                    >
-                                        <img
-                                            src="{{ asset($item['image']) }}"
-                                            alt="{{ $item['alt'] }}"
-                                            loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
-                                        />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-[#2B3326]/75 via-[#2B3326]/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
-
-                                        <div class="relative z-10 p-3 sm:p-3.5 flex items-center justify-between pointer-events-none">
-                                            <span class="px-2.5 py-1 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] text-[10px] font-bold tracking-wider uppercase border border-neutral-200 shadow-2xs">
-                                                {{ $item['badge'] }}
-                                            </span>
-                                            <span class="px-2.5 py-1 rounded-md bg-neutral-100 backdrop-blur-md text-[#2B3326] text-xs font-extrabold border border-neutral-200 shadow-2xs">
-                                                {{ $item['price'] }}
-                                            </span>
-                                        </div>
-
-                                        <div class="relative z-10 px-3 sm:px-3.5 pointer-events-none">
-                                            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/90 backdrop-blur-md border border-neutral-200 text-[#2B3326] text-[10px] sm:text-[11px] font-semibold shadow-xs">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-[#74826B]"></span>
-                                                <span class="line-clamp-1">{{ $item['chip'] }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="relative z-10 p-3 sm:p-3.5 pointer-events-none">
-                                            <div class="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-md bg-white/95 group-hover:bg-neutral-100 backdrop-blur-md text-[#2B3326] border border-neutral-200 text-xs font-bold transition-all shadow-md">
-                                                <span class="truncate">{{ $item['title'] }}</span>
-                                                <span class="text-xs text-[#74826B] font-mono group-hover:translate-x-0.5 transition-transform">↗</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
-
+                                                <!-- Bottom Action Pill: Floating Light Capsule with title & arrow -->
+                                                <div class="relative z-10 p-3 sm:p-3.5 pointer-events-none">
+                                                    <div class="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-md bg-white/95 group-hover:bg-neutral-100 backdrop-blur-md text-[#2B3326] border border-neutral-200 text-xs font-bold transition-all shadow-md">
+                                                        <span class="truncate">{{ $item['title'] }}</span>
+                                                        <span class="text-xs text-[#74826B] font-mono group-hover:translate-x-0.5 transition-transform">↗</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endfor
                             </div>
                         </div>
 
@@ -239,7 +203,7 @@
                     <h1 class="text-4xl sm:text-5xl lg:text-[54px] xl:text-[62px] font-bold text-[#74826B] leading-[1.1] tracking-tight font-serif">
                         Transform Living <br />
                         Spaces with <br />
-                        <span class="italic text-[#2B3326] text-[1.18em]">Menahem</span>
+                        <span class="menahem-animated-word italic text-[1.18em]" data-menahem-word>Menahem</span>
                     </h1>
                 </x-reveal>
 
@@ -296,102 +260,64 @@
             <!-- Right Column: Single-Track Horizontal Scrolling Showcase (Edge-to-Edge, 100% Crisp) -->
             <div class="lg:col-span-6 xl:col-span-6 relative mt-6 lg:mt-0">
                 <x-reveal delay="250">
-                    <div class="hero-marquee-container relative overflow-hidden rounded-lg bg-white border border-neutral-200 p-3 sm:p-3.5 shadow-xs">
+                    <div class="hero-carousel-container relative overflow-hidden rounded-lg bg-white border border-neutral-200 p-3 sm:p-3.5 shadow-xs touch-pan-y select-none" data-hero-carousel>
                         
-                        <!-- Single Horizontal Scrolling Track (One Motion Only) -->
-                        <div class="overflow-hidden">
-                            <div class="animate-marquee-left flex flex-row gap-4 hover:[animation-play-state:paused]">
-                                
-                                <!-- Set 1 (Original) -->
-                                @foreach($heroCards as $item)
-                                    <a
-                                        href="{{ route('products.show', $item['id']) }}"
-                                        title="{{ $item['title'] }}"
-                                        class="relative w-[280px] lg:w-[310px] xl:w-[330px] h-[360px] lg:h-[390px] xl:h-[420px] rounded-md overflow-hidden bg-white shadow-sm border border-neutral-200 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
-                                    >
-                                        <img
-                                            src="{{ asset($item['image']) }}"
-                                            alt="{{ $item['alt'] }}"
-                                            loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
-                                        />
-                                        <!-- Soft Ambient Bottom Shading -->
-                                        <div class="absolute inset-0 bg-gradient-to-t from-[#2B3326]/75 via-[#2B3326]/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
+                        <!-- Single Horizontal Scrolling Track (One Motion Only with Mouse & Touch Drag) -->
+                        <div class="overflow-hidden w-full">
+                            <div class="hero-carousel-track flex flex-row gap-4 will-change-transform cursor-grab active:cursor-grabbing select-none" data-carousel-track>
+                                @for($setIndex = 0; $setIndex < 3; $setIndex++)
+                                    <div class="hero-carousel-group flex flex-row gap-4 shrink-0" data-carousel-group="{{ $setIndex }}" @if($setIndex !== 1) aria-hidden="true" @endif>
+                                        @foreach($heroCards as $cardIndex => $item)
+                                            <a
+                                                href="{{ route('products.show', $item['id']) }}"
+                                                title="{{ $item['title'] }}"
+                                                @if($setIndex !== 1) tabindex="-1" @endif
+                                                draggable="false"
+                                                class="relative w-[280px] lg:w-[310px] xl:w-[330px] h-[360px] lg:h-[390px] xl:h-[420px] rounded-md overflow-hidden bg-white shadow-sm border border-neutral-200 group flex flex-col justify-between shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02] select-none"
+                                            >
+                                                <img
+                                                    src="{{ asset($item['image']) }}"
+                                                    alt="{{ $item['alt'] }}"
+                                                    width="330"
+                                                    height="420"
+                                                    @if($setIndex === 1 && $cardIndex < 2) loading="eager" fetchpriority="high" @else loading="lazy" @endif
+                                                    draggable="false"
+                                                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108 select-none pointer-events-none"
+                                                />
+                                                <!-- Soft Ambient Bottom Shading -->
+                                                <div class="absolute inset-0 bg-gradient-to-t from-[#2B3326]/75 via-[#2B3326]/20 to-transparent transition-opacity duration-300 group-hover:opacity-90 pointer-events-none"></div>
 
-                                        <!-- Top Row: Badge & Price -->
-                                        <div class="relative z-10 p-3.5 sm:p-4 flex items-center justify-between pointer-events-none">
-                                            <span class="px-3 py-1 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] text-[10px] font-bold tracking-wider uppercase border border-neutral-200 shadow-2xs">
-                                                {{ $item['badge'] }}
-                                            </span>
-                                            <span class="px-3 py-1 rounded-md bg-neutral-100 backdrop-blur-md text-[#2B3326] text-xs font-extrabold border border-neutral-200 shadow-2xs">
-                                                {{ $item['price'] }}
-                                            </span>
-                                        </div>
+                                                <!-- Top Row: Badge & Price -->
+                                                <div class="relative z-10 p-3.5 sm:p-4 flex items-center justify-between pointer-events-none">
+                                                    <span class="px-3 py-1 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] text-[10px] font-bold tracking-wider uppercase border border-neutral-200 shadow-2xs">
+                                                        {{ $item['badge'] }}
+                                                    </span>
+                                                    <span class="px-3 py-1 rounded-md bg-neutral-100 backdrop-blur-md text-[#2B3326] text-xs font-extrabold border border-neutral-200 shadow-2xs">
+                                                        {{ $item['price'] }}
+                                                    </span>
+                                                </div>
 
-                                        <!-- Middle Feature Chip -->
-                                        <div class="relative z-10 px-3.5 sm:px-4 pointer-events-none">
-                                            <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-white/90 backdrop-blur-md border border-neutral-200 text-[#2B3326] text-[11px] font-semibold shadow-xs">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-[#74826B]"></span>
-                                                <span class="line-clamp-1">{{ $item['chip'] }}</span>
-                                            </div>
-                                        </div>
+                                                <!-- Middle Feature Chip -->
+                                                <div class="relative z-10 px-3.5 sm:px-4 pointer-events-none">
+                                                    <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-white/90 backdrop-blur-md border border-neutral-200 text-[#2B3326] text-[11px] font-semibold shadow-xs">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-[#74826B]"></span>
+                                                        <span class="line-clamp-1">{{ $item['chip'] }}</span>
+                                                    </div>
+                                                </div>
 
-                                        <!-- Bottom Action Pill with Title & Arrow -->
-                                        <div class="relative z-10 p-3 sm:p-3.5 pointer-events-none">
-                                            <div class="flex items-center justify-between gap-2 px-4 py-2.5 rounded-md bg-white/95 group-hover:bg-neutral-100 backdrop-blur-md text-[#2B3326] shadow-md border border-neutral-200 transition-all">
-                                                <span class="text-xs sm:text-sm font-bold truncate">{{ $item['title'] }}</span>
-                                                <span class="w-6 h-6 rounded-md bg-[#74826B]/20 flex items-center justify-center text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform flex-shrink-0 text-[#74826B] font-mono">
-                                                    ↗
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
-
-                                <!-- Set 2 (Duplicated for 100% seamless infinite loop) -->
-                                @foreach($heroCards as $item)
-                                    <a
-                                        href="{{ route('products.show', $item['id']) }}"
-                                        title="{{ $item['title'] }}"
-                                        aria-hidden="true"
-                                        tabindex="-1"
-                                        class="relative w-[280px] lg:w-[310px] xl:w-[330px] h-[360px] lg:h-[390px] xl:h-[420px] rounded-md overflow-hidden bg-white shadow-sm border border-neutral-200 group flex flex-col justify-between flex-shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
-                                    >
-                                        <img
-                                            src="{{ asset($item['image']) }}"
-                                            alt="{{ $item['alt'] }}"
-                                            loading="lazy"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
-                                        />
-                                        <div class="absolute inset-0 bg-gradient-to-t from-[#2B3326]/75 via-[#2B3326]/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
-
-                                        <div class="relative z-10 p-3.5 sm:p-4 flex items-center justify-between pointer-events-none">
-                                            <span class="px-3 py-1 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] text-[10px] font-bold tracking-wider uppercase border border-neutral-200 shadow-2xs">
-                                                {{ $item['badge'] }}
-                                            </span>
-                                            <span class="px-3 py-1 rounded-md bg-neutral-100 backdrop-blur-md text-[#2B3326] text-xs font-extrabold border border-neutral-200 shadow-2xs">
-                                                {{ $item['price'] }}
-                                            </span>
-                                        </div>
-
-                                        <div class="relative z-10 px-3.5 sm:px-4 pointer-events-none">
-                                            <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-white/90 backdrop-blur-md border border-neutral-200 text-[#2B3326] text-[11px] font-semibold shadow-xs">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-[#74826B]"></span>
-                                                <span class="line-clamp-1">{{ $item['chip'] }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="relative z-10 p-3 sm:p-3.5 pointer-events-none">
-                                            <div class="flex items-center justify-between gap-2 px-4 py-2.5 rounded-md bg-white/95 group-hover:bg-neutral-100 backdrop-blur-md text-[#2B3326] shadow-md border border-neutral-200 transition-all">
-                                                <span class="text-xs sm:text-sm font-bold truncate">{{ $item['title'] }}</span>
-                                                <span class="w-6 h-6 rounded-md bg-[#74826B]/20 flex items-center justify-center text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform flex-shrink-0 text-[#74826B] font-mono">
-                                                    ↗
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
-
+                                                <!-- Bottom Action Pill with Title & Arrow -->
+                                                <div class="relative z-10 p-3 sm:p-3.5 pointer-events-none">
+                                                    <div class="flex items-center justify-between gap-2 px-4 py-2.5 rounded-md bg-white/95 group-hover:bg-neutral-100 backdrop-blur-md text-[#2B3326] shadow-md border border-neutral-200 transition-all">
+                                                        <span class="text-xs sm:text-sm font-bold truncate">{{ $item['title'] }}</span>
+                                                        <span class="w-6 h-6 rounded-md bg-[#74826B]/20 flex items-center justify-center text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 text-[#74826B] font-mono">
+                                                            ↗
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endfor
                             </div>
                         </div>
 

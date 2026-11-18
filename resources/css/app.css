@@ -164,7 +164,29 @@ html.lenis, html.lenis body {
   transform: translateY(0);
 }
 
-/* Horizontal Counter-Marquee Animations (Left & Right) */
+/* Hero Spotlight Infinite Carousel (Continuous Glide + Touch/Drag Navigation) */
+.hero-carousel-container {
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.hero-carousel-track {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+
+.hero-carousel-track:active {
+  cursor: grabbing;
+}
+
+/* Horizontal Counter-Marquee Animations (Left & Right fallback) */
 @keyframes heroScrollLeft {
   0% {
     transform: translateX(0);
@@ -197,13 +219,6 @@ html.lenis, html.lenis body {
   width: max-content;
   animation: heroScrollRight 34s linear infinite;
   will-change: transform;
-}
-
-.animate-marquee-left:hover,
-.animate-marquee-right:hover,
-.hero-marquee-container:hover .animate-marquee-left,
-.hero-marquee-container:hover .animate-marquee-right {
-  animation-play-state: paused;
 }
 
 /* Vertical Counter-Marquee Animations (Retained for backward compatibility) */
@@ -259,5 +274,176 @@ html.lenis, html.lenis body {
   .animate-marquee-left,
   .animate-marquee-right {
     animation: none !important;
+  }
+  .menahem-animated-word {
+    animation: none !important;
+    background-image: linear-gradient(135deg, #020301 0%, #182d09 35%, #21420d 70%, #305711 100%) !important;
+  }
+}
+
+/* ===================================================================
+   Hero "Menahem" Wordmark: Interactive Color Palette Gradient Shimmer
+   Color Palette Theme: #020301, #0e1805, #182d09, #21420d, #305711
+   Interpolated via Registered CSS Custom Properties & Conic/Radial Mesh
+   =================================================================== */
+
+@property --bg-1-x {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 25;
+}
+
+@property --bg-2-x {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 35;
+}
+
+@property --bg-2-y {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 40;
+}
+
+@property --bg-3-x {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 45;
+}
+
+@property --bg-3-y {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 20;
+}
+
+@property --position-x {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 50;
+}
+
+@property --position-y {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 50;
+}
+
+.menahem-animated-word {
+  display: inline-block;
+  position: relative;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+
+  /* Custom Color Palette from reference image */
+  --palette-1: #020301;
+  --palette-2: #0e1805;
+  --palette-3: #182d09;
+  --palette-4: #21420d;
+  --palette-5: #305711;
+
+  --bg-1-x: 25;
+  --bg-2-x: 35;
+  --bg-2-y: 40;
+  --bg-3-x: 45;
+  --bg-3-y: 20;
+  --position-x: 50;
+  --position-y: 50;
+  --is-hovered: 0;
+
+  background-image:
+    /* Interactive Cursor Light Gleam based on reference JS mousemove */
+    radial-gradient(
+      circle 65px at calc(var(--position-x, 50) * 1%) calc(var(--position-y, 50) * 1%),
+      rgba(48, 87, 17, calc(var(--is-hovered, 0) * 0.95)) 0%,
+      rgba(33, 66, 13, calc(var(--is-hovered, 0) * 0.55)) 45%,
+      transparent 75%
+    ),
+    /* Radial Highlight 1 (interpolated via keyframe variables) */
+    radial-gradient(
+      ellipse at calc(var(--bg-2-x, 35) * 1%) calc(var(--bg-2-y, 40) * 1%),
+      #305711 18%,
+      transparent 48%
+    ),
+    /* Radial Highlight 2 (interpolated via keyframe variables) */
+    radial-gradient(
+      ellipse at calc(var(--bg-3-x, 45) * 1%) calc(var(--bg-3-y, 20) * 1%),
+      #21420d 22%,
+      transparent 52%
+    ),
+    /* Conic Gradient flowing across the 5 palette shades */
+    conic-gradient(
+      from 140deg at calc(var(--bg-1-x, 25) * 1%) 65%,
+      #020301 0deg,
+      #0e1805 38deg,
+      #182d09 78deg,
+      #21420d 122deg,
+      #305711 168deg,
+      #21420d 212deg,
+      #182d09 258deg,
+      #0e1805 304deg,
+      #020301 360deg
+    );
+
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size: 100% 100%, 150% 150%, 150% 150%, 200% 200%;
+  background-position: center, 50% 50%, 50% 50%, 50% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  animation: menahemBgAnimation 16s ease-in-out infinite alternate;
+  will-change: --bg-1-x, --bg-2-x, --bg-2-y, --bg-3-x, --bg-3-y, background-position;
+  transition: filter 0.35s ease, transform 0.35s ease;
+  cursor: pointer;
+}
+
+.menahem-animated-word:hover {
+  filter: drop-shadow(0 2px 14px rgba(48, 87, 17, 0.38));
+}
+
+@keyframes menahemBgAnimation {
+  0% {
+    --bg-1-x: 25;
+    --bg-2-x: 35;
+    --bg-2-y: 40;
+    --bg-3-x: 45;
+    --bg-3-y: 20;
+    background-position: center, 0% 50%, 100% 50%, 0% 50%;
+  }
+  25% {
+    --bg-1-x: 40;
+    --bg-2-x: 80;
+    --bg-2-y: 50;
+    --bg-3-x: 70;
+    --bg-3-y: 20;
+    background-position: center, 25% 60%, 75% 40%, 30% 70%;
+  }
+  50% {
+    --bg-1-x: 10;
+    --bg-2-x: 30;
+    --bg-2-y: 40;
+    --bg-3-x: 50;
+    --bg-3-y: 80;
+    background-position: center, 50% 30%, 50% 70%, 70% 30%;
+  }
+  75% {
+    --bg-1-x: 70;
+    --bg-2-x: 50;
+    --bg-2-y: 10;
+    --bg-3-x: 40;
+    --bg-3-y: 30;
+    background-position: center, 75% 70%, 25% 30%, 90% 80%;
+  }
+  100% {
+    --bg-1-x: 25;
+    --bg-2-x: 35;
+    --bg-2-y: 40;
+    --bg-3-x: 45;
+    --bg-3-y: 20;
+    background-position: center, 100% 50%, 0% 50%, 100% 50%;
   }
 }
