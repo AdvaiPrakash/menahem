@@ -22,6 +22,9 @@
     <!-- Slide-over Shopping Cart Drawer -->
     <x-cart-drawer :content="$content" />
 
+    <!-- Curtain Measurement Manual Modal -->
+    <x-curtain-measurement-modal :whatsapp-number="$brand['whatsapp_number'] ?? '919876543210'" />
+
     <!-- Floating Persistent WhatsApp Quick-Action CTA (Square-refined icon on mobile, expanded pill on desktop) -->
     <aside class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 group">
         <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" aria-label="Direct WhatsApp Consultation" class="flex items-center justify-center w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-3 rounded-lg bg-[#25d366] text-white shadow-2xl hover:bg-[#20ba5a] transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/60">

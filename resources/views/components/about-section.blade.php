@@ -67,36 +67,36 @@
             </div>
 
             <!-- Right Column: Editorial Narrative, Pillars & Actions (7 cols) -->
-            <div class="lg:col-span-7 flex flex-col justify-center">
-                <x-reveal delay="150">
+            <div class="lg:col-span-7 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
+                <x-reveal delay="150" class="w-full">
                     <!-- Eyebrow Pill -->
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-3 w-fit shadow-2xs">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-3 w-fit shadow-2xs mx-auto lg:mx-0">
                         <span>★</span>
                         <span>{{ $about['badge'] ?? 'Our Essence & Story' }}</span>
                     </div>
 
                     <!-- Heading in Playfair Display Font -->
-                    <h2 class="text-3xl sm:text-4xl lg:text-[40px] font-bold tracking-tight text-[#2B3326] font-serif leading-[1.2]">
+                    <h2 class="text-3xl sm:text-4xl lg:text-[40px] font-bold tracking-tight text-[#2B3326] font-serif leading-[1.2] text-center lg:text-left">
                         {{ $about['heading'] ?? 'Rooted in Simple Living, Crafted for Everyday Comfort' }}
                     </h2>
 
                     <!-- Lead Philosophy -->
-                    <p class="text-sm sm:text-base text-[#2B3326] font-medium leading-relaxed mt-4">
+                    <p class="text-sm sm:text-base text-[#2B3326] font-medium leading-relaxed mt-4 text-center lg:text-left">
                         {{ $about['lead'] ?? 'Menahem takes its name from an ancient word meaning comforter. We make home textiles that quiet the noise of the day.' }}
                     </p>
 
                     <!-- Body Story -->
-                    <p class="text-xs sm:text-sm text-[#5C6654] leading-relaxed mt-3">
+                    <p class="text-xs sm:text-sm text-[#5C6654] leading-relaxed mt-3 text-center lg:text-left">
                         {{ $about['description'] ?? 'We began with a clear purpose: to craft home essentials that feel gentle from the very first wash, free from the stiff chemical finishes common in mass-produced furnishings. Hand-finished by generational artisans across India, our textiles pair breathable long-staple cottons with tailored stitches and calm, earth-drawn tones.' }}
                     </p>
                 </x-reveal>
 
                 <!-- 3 Minimalist Value Pillars -->
                 @if(!empty($pillars))
-                    <x-reveal delay="200">
+                    <x-reveal delay="200" class="w-full">
                         <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-neutral-200">
                             @foreach($pillars as $index => $pillar)
-                                <div class="p-3.5 rounded-lg bg-white border border-neutral-200 shadow-2xs flex flex-col justify-between">
+                                <div class="p-3.5 rounded-lg bg-white border border-neutral-200 shadow-2xs flex flex-col justify-between text-left">
                                     <div>
                                         <div class="w-8 h-8 rounded-md bg-neutral-100 border border-neutral-200 flex items-center justify-center text-[#74826B] mb-2.5 shadow-2xs">
                                             @if($index === 0)
@@ -130,10 +130,10 @@
                 @endif
 
                 <!-- Call to Action Actions -->
-                <x-reveal delay="250">
-                    <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                <x-reveal delay="250" class="w-full">
+                    <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3.5">
                         <a
-                            href="{{ $about['cta']['url'] ?? '#trending' }}"
+                            href="{{ $about['cta']['url'] ?? '/products' }}"
                             class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg bg-[#74826B] hover:bg-[#636F5A] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md shadow-[#74826B]/25 hover:shadow-lg transform hover:-translate-y-0.5 active:scale-98"
                         >
                             <span>{{ $about['cta']['label'] ?? 'Explore Curated Essentials' }}</span>

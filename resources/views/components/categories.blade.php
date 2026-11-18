@@ -10,20 +10,29 @@
 <section id="shop-categories" class="py-12 sm:py-16 lg:py-20 bg-white border-b border-neutral-200/70">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Header: Title & View All Link -->
-        <div class="flex items-center justify-between mb-6 sm:mb-10 pb-4 border-b border-neutral-100">
-            <div>
-                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#2B3326] font-serif">
+        <!-- Header: Explore Full Collection Button placed ON TOP of "Shop by Category" -->
+        <div class="mb-6 sm:mb-10 pb-4 border-b border-neutral-100 flex flex-col items-center text-center sm:items-start sm:text-left">
+            <!-- Button placed on top of "Shop by Category" (Square-shaped geometry matching site design) -->
+            <div class="mb-3.5 flex justify-center sm:justify-start">
+                <a
+                    href="{{ route('categories.index') }}"
+                    class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs sm:text-sm font-bold tracking-wide bg-neutral-100 hover:bg-[#74826B] text-[#2B3326] hover:text-white border border-neutral-200 hover:border-[#74826B] transition-all duration-200 shadow-2xs group cursor-pointer"
+                >
+                    <span class="text-[#74826B] group-hover:text-white transition-colors">★</span>
+                    <span>{{ $categories['view_all_label'] ?? 'Explore the full Menahem collection.' }}</span>
+                    <span class="transition-transform group-hover:translate-x-1 font-mono">→</span>
+                </a>
+            </div>
+
+            <!-- Writing: Shop by Category & Subtitle (Centered on mobile, left-aligned on desktop) -->
+            <div class="w-full">
+                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#2B3326] font-serif text-center sm:text-left">
                     {{ $categories['heading'] ?? 'Shop by Category' }}
                 </h2>
-                <p class="text-xs sm:text-sm text-[#5C6654] mt-1 font-medium">
+                <p class="text-xs sm:text-sm text-[#5C6654] mt-1.5 font-medium text-center sm:text-left max-w-xl mx-auto sm:mx-0">
                     {{ $categories['subheading'] ?? 'Curtains, Table Decor, Sofa Decor, Towels, Bedsheets & Rugs' }}
                 </p>
             </div>
-            <a href="{{ route('categories.index') }}" class="text-xs sm:text-sm font-bold text-[#2B3326] hover:text-[#74826B] transition-colors flex items-center gap-1.5 group">
-                <span>{{ $categories['view_all_label'] ?? 'View all collections' }}</span>
-                <span class="transition-transform group-hover:translate-x-1 font-mono">→</span>
-            </a>
         </div>
 
         <!-- Categories Grid: 2-column grid on mobile, 3 on tablet, 6 in a row on desktop -->

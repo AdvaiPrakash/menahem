@@ -61,7 +61,11 @@
             if (this.items.length === 0) return 'https://wa.me/{{ $whatsappNumber }}';
             let msg = 'Hello Menahem! I would like to order the following items from your collection:%0A%0A';
             this.items.forEach((item, index) => {
-                msg += (index + 1) + '. ' + encodeURIComponent(item.name) + ' (Qty: ' + item.quantity + ') - ₹' + (item.price * item.quantity) + '%0A';
+                let namePart = item.name;
+                if (item.custom_size) {
+                    namePart += ' [Custom Size: ' + item.custom_size + ']';
+                }
+                msg += (index + 1) + '. ' + encodeURIComponent(namePart) + ' (Qty: ' + item.quantity + ') - ₹' + (item.price * item.quantity) + '%0A';
             });
             msg += '%0A*Subtotal:* ₹' + this.subtotal;
             msg += '%0A*Delivery:* ' + (this.shipping === 0 ? 'FREE' : '₹99');
@@ -81,17 +85,18 @@
             this.items = this.items.filter(i => i.id !== id);
         },
         addItem(newItem) {
-            const existing = this.items.find(i => i.id === newItem.id);
+            const existing = this.items.find(i => i.id === newItem.id && (i.custom_size || null) === (newItem.custom_size || null));
             if (existing) {
                 existing.quantity += (newItem.quantity || 1);
             } else {
                 this.items.push({
-                    id: newItem.id,
+                    id: newItem.custom_size ? (newItem.id + '-' + Date.now()) : newItem.id,
                     name: newItem.name,
                     price: newItem.price,
                     quantity: newItem.quantity || 1,
                     image: newItem.image,
-                    category: newItem.category || 'Collection'
+                    category: newItem.category || 'Collection',
+                    custom_size: newItem.custom_size || null
                 });
             }
             this.open = true;
@@ -207,6 +212,12 @@
                         <div class="flex-1 min-w-0">
                             <span x-text="item.category" class="text-[10px] uppercase font-bold text-[#74826B] tracking-wider block"></span>
                             <h4 x-text="item.name" class="text-xs sm:text-sm font-bold text-[#2B3326] truncate mt-0.5"></h4>
+                            <template x-if="item.custom_size">
+                                <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded bg-[#74826B]/10 border border-[#74826B]/20 text-[10px] font-semibold text-[#2B3326]">
+                                    <span>📏</span>
+                                    <span x-text="item.custom_size"></span>
+                                </div>
+                            </template>
                             <div class="text-xs font-extrabold text-[#2B3326] mt-1">
                                 ₹<span x-text="item.price.toLocaleString()"></span>
                             </div>

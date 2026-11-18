@@ -1,0 +1,209 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 680" width="100%" height="100%">
+  <defs>
+    <linearGradient id="wallBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FAF8F5" />
+      <stop offset="100%" stop-color="#F2EFE9" />
+    </linearGradient>
+    <linearGradient id="curtainLinenLeft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E5DECE" />
+      <stop offset="25%" stop-color="#F5F2EB" />
+      <stop offset="50%" stop-color="#D9CFBC" />
+      <stop offset="75%" stop-color="#EFEBE2" />
+      <stop offset="100%" stop-color="#CBC0AA" />
+    </linearGradient>
+    <linearGradient id="curtainLinenRight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#CBC0AA" />
+      <stop offset="25%" stop-color="#EFEBE2" />
+      <stop offset="50%" stop-color="#D9CFBC" />
+      <stop offset="75%" stop-color="#F5F2EB" />
+      <stop offset="100%" stop-color="#E5DECE" />
+    </linearGradient>
+    <linearGradient id="rodGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8E7854" />
+      <stop offset="50%" stop-color="#BAA57E" />
+      <stop offset="100%" stop-color="#6F5D3E" />
+    </linearGradient>
+    <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#E6E0D4" stroke-width="0.7" opacity="0.6" />
+    </pattern>
+    <marker id="arrowHeadGreen" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#74826B" />
+    </marker>
+    <marker id="arrowHeadGreenStart" markerWidth="8" markerHeight="8" refX="3" refY="4" orient="auto">
+      <path d="M7,1 L1,4 L7,7 Z" fill="#74826B" />
+    </marker>
+    <marker id="arrowHeadGold" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 Z" fill="#8E7854" />
+    </marker>
+    <marker id="arrowHeadGoldStart" markerWidth="8" markerHeight="8" refX="3" refY="4" orient="auto">
+      <path d="M7,1 L1,4 L7,7 Z" fill="#8E7854" />
+    </marker>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="960" height="680" fill="url(#wallBg)" rx="12" />
+  <rect width="960" height="680" fill="url(#gridPattern)" rx="12" />
+  <rect width="958" height="678" x="1" y="1" fill="none" stroke="#D7C7B2" stroke-width="1.5" rx="12" />
+
+  <!-- Diagram Title Header -->
+  <g id="header" transform="translate(40, 36)">
+    <rect x="0" y="0" width="140" height="24" rx="4" fill="#74826B" fill-opacity="0.12" stroke="#74826B" stroke-width="1" />
+    <text x="70" y="16" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#2B3326" text-anchor="middle" letter-spacing="1">MENAHEM TAILORING</text>
+    <text x="0" y="52" font-family="'Playfair Display', Georgia, serif" font-size="24" font-weight="700" fill="#2B3326">Curtain Measurement Manual</text>
+    <text x="0" y="74" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="500" fill="#5C6654">Follow this architectural guide to accurately measure the breadth and length for bespoke drapes</text>
+  </g>
+
+  <!-- Floor Line -->
+  <line x1="60" y1="600" x2="680" y2="600" stroke="#74826B" stroke-width="2.5" stroke-dasharray="6,4" />
+  <text x="80" y="622" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="700" fill="#2B3326">FLOOR LEVEL (Reference Base)</text>
+
+  <!-- Window Frame -->
+  <g id="windowFrame">
+    <!-- Window Outer Molding -->
+    <rect x="200" y="180" width="340" height="320" fill="#FFFFFF" stroke="#D7C7B2" stroke-width="8" rx="4" />
+    <!-- Window Glass Pane -->
+    <rect x="212" y="192" width="316" height="296" fill="#EEF3F5" stroke="#C8D4D8" stroke-width="2" />
+    <!-- Window Muntin Bars (Grids) -->
+    <line x1="370" y1="192" x2="370" y2="488" stroke="#D7C7B2" stroke-width="5" />
+    <line x1="212" y1="340" x2="528" y2="340" stroke="#D7C7B2" stroke-width="5" />
+    <!-- Window Sill Projection -->
+    <rect x="186" y="500" width="368" height="14" fill="#E4DCD0" stroke="#C7BBAA" stroke-width="1.5" rx="2" />
+    <text x="370" y="530" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="600" fill="#5C6654" text-anchor="middle">Window Sill (Projection)</text>
+  </g>
+
+  <!-- Curtain Rod / Track (Above Window Frame) -->
+  <g id="curtainRod">
+    <!-- Left Bracket -->
+    <rect x="150" y="138" width="10" height="24" fill="#6F5D3E" rx="2" />
+    <!-- Right Bracket -->
+    <rect x="580" y="138" width="10" height="24" fill="#6F5D3E" rx="2" />
+    <!-- Center Bracket -->
+    <rect x="365" y="138" width="10" height="24" fill="#6F5D3E" rx="2" />
+    <!-- The Rod Bar -->
+    <rect x="110" y="142" width="520" height="12" rx="6" fill="url(#rodGrad)" stroke="#58482E" stroke-width="1" />
+    <!-- Left Finial -->
+    <circle cx="106" cy="148" r="14" fill="url(#rodGrad)" stroke="#58482E" stroke-width="1.5" />
+    <!-- Right Finial -->
+    <circle cx="634" cy="148" r="14" fill="url(#rodGrad)" stroke="#58482E" stroke-width="1.5" />
+    <!-- Rod Position Annotation -->
+    <path d="M 200 180 L 175 180 L 175 148 L 195 148" fill="none" stroke="#8E7854" stroke-width="1.5" stroke-dasharray="3,3" />
+    <text x="170" y="167" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#8E7854" text-anchor="end">4"–6" (10-15cm)</text>
+    <text x="170" y="179" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="500" fill="#5C6654" text-anchor="end">Above frame</text>
+  </g>
+
+  <!-- Left Curtain Drape with Realistic Wave Folds -->
+  <g id="leftDrape">
+    <!-- Eyelets -->
+    <circle cx="140" cy="148" r="7" fill="#6F5D3E" stroke="#BAA57E" stroke-width="2" />
+    <circle cx="170" cy="148" r="7" fill="#6F5D3E" stroke="#BAA57E" stroke-width="2" />
+    <circle cx="200" cy="148" r="7" fill="#6F5D3E" stroke="#BAA57E" stroke-width="2" />
+    <circle cx="230" cy="148" r="7" fill="#6F5D3E" stroke="#BAA57E" stroke-width="2" />
+    <!-- Fabric Body Left -->
+    <path d="M 125 140
+             C 145 135, 155 142, 170 140
+             C 185 138, 205 142, 220 140
+             C 235 138, 245 142, 250 140
+             L 255 588
+             C 245 592, 235 586, 220 590
+             C 205 586, 185 592, 170 588
+             C 155 586, 140 592, 125 588
+             Z"
+          fill="url(#curtainLinenLeft)" stroke="#B5A893" stroke-width="1.5" />
+    <!-- Wave Shadow Folds -->
+    <path d="M 155 142 Q 160 360 156 587" stroke="#BAA993" stroke-width="2" opacity="0.6" fill="none" />
+    <path d="M 188 142 Q 194 360 190 589" stroke="#BAA993" stroke-width="2.5" opacity="0.6" fill="none" />
+    <path d="M 224 142 Q 228 360 225 588" stroke="#BAA993" stroke-width="2" opacity="0.6" fill="none" />
+  </g>
+
+  <!-- Right Curtain Drape with Realistic Wave Folds -->
+  <g id="rightDrape">
+    <!-- Eyelets -->
+    <circle cx="510" cy="148" r="7" fill="#6F5D3E" stroke="#BAA57E" stroke-width="2" />
+    <circle cx="540" cy="148" r="7" fill="#6F5D3E" stroke="#BAA57E" stroke-width="2" />
+    <circle cx="570" cy="148" r="7" fill="#6F5D3E" stroke="#BAA57E" stroke-width="2" />
+    <circle cx="600" cy="148" r="7" fill="#6F5D3E" stroke="#BAA57E" stroke-width="2" />
+    <!-- Fabric Body Right -->
+    <path d="M 490 140
+             C 505 138, 520 142, 535 140
+             C 550 138, 570 142, 585 140
+             C 600 138, 610 142, 615 140
+             L 615 588
+             C 605 592, 590 586, 575 590
+             C 560 586, 545 592, 530 588
+             C 515 586, 500 592, 490 588
+             Z"
+          fill="url(#curtainLinenRight)" stroke="#B5A893" stroke-width="1.5" />
+    <!-- Wave Shadow Folds -->
+    <path d="M 518 142 Q 522 360 519 587" stroke="#BAA993" stroke-width="2" opacity="0.6" fill="none" />
+    <path d="M 552 142 Q 556 360 553 589" stroke="#BAA993" stroke-width="2.5" opacity="0.6" fill="none" />
+    <path d="M 588 142 Q 592 360 589 588" stroke="#BAA993" stroke-width="2" opacity="0.6" fill="none" />
+  </g>
+
+  <!-- ================= MEASUREMENT ARROWS & ANNOTATIONS ================= -->
+
+  <!-- 1. BREADTH (WIDTH) MEASUREMENT LINE -->
+  <g id="breadthMeasurement">
+    <!-- Extension Projection Lines -->
+    <line x1="110" y1="138" x2="110" y2="92" stroke="#74826B" stroke-width="1.5" stroke-dasharray="3,3" />
+    <line x1="630" y1="138" x2="630" y2="92" stroke="#74826B" stroke-width="1.5" stroke-dasharray="3,3" />
+    <!-- Main Breadth Double Arrow Line -->
+    <line x1="114" y1="98" x2="626" y2="98" stroke="#74826B" stroke-width="2.5" marker-start="url(#arrowHeadGreenStart)" marker-end="url(#arrowHeadGreen)" />
+    <!-- Breadth Label Pill -->
+    <rect x="270" y="82" width="200" height="32" rx="6" fill="#74826B" stroke="#2B3326" stroke-width="1" />
+    <text x="370" y="103" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">BREADTH / WIDTH (B)</text>
+    <text x="370" y="128" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="600" fill="#2B3326" text-anchor="middle">Measure Full Rod Width + 6"-12" Stacking Space</text>
+  </g>
+
+  <!-- 2. LENGTH (DROP / HEIGHT) MEASUREMENT LINES -->
+  <g id="lengthMeasurement" transform="translate(640, 0)">
+    <!-- Top Reference Line from Top of Rod -->
+    <line x1="-10" y1="142" x2="80" y2="142" stroke="#74826B" stroke-width="1.5" stroke-dasharray="4,4" />
+
+    <!-- Drop Option 1: Sill Length (500px) -->
+    <line x1="-90" y1="495" x2="30" y2="495" stroke="#74826B" stroke-width="1.2" stroke-dasharray="3,3" />
+    <!-- Drop Option 2: Below Sill / Apron (550px) -->
+    <line x1="-90" y1="545" x2="50" y2="545" stroke="#74826B" stroke-width="1.2" stroke-dasharray="3,3" />
+    <!-- Drop Option 3: Floor Touch (592px) -->
+    <line x1="-25" y1="592" x2="70" y2="592" stroke="#74826B" stroke-width="1.2" stroke-dasharray="3,3" />
+
+    <!-- Main Vertical Length Arrow Line (To Floor Length) -->
+    <line x1="60" y1="146" x2="60" y2="588" stroke="#74826B" stroke-width="2.5" marker-start="url(#arrowHeadGreenStart)" marker-end="url(#arrowHeadGreen)" />
+
+    <!-- Length Label Pill -->
+    <rect x="18" y="320" width="180" height="32" rx="6" fill="#74826B" stroke="#2B3326" stroke-width="1" />
+    <text x="108" y="341" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">LENGTH / DROP (L)</text>
+
+    <!-- Length Markers & Annotations on the Right -->
+    <!-- Marker 1: Sill -->
+    <circle cx="30" cy="495" r="3.5" fill="#74826B" />
+    <text x="75" y="490" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#2B3326">① Sill Length</text>
+    <text x="75" y="503" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="500" fill="#5C6654">1/2" (1.5cm) above sill</text>
+
+    <!-- Marker 2: Below Sill -->
+    <circle cx="50" cy="545" r="3.5" fill="#74826B" />
+    <text x="75" y="540" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#2B3326">② Below Sill / Apron</text>
+    <text x="75" y="553" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="500" fill="#5C6654">4"-6" (10-15cm) below frame</text>
+
+    <!-- Marker 3: Floor Length -->
+    <circle cx="60" cy="592" r="3.5" fill="#74826B" />
+    <text x="75" y="588" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#2B3326">③ Floor Length (Popular)</text>
+    <text x="75" y="601" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="500" fill="#5C6654">1/2" (1.5cm) above floor glide</text>
+  </g>
+
+  <!-- Side Architectural Specification Callout Card (Bottom Right) -->
+  <g id="specCard" transform="translate(680, 140)">
+    <rect x="0" y="0" width="240" height="150" rx="8" fill="#FFFFFF" stroke="#D7C7B2" stroke-width="1.5" />
+    <rect x="0" y="0" width="240" height="30" rx="8" fill="#F6F4EB" stroke="#D7C7B2" stroke-width="1" />
+    <text x="12" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#2B3326">📏 QUICK MEASUREMENT RULES</text>
+    
+    <text x="12" y="50" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="700" fill="#74826B">1. Measure the Rod, Not Glass</text>
+    <text x="12" y="64" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="500" fill="#5C6654">Exclude decorative end finials.</text>
+
+    <text x="12" y="86" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="700" fill="#74826B">2. Fullness Rule (Gathers)</text>
+    <text x="12" y="100" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="500" fill="#5C6654">Multiply rod width by 1.5x–2.0x.</text>
+
+    <text x="12" y="122" font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="700" fill="#74826B">3. Use a Steel Tape Measure</text>
+    <text x="12" y="136" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="500" fill="#5C6654">Measure left, center, right points.</text>
+  </g>
+
+</svg>

@@ -6,25 +6,16 @@
         <!-- 2. Shop by Category (Multi-Level Category Navigation Flow) -->
         <x-categories :content="$content" />
 
-        <!-- 3. Shop by Rooms (Shop for Bedroom, Shop for Livingroom, Shop for Kitchen) -->
-        <x-rooms-showcase :content="$content" />
-
-        <!-- 4. Curtains & Custom Drapes Showcase -->
-        <x-curtains-showcase :content="$content" />
-
-        <!-- 5. Handcrafted Bedsheets & Mulmul Dohars Showcase -->
-        <x-bedsheets-showcase :content="$content" />
-
-        <!-- 6. About Menahem: Essence, Philosophy & Quiet Craftsmanship -->
+        <!-- 3. About Menahem: Essence, Philosophy & Quiet Craftsmanship -->
         <x-about-section :content="$content" />
 
-        <!-- 7. Trending Home Essentials (Curated Favorites with Direct Actions) -->
-        <x-trending :content="$content" />
+        <!-- 4. Clearance Sale Section (With Specified Percent Off) -->
+        <x-clearance-sale :content="$content" />
 
-        <!-- 7. Trust Badges Strip (Rating, Free Shipping, Guarantee, Secure Checkout) -->
+        <!-- 5. Trust Badges Strip (Rating, Free Shipping, Guarantee, Secure Checkout) -->
         <x-trust-strip :content="$content" />
 
-        <!-- 8. Newsletter Subscription Strip -->
+        <!-- 5. Newsletter Subscription Strip -->
         <x-newsletter :content="$content" />
     </x-site-shell>
 </x-layouts.app>

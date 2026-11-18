@@ -19,6 +19,11 @@
     $desc = $product['desc'] ?? 'Artisanal texture crafted with premium natural fibers, designed to bring understated luxury and everyday comfort to your home.';
     $image = $product['image'] ?? '/images/categories/bedsheets.webp';
 
+    $isCurtain = str_contains(strtolower($name), 'curtain')
+        || str_contains(strtolower($name), 'drape')
+        || str_contains(strtolower($category), 'curtain')
+        || str_contains(strtolower($categorySlug), 'curtain');
+
     $brand = $content['BRAND'] ?? [];
     $whatsappMsg = urlencode("Hello Menahem! I would like to order: {$name} ({$price}). Please assist me with delivery and payment.");
     $whatsappUrl = "https://wa.me/919876543210?text={$whatsappMsg}";
@@ -48,6 +53,14 @@
                 ],
                 quantity: 1,
                 selectedTab: 'details',
+                isCurtain: {{ $isCurtain ? 'true' : 'false' }},
+                sizeMode: 'standard', // 'standard' | 'custom'
+                curtainUnit: 'inches',
+                curtainBreadth: 48,
+                curtainLength: 84,
+                curtainHeader: 'Antique Brass Eyelets',
+                curtainRoom: '',
+
                 nextImage() {
                     this.activeIndex = (this.activeIndex + 1) % this.gallery.length;
                     this.activeImage = this.gallery[this.activeIndex];
@@ -60,12 +73,35 @@
                     this.activeIndex = idx;
                     this.activeImage = this.gallery[idx];
                 },
+                get lengthInInches() {
+                    return this.curtainUnit === 'feet' ? (this.curtainLength * 12) : this.curtainLength;
+                },
+                get calculatedUnitPrice() {
+                    let base = {{ $numericPrice }};
+                    if (this.isCurtain && this.sizeMode === 'custom') {
+                        if (this.lengthInInches > 96) base += 250;
+                    }
+                    return base;
+                },
                 get totalFormatted() {
-                    return '₹' + ({{ $numericPrice }} * this.quantity).toLocaleString();
+                    return '₹' + (this.calculatedUnitPrice * this.quantity).toLocaleString();
+                },
+                get customSizeString() {
+                    if (!this.isCurtain || this.sizeMode !== 'custom') return null;
+                    return this.curtainBreadth + ' ' + this.curtainUnit + ' (B) × ' + this.curtainLength + ' ' + this.curtainUnit + ' (L) [' + this.curtainHeader + ']';
                 },
                 get dynamicWhatsappUrl() {
-                    const msg = encodeURIComponent('Hello Menahem! I would like to order ' + this.quantity + 'x {{ addslashes($name) }} (Total: ' + this.totalFormatted + '). Please guide me with payment and delivery.');
-                    return 'https://wa.me/919876543210?text=' + msg;
+                    let lines = [
+                        'Hello Menahem! I would like to order ' + this.quantity + 'x {{ addslashes($name) }}'
+                    ];
+                    if (this.isCurtain && this.sizeMode === 'custom') {
+                        lines.push('• Custom Dimensions: Length = ' + this.curtainLength + ' ' + this.curtainUnit + ', Breadth = ' + this.curtainBreadth + ' ' + this.curtainUnit);
+                        lines.push('• Header Style: ' + this.curtainHeader);
+                        if (this.curtainRoom) lines.push('• Window/Room: ' + this.curtainRoom);
+                    }
+                    lines.push('• Total: ' + this.totalFormatted);
+                    lines.push('Please guide me with custom tailoring and delivery.');
+                    return 'https://wa.me/{{ $brand['whatsapp_number'] ?? '919876543210' }}?text=' + encodeURIComponent(lines.join('\n'));
                 }
             }"
             class="pt-24 sm:pt-28 lg:pt-30 pb-20 bg-white min-h-screen text-[#2B3326]"
@@ -173,22 +209,22 @@
                         </div>
                     </div>
 
-                    <!-- Right: Product Details, Customization & Purchase Panel -->
-                    <div class="lg:col-span-6 flex flex-col text-left">
+                    <!-- Right: Product Details, Customization & Purchase Panel (Centered on mobile, Left-aligned on websites) -->
+                    <div class="lg:col-span-6 flex flex-col text-center lg:text-left items-center lg:items-start">
                         
                         <!-- Eyebrow Pill -->
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-3 w-fit">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-3 w-fit mx-auto lg:mx-0">
                             <span class="text-[#74826B]">★</span>
                             <span>{{ $material }}</span>
                         </div>
 
                         <!-- Product Title in Playfair Display Font -->
-                        <h1 class="text-3xl sm:text-4xl font-bold font-serif tracking-tight text-[#2B3326] leading-tight">
+                        <h1 class="text-3xl sm:text-4xl font-bold font-serif tracking-tight text-[#2B3326] leading-tight text-center lg:text-left">
                             {{ $name }}
                         </h1>
 
                         <!-- Rating & Review Count -->
-                        <div class="flex items-center gap-3 mt-3.5 pb-4 border-b border-neutral-200">
+                        <div class="flex items-center justify-center lg:justify-start gap-3 mt-3.5 pb-4 border-b border-neutral-200 w-full">
                             <div class="flex text-[#74826B]">
                                 @for($i = 0; $i < 5; $i++)
                                     <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
@@ -201,7 +237,7 @@
                         </div>
 
                         <!-- Price Section -->
-                        <div class="mt-5 flex items-baseline gap-3.5">
+                        <div class="mt-5 flex items-baseline justify-center lg:justify-start gap-3.5">
                             <span class="text-3xl sm:text-4xl font-extrabold text-[#2B3326] tracking-tight">
                                 {{ $price }}
                             </span>
@@ -214,10 +250,10 @@
                                 </span>
                             @endif
                         </div>
-                        <p class="text-[11px] text-[#5C6654] mt-1 font-medium">Inclusive of all taxes • Free shipping across India</p>
+                        <p class="text-[11px] text-[#5C6654] mt-1 font-medium text-center lg:text-left">Inclusive of all taxes • Free shipping across India</p>
 
                         <!-- Description Snippet -->
-                        <p class="mt-4 text-sm text-[#5C6654] leading-relaxed">
+                        <p class="mt-4 text-sm text-[#5C6654] leading-relaxed text-center lg:text-left">
                             {{ $desc }}
                         </p>
 
@@ -240,6 +276,195 @@
                                 <span>Bespoke Tailoring</span>
                             </div>
                         </div>
+
+                        <!-- Curtain Customization Option (Length & Breadth) if product is a curtain -->
+                        @if($isCurtain)
+                            <div class="mt-6 p-4 sm:p-5 rounded-xl border border-[#74826B]/30 bg-[#FAF8F5] space-y-4 shadow-2xs">
+                                <div class="flex items-center justify-between pb-3 border-b border-neutral-200">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm">✂️</span>
+                                        <span class="text-xs font-bold uppercase tracking-wider text-[#2B3326]">Curtain Size & Customization</span>
+                                    </div>
+                                    <div class="inline-flex rounded-md bg-white border border-neutral-200 p-0.5 text-xs font-bold">
+                                        <button
+                                            type="button"
+                                            @click="sizeMode = 'standard'"
+                                            :class="sizeMode === 'standard' ? 'bg-[#74826B] text-white shadow-xs' : 'text-[#5C6654] hover:text-[#2B3326]'"
+                                            class="px-2.5 py-1 rounded transition-colors cursor-pointer"
+                                        >
+                                            Standard
+                                        </button>
+                                        <button
+                                            type="button"
+                                            @click="sizeMode = 'custom'"
+                                            :class="sizeMode === 'custom' ? 'bg-[#74826B] text-white shadow-xs' : 'text-[#5C6654] hover:text-[#2B3326]'"
+                                            class="px-2.5 py-1 rounded transition-colors cursor-pointer"
+                                        >
+                                            Custom Size
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Standard Size Options -->
+                                <div x-show="sizeMode === 'standard'" class="space-y-2">
+                                    <span class="text-[11px] text-[#5C6654] block">Select standard Indian window or door pair drop:</span>
+                                    <div class="grid grid-cols-3 gap-2 text-xs">
+                                        <button
+                                            type="button"
+                                            @click="curtainLength = 60; curtainBreadth = 48;"
+                                            :class="curtainLength === 60 ? 'border-[#74826B] bg-[#74826B]/10 font-bold text-[#2B3326]' : 'border-neutral-200 bg-white text-[#5C6654]'"
+                                            class="p-2 rounded-lg border text-center transition-all cursor-pointer"
+                                        >
+                                            <span class="block">Window (5ft)</span>
+                                            <span class="text-[10px] opacity-75">48" × 60"</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            @click="curtainLength = 84; curtainBreadth = 48;"
+                                            :class="curtainLength === 84 ? 'border-[#74826B] bg-[#74826B]/10 font-bold text-[#2B3326]' : 'border-neutral-200 bg-white text-[#5C6654]'"
+                                            class="p-2 rounded-lg border text-center transition-all cursor-pointer"
+                                        >
+                                            <span class="block">Door (7ft)</span>
+                                            <span class="text-[10px] opacity-75">48" × 84"</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            @click="curtainLength = 108; curtainBreadth = 48;"
+                                            :class="curtainLength === 108 ? 'border-[#74826B] bg-[#74826B]/10 font-bold text-[#2B3326]' : 'border-neutral-200 bg-white text-[#5C6654]'"
+                                            class="p-2 rounded-lg border text-center transition-all cursor-pointer"
+                                        >
+                                            <span class="block">Long Door (9ft)</span>
+                                            <span class="text-[10px] opacity-75">48" × 108"</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Custom Length & Breadth Inputs -->
+                                <div x-show="sizeMode === 'custom'" class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-bold text-[#2B3326]">Enter Exact Custom Dimensions</span>
+                                        
+                                        <!-- Small writing button for displaying measurement manual -->
+                                        <button
+                                            type="button"
+                                            @click="$dispatch('open-curtain-manual')"
+                                            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#74826B] hover:text-[#2B3326] underline underline-offset-4 decoration-[#74826B]/60 transition-colors cursor-pointer group"
+                                        >
+                                            <svg class="w-3.5 h-3.5 text-[#74826B] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            <span>How to measure? (View Manual)</span>
+                                            <span class="text-[10px] font-mono">↗</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Unit Selector -->
+                                    <div class="flex items-center justify-end gap-2 text-xs">
+                                        <span class="text-[11px] text-[#5C6654]">Unit:</span>
+                                        <div class="inline-flex rounded-md bg-white border border-neutral-200 p-0.5">
+                                            <button
+                                                type="button"
+                                                @click="curtainUnit = 'inches'"
+                                                :class="curtainUnit === 'inches' ? 'bg-[#74826B] text-white' : 'text-[#5C6654]'"
+                                                class="px-2 py-0.5 rounded text-[11px] font-bold cursor-pointer"
+                                            >
+                                                Inches
+                                            </button>
+                                            <button
+                                                type="button"
+                                                @click="curtainUnit = 'feet'"
+                                                :class="curtainUnit === 'feet' ? 'bg-[#74826B] text-white' : 'text-[#5C6654]'"
+                                                class="px-2 py-0.5 rounded text-[11px] font-bold cursor-pointer"
+                                            >
+                                                Feet
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Inputs Grid -->
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-semibold text-[#2B3326] mb-1">
+                                                Breadth (Width)
+                                            </label>
+                                            <div class="relative">
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    x-model.number="curtainBreadth"
+                                                    class="w-full px-3 py-2 rounded-lg border border-neutral-300 text-xs font-bold text-[#2B3326] bg-white outline-none focus:border-[#74826B]"
+                                                />
+                                                <span class="absolute right-2.5 top-2 text-[11px] text-[#5C6654]" x-text="curtainUnit"></span>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-xs font-semibold text-[#2B3326] mb-1">
+                                                Length (Height/Drop)
+                                            </label>
+                                            <div class="relative">
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    x-model.number="curtainLength"
+                                                    class="w-full px-3 py-2 rounded-lg border border-neutral-300 text-xs font-bold text-[#2B3326] bg-white outline-none focus:border-[#74826B]"
+                                                />
+                                                <span class="absolute right-2.5 top-2 text-[11px] text-[#5C6654]" x-text="curtainUnit"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Header Style Choice -->
+                                    <div>
+                                        <label class="block text-xs font-semibold text-[#2B3326] mb-1.5">
+                                            Header / Hanging Style
+                                        </label>
+                                        <div class="grid grid-cols-3 gap-2 text-[11px]">
+                                            <button
+                                                type="button"
+                                                @click="curtainHeader = 'Antique Brass Eyelets'"
+                                                :class="curtainHeader.includes('Eyelets') ? 'border-[#74826B] bg-white font-bold text-[#2B3326] ring-1 ring-[#74826B]' : 'border-neutral-200 bg-white text-[#5C6654]'"
+                                                class="p-2 rounded-md border text-center transition-all cursor-pointer"
+                                            >
+                                                Eyelet Rings
+                                            </button>
+                                            <button
+                                                type="button"
+                                                @click="curtainHeader = 'Classic Pinch Pleats'"
+                                                :class="curtainHeader.includes('Pleats') ? 'border-[#74826B] bg-white font-bold text-[#2B3326] ring-1 ring-[#74826B]' : 'border-neutral-200 bg-white text-[#5C6654]'"
+                                                class="p-2 rounded-md border text-center transition-all cursor-pointer"
+                                            >
+                                                Pinch Pleats
+                                            </button>
+                                            <button
+                                                type="button"
+                                                @click="curtainHeader = 'Rod Pocket Casing'"
+                                                :class="curtainHeader.includes('Pocket') ? 'border-[#74826B] bg-white font-bold text-[#2B3326] ring-1 ring-[#74826B]' : 'border-neutral-200 bg-white text-[#5C6654]'"
+                                                class="p-2 rounded-md border text-center transition-all cursor-pointer"
+                                            >
+                                                Rod Pocket
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Room/Window Note -->
+                                    <div>
+                                        <input
+                                            type="text"
+                                            x-model="curtainRoom"
+                                            placeholder="Room / Window note (e.g. Master Bedroom, Balcony Door)"
+                                            class="w-full px-3 py-1.5 rounded-lg border border-neutral-300 text-xs text-[#2B3326] bg-white outline-none focus:border-[#74826B]"
+                                        />
+                                    </div>
+
+                                    <!-- Live Summary of custom dimensions -->
+                                    <div class="p-2.5 rounded-lg bg-white border border-neutral-200 text-xs text-[#2B3326] flex items-center justify-between">
+                                        <span class="text-[#5C6654]">Custom Fit:</span>
+                                        <strong x-text="customSizeString"></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         <!-- Quantity Selector -->
                         <div class="mt-6 flex items-center gap-4">
@@ -290,10 +515,11 @@
                                 @click="$dispatch('add-to-cart', {
                                     id: {{ $id }},
                                     name: '{{ addslashes($name) }}',
-                                    price: {{ $numericPrice }},
+                                    price: calculatedUnitPrice,
                                     quantity: quantity,
                                     image: activeImage,
-                                    category: '{{ addslashes($category) }}'
+                                    category: '{{ addslashes($category) }}',
+                                    custom_size: customSizeString
                                 })"
                                 class="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-white hover:bg-neutral-100 text-[#2B3326] border border-neutral-200 text-sm font-bold tracking-wide transition-all shadow-xs hover:border-[#74826B] cursor-pointer"
                             >

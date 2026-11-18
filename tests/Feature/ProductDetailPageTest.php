@@ -14,9 +14,9 @@ class ProductDetailPageTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
-        $response->assertSee('Handcrafted Bedsheets & Mulmul Dohars');
+        $response->assertSee('Shop by Category');
+        $response->assertSee('Explore the full Menahem collection.');
         $response->assertSee('Rooted in Simple Living, Crafted for Everyday Comfort');
-        $response->assertSee('Trending Home Essentials');
         $response->assertSee('Make Your Home More Beautiful');
     }
 

@@ -28,15 +28,15 @@
             </ol>
         </nav>
 
-        <!-- Back Button & Header -->
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-neutral-200">
-            <div>
+        <!-- Back Button & Header (Centered on mobile, Left-aligned on websites) -->
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-neutral-200 text-center sm:text-left items-center sm:items-start">
+            <div class="w-full sm:w-auto">
                 <!-- Easy Back Navigation Option -->
-                <div class="mb-2.5">
+                <div class="mb-2.5 flex justify-center sm:justify-start">
                     <a
                         href="{{ $parentUrl }}"
                         onclick="if (window.history.length > 1 && document.referrer.includes(window.location.host)) { window.history.back(); return false; }"
-                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5C6654] hover:text-[#2B3326] transition-colors py-1 px-2.5 rounded-md hover:bg-neutral-100 -ml-2.5 cursor-pointer"
+                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5C6654] hover:text-[#2B3326] transition-colors py-1 px-2.5 rounded-md hover:bg-neutral-100 sm:-ml-2.5 cursor-pointer"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -46,16 +46,16 @@
                 </div>
 
                 <!-- Current Category Heading -->
-                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif text-[#2B3326] tracking-tight">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif text-[#2B3326] tracking-tight text-center sm:text-left">
                     {{ $category['name'] }}
                 </h1>
-                <p class="text-xs sm:text-sm text-[#5C6654] mt-1.5 max-w-2xl leading-relaxed">
+                <p class="text-xs sm:text-sm text-[#5C6654] mt-1.5 max-w-2xl leading-relaxed text-center sm:text-left mx-auto sm:mx-0">
                     {{ $category['description'] ?? 'Choose a category below to browse our handcrafted products.' }}
                 </p>
             </div>
 
             <!-- Subcategory counter & all products link -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center sm:justify-end gap-3 w-full sm:w-auto">
                 <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-neutral-100 text-[#5C6654] border border-neutral-200">
                     {{ count($subcategories) }} {{ count($subcategories) === 1 ? 'Option' : 'Options' }} Available
                 </span>

@@ -13,16 +13,16 @@
         <x-reveal delay="100">
             <div class="rounded-lg bg-white border border-neutral-200 p-6 sm:p-10 lg:p-14 shadow-sm">
                 
-                <!-- Section Header -->
-                <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-3.5 shadow-2xs">
+                <!-- Section Header (Centered on mobile, Left-aligned on websites) -->
+                <div class="flex flex-col items-center lg:items-start text-center lg:text-left max-w-2xl mx-auto lg:mx-0 mb-10 sm:mb-14">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-md bg-neutral-100 text-[#2B3326] border border-neutral-200 text-xs font-bold uppercase tracking-wider mb-3.5 shadow-2xs mx-auto lg:mx-0">
                         <span>★</span>
                         <span>ATELIER CONCIERGE & STYLING</span>
                     </div>
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-[#2B3326] tracking-tight leading-tight">
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-[#2B3326] tracking-tight leading-tight text-center lg:text-left">
                         Make Your Home More Beautiful
                     </h2>
-                    <p class="text-xs sm:text-sm sm:text-base text-[#5C6654] mt-3 leading-relaxed font-medium">
+                    <p class="text-xs sm:text-sm sm:text-base text-[#5C6654] mt-3 leading-relaxed font-medium text-center lg:text-left">
                         Have a question about bespoke drapery measurements, fabric samples, or custom bedding sets? Share your requirements and our interior styling concierge will guide you.
                     </p>
                 </div>

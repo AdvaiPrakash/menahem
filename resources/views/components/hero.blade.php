@@ -107,7 +107,7 @@
             <x-reveal delay="100">
                 <h1 class="text-3xl sm:text-4xl font-bold text-[#74826B] leading-[1.15] tracking-tight font-serif max-w-sm sm:max-w-md mx-auto">
                     Transform Living <br />
-                    Spaces with <span class="menahem-animated-word italic text-[1.18em]" data-menahem-word>Menahem</span>
+                    Spaces with <span class="italic text-[#2B3326] text-[1.18em]">Menahem</span>
                 </h1>
             </x-reveal>
 
@@ -203,7 +203,7 @@
                     <h1 class="text-4xl sm:text-5xl lg:text-[54px] xl:text-[62px] font-bold text-[#74826B] leading-[1.1] tracking-tight font-serif">
                         Transform Living <br />
                         Spaces with <br />
-                        <span class="menahem-animated-word italic text-[1.18em]" data-menahem-word>Menahem</span>
+                        <span class="italic text-[#2B3326] text-[1.18em]">Menahem</span>
                     </h1>
                 </x-reveal>
 
