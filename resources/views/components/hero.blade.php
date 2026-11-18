@@ -6,6 +6,8 @@
     $hero = $content['HERO'] ?? $content;
     $brand = $content['BRAND'] ?? [];
     $whatsappUrl = $brand['whatsapp_url'] ?? '#';
+    $categories = $content['CATEGORIES'] ?? [];
+    $viewAllLabel = $categories['view_all_label'] ?? 'Explore the full Menahem collection.';
 
     // Single unified collection of curated cards for the one horizontal scrolling track
     $heroCards = [
@@ -182,6 +184,18 @@
                         </div>
 
                     </div>
+
+                    <!-- "Explore the full Menahem collection." button placed just below moving scrolling images (mobile view) -->
+                    <div class="mt-4 flex justify-center">
+                        <a
+                            href="{{ route('categories.index') }}"
+                            class="inline-flex items-center gap-2 px-3.5 py-2 rounded-md text-xs sm:text-sm font-bold tracking-wide bg-neutral-100 hover:bg-[#74826B] text-[#2B3326] hover:text-white border border-neutral-200 hover:border-[#74826B] transition-all duration-200 shadow-2xs group cursor-pointer"
+                        >
+                            <span class="text-[#74826B] group-hover:text-white transition-colors">★</span>
+                            <span>{{ $viewAllLabel }}</span>
+                            <span class="transition-transform group-hover:translate-x-1 font-mono">→</span>
+                        </a>
+                    </div>
                 </div>
             </x-reveal>
 
@@ -321,6 +335,18 @@
                             </div>
                         </div>
 
+                    </div>
+
+                    <!-- "Explore the full Menahem collection." button placed just below moving scrolling images (desktop view) -->
+                    <div class="mt-4 flex justify-center">
+                        <a
+                            href="{{ route('categories.index') }}"
+                            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs sm:text-sm font-bold tracking-wide bg-neutral-100 hover:bg-[#74826B] text-[#2B3326] hover:text-white border border-neutral-200 hover:border-[#74826B] transition-all duration-200 shadow-2xs group cursor-pointer"
+                        >
+                            <span class="text-[#74826B] group-hover:text-white transition-colors">★</span>
+                            <span>{{ $viewAllLabel }}</span>
+                            <span class="transition-transform group-hover:translate-x-1 font-mono">→</span>
+                        </a>
                     </div>
                 </x-reveal>
             </div>
