@@ -28,6 +28,9 @@ class ClearanceSaleTest extends TestCase
         $response->assertSee('Save ₹1,000 (50% OFF)');
         $response->assertSee('Save ₹900 (45% OFF)');
 
+        // Asserts removal of "Explore All Clearance Deals" button
+        $response->assertDontSee('Explore All Clearance Deals');
+
         // Asserts section order: "Our Essence & Story" appears before "Clearance Sale"
         $content = $response->getContent();
         $essencePos = strpos($content, 'Our Essence');
