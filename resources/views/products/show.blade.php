@@ -640,8 +640,8 @@
                             </a>
                         </div>
 
-                        <!-- 4 Cards Grid in 1 Row on Desktop -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- 2 in 1 Row on Mobile, 4 Cards in 1 Row on Desktop -->
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
                             @foreach($relatedProducts as $relProduct)
                                 <x-product-card :product="$relProduct" />
                             @endforeach

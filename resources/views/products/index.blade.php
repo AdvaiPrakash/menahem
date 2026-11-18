@@ -396,8 +396,8 @@
 
             <!-- Right Column: Product Grid -->
             <main class="lg:col-span-9 w-full">
-                <!-- 2-col on mobile, 3-col on tablet/desktop -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                <!-- 2 products in 1 row on mobile, 3-col on desktop -->
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                     @foreach($allProducts as $index => $product)
                         <div
                             x-show="matches({{ json_encode($product) }})"
