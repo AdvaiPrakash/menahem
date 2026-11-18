@@ -94,7 +94,7 @@
     ];
 @endphp
 
-<section id="hero" class="relative pt-28 sm:pt-30 md:pt-32 lg:pt-48 xl:pt-52 pb-14 sm:pb-20 lg:pb-20 bg-white overflow-hidden border-b border-neutral-200">
+<section id="hero" class="relative pt-28 sm:pt-30 md:pt-32 lg:pt-40 xl:pt-44 pb-14 sm:pb-20 lg:pb-20 bg-white overflow-hidden border-b border-neutral-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- ===================================================================
