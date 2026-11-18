@@ -94,8 +94,8 @@
     ];
 @endphp
 
-<section id="hero" class="relative pt-28 sm:pt-30 md:pt-32 lg:pt-40 xl:pt-44 pb-14 sm:pb-20 lg:pb-20 bg-white overflow-hidden border-b border-neutral-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section id="hero" class="relative pt-24 sm:pt-28 lg:pt-[92px] pb-10 sm:pb-14 lg:pb-0 bg-white overflow-hidden border-b border-neutral-200 lg:h-screen lg:min-h-[560px] lg:flex lg:flex-col lg:justify-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full lg:my-auto">
         
         <!-- ===================================================================
              MOBILE-ONLY LAYOUT (< lg)
@@ -214,30 +214,30 @@
                 
                 <!-- Main Editorial Headline in Playfair Display -->
                 <x-reveal delay="100">
-                    <h1 class="text-4xl sm:text-5xl lg:text-[54px] xl:text-[62px] font-bold text-[#74826B] leading-[1.1] tracking-tight font-serif">
+                    <h1 class="text-3xl sm:text-4xl lg:text-[36px] xl:text-[44px] font-bold text-[#74826B] leading-[1.12] tracking-tight font-serif">
                         Transform Living <br />
                         Spaces with <br />
-                        <span class="italic text-[#2B3326] text-[1.18em]">Menahem</span>
+                        <span class="italic text-[#2B3326] text-[1.15em]">Menahem</span>
                     </h1>
                 </x-reveal>
 
                 <!-- Subtitle Description -->
                 <x-reveal delay="150">
-                    <p class="mt-4 sm:mt-5 text-sm sm:text-base lg:text-[17px] text-[#5C6654] leading-relaxed max-w-lg font-normal">
+                    <p class="mt-2.5 text-xs sm:text-sm lg:text-[13px] xl:text-sm text-[#5C6654] leading-relaxed max-w-md font-normal">
                         {{ $hero['description'] ?? 'Discover thoughtfully curated home essentials, from bespoke linen drapery to ultra-soft cotton towels and bedsheets, designed for everyday warmth, comfort, and sophistication.' }}
                     </p>
                 </x-reveal>
 
                 <!-- Bottom Tag Pills -->
                 <x-reveal delay="200" class="w-full">
-                    <div class="mt-8 sm:mt-10 pt-6 border-t border-neutral-200 flex flex-wrap items-center gap-2.5 w-full">
-                        <span class="px-3 py-1 rounded-md bg-neutral-100 text-[#2B3326] text-[11px] font-bold border border-neutral-200 shadow-2xs">
+                    <div class="mt-4 pt-3 border-t border-neutral-200 flex flex-wrap items-center gap-2 w-full">
+                        <span class="px-2.5 py-1 rounded-md bg-neutral-100 text-[#2B3326] text-[11px] font-bold border border-neutral-200 shadow-2xs">
                             100% Pure Cotton
                         </span>
-                        <span class="px-3 py-1 rounded-md bg-neutral-100 text-[#2B3326] text-[11px] font-bold border border-neutral-200 shadow-2xs">
+                        <span class="px-2.5 py-1 rounded-md bg-neutral-100 text-[#2B3326] text-[11px] font-bold border border-neutral-200 shadow-2xs">
                             Handcrafted Weaves
                         </span>
-                        <span class="px-3 py-1 rounded-md bg-white text-[#5C6654] text-[11px] font-semibold border border-neutral-200 shadow-2xs">
+                        <span class="px-2.5 py-1 rounded-md bg-white text-[#5C6654] text-[11px] font-semibold border border-neutral-200 shadow-2xs">
                             Bespoke Tailoring
                         </span>
                     </div>
@@ -247,24 +247,24 @@
 
             <!-- Center Vertical Floating Quick-Action Pill -->
             <div class="hidden xl:flex xl:col-span-1 justify-center z-20">
-                <div class="flex flex-col items-center gap-3 p-2 rounded-lg bg-white/95 backdrop-blur-md border border-neutral-200 shadow-lg">
-                    <a href="{{ route('products.index') }}" title="Wishlist Favorites" class="w-10 h-10 rounded-md bg-neutral-100 hover:bg-neutral-200 text-[#74826B] flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-2xs">
-                        <svg class="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24">
+                <div class="flex flex-col items-center gap-2.5 p-1.5 rounded-lg bg-white/95 backdrop-blur-md border border-neutral-200 shadow-md">
+                    <a href="{{ route('products.index') }}" title="Wishlist Favorites" class="w-9 h-9 rounded-md bg-neutral-100 hover:bg-neutral-200 text-[#74826B] flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-2xs">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
                     </a>
-                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" title="Concierge Assistance" class="w-10 h-10 rounded-md bg-neutral-100 hover:bg-neutral-200 text-[#2B3326] flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-2xs">
-                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" title="Concierge Assistance" class="w-9 h-9 rounded-md bg-neutral-100 hover:bg-neutral-200 text-[#2B3326] flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-2xs">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 18v-6a9 9 0 0118 0v6M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/>
                         </svg>
                     </a>
-                    <a href="{{ route('home') }}#why-us" title="30-Day Easy Exchange" class="w-10 h-10 rounded-md bg-white hover:bg-neutral-100 text-[#5C6654] hover:text-[#74826B] border border-neutral-200 flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-2xs">
-                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <a href="{{ route('home') }}#why-us" title="30-Day Easy Exchange" class="w-9 h-9 rounded-md bg-white hover:bg-neutral-100 text-[#5C6654] hover:text-[#74826B] border border-neutral-200 flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-2xs">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                         </svg>
                     </a>
-                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" title="Bespoke Order Inquiry" class="w-10 h-10 rounded-md bg-[#74826B] hover:bg-[#636F5A] text-white flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-xs">
-                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" title="Bespoke Order Inquiry" class="w-9 h-9 rounded-md bg-[#74826B] hover:bg-[#636F5A] text-white flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-xs">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6"/>
                         </svg>
                     </a>
@@ -274,26 +274,26 @@
             <!-- Right Column: Single-Track Horizontal Scrolling Showcase (Edge-to-Edge, 100% Crisp) -->
             <div class="lg:col-span-6 xl:col-span-6 relative mt-6 lg:mt-0">
                 <x-reveal delay="250">
-                    <div class="hero-carousel-container relative overflow-hidden rounded-lg bg-white border border-neutral-200 p-3 sm:p-3.5 shadow-xs touch-pan-y select-none" data-hero-carousel>
+                    <div class="hero-carousel-container relative overflow-hidden rounded-lg bg-white border border-neutral-200 p-2 sm:p-2.5 shadow-xs touch-pan-y select-none" data-hero-carousel>
                         
                         <!-- Single Horizontal Scrolling Track (One Motion Only with Mouse & Touch Drag) -->
                         <div class="overflow-hidden w-full">
-                            <div class="hero-carousel-track flex flex-row gap-4 will-change-transform cursor-grab active:cursor-grabbing select-none" data-carousel-track>
+                            <div class="hero-carousel-track flex flex-row gap-3.5 will-change-transform cursor-grab active:cursor-grabbing select-none" data-carousel-track>
                                 @for($setIndex = 0; $setIndex < 3; $setIndex++)
-                                    <div class="hero-carousel-group flex flex-row gap-4 shrink-0" data-carousel-group="{{ $setIndex }}" @if($setIndex !== 1) aria-hidden="true" @endif>
+                                    <div class="hero-carousel-group flex flex-row gap-3.5 shrink-0" data-carousel-group="{{ $setIndex }}" @if($setIndex !== 1) aria-hidden="true" @endif>
                                         @foreach($heroCards as $cardIndex => $item)
                                             <a
                                                 href="{{ route('products.show', $item['id']) }}"
                                                 title="{{ $item['title'] }}"
                                                 @if($setIndex !== 1) tabindex="-1" @endif
                                                 draggable="false"
-                                                class="relative w-[280px] lg:w-[310px] xl:w-[330px] h-[360px] lg:h-[390px] xl:h-[420px] rounded-md overflow-hidden bg-white shadow-sm border border-neutral-200 group flex flex-col justify-between shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02] select-none"
+                                                class="relative w-[230px] lg:w-[250px] xl:w-[275px] h-[285px] lg:h-[305px] xl:h-[330px] rounded-md overflow-hidden bg-white shadow-sm border border-neutral-200 group flex flex-col justify-between shrink-0 cursor-pointer block transition-transform duration-300 hover:scale-[1.02] select-none"
                                             >
                                                 <img
                                                     src="{{ asset($item['image']) }}"
                                                     alt="{{ $item['alt'] }}"
-                                                    width="330"
-                                                    height="420"
+                                                    width="275"
+                                                    height="330"
                                                     @if($setIndex === 1 && $cardIndex < 2) loading="eager" fetchpriority="high" @else loading="lazy" @endif
                                                     draggable="false"
                                                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-108 select-none pointer-events-none"
@@ -302,28 +302,28 @@
                                                 <div class="absolute inset-0 bg-gradient-to-t from-[#2B3326]/75 via-[#2B3326]/20 to-transparent transition-opacity duration-300 group-hover:opacity-90 pointer-events-none"></div>
 
                                                 <!-- Top Row: Badge & Price -->
-                                                <div class="relative z-10 p-3.5 sm:p-4 flex items-center justify-between pointer-events-none">
-                                                    <span class="px-3 py-1 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] text-[10px] font-bold tracking-wider uppercase border border-neutral-200 shadow-2xs">
+                                                <div class="relative z-10 p-2.5 sm:p-3 flex items-center justify-between pointer-events-none">
+                                                    <span class="px-2.5 py-0.5 rounded-md bg-white/95 backdrop-blur-md text-[#2B3326] text-[10px] font-bold tracking-wider uppercase border border-neutral-200 shadow-2xs">
                                                         {{ $item['badge'] }}
                                                     </span>
-                                                    <span class="px-3 py-1 rounded-md bg-neutral-100 backdrop-blur-md text-[#2B3326] text-xs font-extrabold border border-neutral-200 shadow-2xs">
+                                                    <span class="px-2.5 py-0.5 rounded-md bg-neutral-100 backdrop-blur-md text-[#2B3326] text-xs font-extrabold border border-neutral-200 shadow-2xs">
                                                         {{ $item['price'] }}
                                                     </span>
                                                 </div>
 
                                                 <!-- Middle Feature Chip -->
-                                                <div class="relative z-10 px-3.5 sm:px-4 pointer-events-none">
-                                                    <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-white/90 backdrop-blur-md border border-neutral-200 text-[#2B3326] text-[11px] font-semibold shadow-xs">
+                                                <div class="relative z-10 px-2.5 sm:px-3 pointer-events-none">
+                                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/90 backdrop-blur-md border border-neutral-200 text-[#2B3326] text-[10px] sm:text-[11px] font-semibold shadow-xs">
                                                         <span class="w-1.5 h-1.5 rounded-full bg-[#74826B]"></span>
                                                         <span class="line-clamp-1">{{ $item['chip'] }}</span>
                                                     </div>
                                                 </div>
 
                                                 <!-- Bottom Action Pill with Title & Arrow -->
-                                                <div class="relative z-10 p-3 sm:p-3.5 pointer-events-none">
-                                                    <div class="flex items-center justify-between gap-2 px-4 py-2.5 rounded-md bg-white/95 group-hover:bg-neutral-100 backdrop-blur-md text-[#2B3326] shadow-md border border-neutral-200 transition-all">
-                                                        <span class="text-xs sm:text-sm font-bold truncate">{{ $item['title'] }}</span>
-                                                        <span class="w-6 h-6 rounded-md bg-[#74826B]/20 flex items-center justify-center text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 text-[#74826B] font-mono">
+                                                <div class="relative z-10 p-2 sm:p-2.5 pointer-events-none">
+                                                    <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-md bg-white/95 group-hover:bg-neutral-100 backdrop-blur-md text-[#2B3326] shadow-md border border-neutral-200 transition-all">
+                                                        <span class="text-xs font-bold truncate">{{ $item['title'] }}</span>
+                                                        <span class="w-5 h-5 rounded-md bg-[#74826B]/20 flex items-center justify-center text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 text-[#74826B] font-mono">
                                                             ↗
                                                         </span>
                                                     </div>
@@ -338,10 +338,10 @@
                     </div>
 
                     <!-- "Explore the full Menahem collection." button placed just below moving scrolling images (desktop view) -->
-                    <div class="mt-4 flex justify-center">
+                    <div class="mt-3 flex justify-center">
                         <a
                             href="{{ route('categories.index') }}"
-                            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs sm:text-sm font-bold tracking-wide bg-neutral-100 hover:bg-[#74826B] text-[#2B3326] hover:text-white border border-neutral-200 hover:border-[#74826B] transition-all duration-200 shadow-2xs group cursor-pointer"
+                            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs sm:text-[13px] font-bold tracking-wide bg-neutral-100 hover:bg-[#74826B] text-[#2B3326] hover:text-white border border-neutral-200 hover:border-[#74826B] transition-all duration-200 shadow-2xs group cursor-pointer"
                         >
                             <span class="text-[#74826B] group-hover:text-white transition-colors">★</span>
                             <span>{{ $viewAllLabel }}</span>

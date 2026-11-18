@@ -10,7 +10,7 @@
 
 <header class="w-full fixed top-0 left-0 z-50 shadow-md">
     <!-- Main Navigation Bar (Olive Green Dark Shade #384230) -->
-    <nav id="main-navbar" class="w-full bg-[#384230] transition-all duration-300 py-2 sm:py-2.5 px-3 sm:px-8 border-b border-[#2C3424]">
+    <nav id="main-navbar" class="w-full bg-[#384230] transition-all duration-300 py-2 sm:py-2.5 lg:py-2 px-3 sm:px-8 border-b border-[#2C3424]">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             
             <!-- Mobile Left: Hamburger Container (w-20 to balance the right icons on mobile, hidden on desktop) -->
@@ -30,16 +30,16 @@
             <!-- Logo: Balanced in the center on mobile, positioned on left on desktop -->
             <a
                 href="/"
-                class="flex items-center justify-center flex-shrink-0 group py-0 w-[66px] h-[66px] sm:w-[74px] sm:h-[74px] lg:w-[82px] lg:h-[82px]"
+                class="flex items-center justify-center flex-shrink-0 group py-0 w-[66px] h-[66px] sm:w-[74px] sm:h-[74px] lg:w-[76px] lg:h-[76px]"
                 aria-label="Menahem Home"
             >
                 <img
                     src="{{ asset('images/logo.png') }}"
                     alt="Menahem - The one that comforts you"
-                    width="82"
-                    height="82"
+                    width="76"
+                    height="76"
                     class="site-logo object-contain transition-transform duration-300 group-hover:scale-105"
-                    style="max-width: 86px; max-height: 86px; object-fit: contain;"
+                    style="max-width: 76px; max-height: 76px; object-fit: contain;"
                 />
             </a>
 
