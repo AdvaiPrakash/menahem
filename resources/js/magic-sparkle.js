@@ -8,7 +8,7 @@ export function initMagicSparkles() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
-    const interval = 1000;
+    const interval = 2500;
 
     const rand = (min, max) =>
         Math.floor(Math.random() * (max - min + 1)) + min;

@@ -33,7 +33,12 @@ class ProductController extends Controller
                 $targetCategorySlugs = CategoryService::getAllLeafSlugs($categoryInfo);
                 $targetCategorySlugs[] = $selectedCategory;
 
-                if (! empty($resolved['parent']) && ! empty($resolved['parent_path'])) {
+                if (! empty($categoryInfo['subcategories'])) {
+                    // Category has its own subcategory overview page
+                    $parentBackName = $categoryInfo['name'];
+                    $parentBackUrl = url('/categories/'.$resolved['path']);
+                } elseif (! empty($resolved['parent']) && ! empty($resolved['parent_path'])) {
+                    // Leaf category: go back to its parent category overview page
                     $parentBackName = $resolved['parent']['name'];
                     $parentBackUrl = url('/categories/'.$resolved['parent_path']);
                 }

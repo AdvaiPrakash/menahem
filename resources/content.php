@@ -44,11 +44,11 @@ return [
             ['label' => 'About', 'url' => '#about'],
         ],
         'shop_categories' => [
+            ['name' => 'Bedsheets & Dohars', 'slug' => 'bedsheets-dohars', 'count' => 'Dohars, Quilts, Comforters', 'badge' => '100% Cotton'],
             ['name' => 'Curtains & Drapes', 'slug' => 'curtains-drapes', 'count' => 'Sheer & Blackout', 'badge' => 'Trending'],
             ['name' => 'Table Decor', 'slug' => 'table-decor', 'count' => 'Cloths, Runners, Mats', 'badge' => 'Artisanal'],
             ['name' => 'Sofa Decor', 'slug' => 'sofa-decor', 'count' => 'Throws & Protectors', 'badge' => 'Cozy Living'],
             ['name' => 'Towels & Wellness', 'slug' => 'towels-wellness', 'count' => 'Bath & Hand Towels', 'badge' => 'Ultra Soft'],
-            ['name' => 'Bedsheets & Dohars', 'slug' => 'bedsheets-dohars', 'count' => 'Dohars, Quilts, Comforters', 'badge' => '100% Cotton'],
             ['name' => 'Rugs', 'slug' => 'rugs', 'count' => 'Handcrafted Weaves', 'badge' => 'Handmade'],
         ],
         'cta' => [
@@ -110,15 +110,15 @@ return [
     // Section 5: Shop by Category (Reflecting Real Product Range)
     'CATEGORIES' => [
         'heading' => 'Shop by Category',
-        'subheading' => 'Curtains, Table Decor, Sofa Decor, Towels, Bedsheets & Rugs',
+        'subheading' => 'Bedsheets, Curtains, Table Decor, Sofa Decor, Towels & Rugs',
         'view_all_label' => 'Explore the full Menahem collection.',
         'view_all_url' => '/categories',
         'items' => [
+            ['name' => 'Bedsheets & Dohars', 'slug' => 'bedsheets-dohars', 'image' => '/images/categories/bedsheets.webp', 'desc' => 'Dohars, Quilts & Comforters'],
             ['name' => 'Curtains & Drapes', 'slug' => 'curtains-drapes', 'image' => '/images/categories/curtains.webp', 'desc' => 'Sheer & Blackout Drapes'],
             ['name' => 'Table Decor', 'slug' => 'table-decor', 'image' => '/images/categories/table-decor.webp', 'desc' => 'Table cloths, runners & mats'],
             ['name' => 'Sofa Decor', 'slug' => 'sofa-decor', 'image' => '/images/categories/sofa-decor.webp', 'desc' => 'Sofa throws & protectors'],
             ['name' => 'Towels & Wellness', 'slug' => 'towels-wellness', 'image' => '/images/categories/towels.webp', 'desc' => 'Bath & hand towels'],
-            ['name' => 'Bedsheets & Dohars', 'slug' => 'bedsheets-dohars', 'image' => '/images/categories/bedsheets.webp', 'desc' => 'Dohars, Quilts & Comforters'],
             ['name' => 'Rugs', 'slug' => 'rugs', 'image' => '/images/categories/rugs.webp', 'desc' => 'Handcrafted wool & jute weaves'],
         ],
     ],

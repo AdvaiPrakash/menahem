@@ -6,11 +6,11 @@
         <!-- 2. Shop by Category (Multi-Level Category Navigation Flow) -->
         <x-categories :content="$content" />
 
-        <!-- 3. About Menahem: Essence, Philosophy & Quiet Craftsmanship -->
-        <x-about-section :content="$content" />
-
-        <!-- 4. Clearance Sale Section (With Specified Percent Off) -->
+        <!-- 3. Clearance Sale Section (With Specified Percent Off) -->
         <x-clearance-sale :content="$content" />
+
+        <!-- 4. About Menahem: Essence, Philosophy & Quiet Craftsmanship -->
+        <x-about-section :content="$content" />
 
         <!-- 5. Trust Badges Strip (Rating, Free Shipping, Guarantee, Secure Checkout) -->
         <x-trust-strip :content="$content" />

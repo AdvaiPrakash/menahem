@@ -12,6 +12,124 @@ class CategoryService
     public static function getHierarchy(): array
     {
         return [
+            'bedsheets-dohars' => [
+                'name' => 'Bedsheets & Dohars',
+                'slug' => 'bedsheets-dohars',
+                'image' => '/images/categories/bedsheets.webp',
+                'description' => '400TC mulmul sheets, fitted covers, embroidered sets & summer dohars',
+                'subcategories' => [
+                    'cotton-bedsheets' => [
+                        'name' => 'Cotton Bedsheets',
+                        'slug' => 'cotton-bedsheets',
+                        'image' => '/images/products/bedsheet-set.webp',
+                        'description' => 'Breathable 100% mulmul cotton bedsheets with matching pillow covers',
+                        'subcategories' => [
+                            'king-size-cotton-bedsheets' => [
+                                'name' => 'King Size',
+                                'slug' => 'king-size-cotton-bedsheets',
+                                'image' => '/images/products/bedsheet-set.webp',
+                                'description' => '108x108 inch generous king size sheets with pillow covers',
+                                'subcategories' => [],
+                            ],
+                            'queen-size-cotton-bedsheets' => [
+                                'name' => 'Queen Size',
+                                'slug' => 'queen-size-cotton-bedsheets',
+                                'image' => '/images/categories/bedsheets.webp',
+                                'description' => '90x100 inch comfortable queen size sheets with pillow covers',
+                                'subcategories' => [],
+                            ],
+                            'single-cotton-bedsheets' => [
+                                'name' => 'Single',
+                                'slug' => 'single-cotton-bedsheets',
+                                'image' => '/images/products/bedsheet-set.webp',
+                                'description' => '60x90 inch breathable sheets for single beds and daybeds',
+                                'subcategories' => [],
+                            ],
+                        ],
+                    ],
+                    'fitted-bedsheets' => [
+                        'name' => 'Fitted Bedsheets',
+                        'slug' => 'fitted-bedsheets',
+                        'image' => '/images/categories/bed-protectors.webp',
+                        'description' => 'All-around 360° elastic hem for snug, wrinkle-free mattress fit',
+                        'subcategories' => [
+                            'king-size-fitted-bedsheets' => [
+                                'name' => 'King Size',
+                                'slug' => 'king-size-fitted-bedsheets',
+                                'image' => '/images/categories/bed-protectors.webp',
+                                'description' => 'Deep pocket fitted sheet fitting mattresses up to 12 inches',
+                                'subcategories' => [],
+                            ],
+                            'queen-size-fitted-bedsheets' => [
+                                'name' => 'Queen Size',
+                                'slug' => 'queen-size-fitted-bedsheets',
+                                'image' => '/images/products/bed-protector.webp',
+                                'description' => 'Snug elastic grip for queen-size orthopedic mattresses',
+                                'subcategories' => [],
+                            ],
+                        ],
+                    ],
+                    'embroidered-bedsheets' => [
+                        'name' => 'Embroidered Bedsheets',
+                        'slug' => 'embroidered-bedsheets',
+                        'image' => '/images/categories/bedsheets.webp',
+                        'description' => 'Delicate hand-guided needlework on crisp percale cotton',
+                        'subcategories' => [
+                            'king-size-embroidered-bedsheets' => [
+                                'name' => 'King Size',
+                                'slug' => 'king-size-embroidered-bedsheets',
+                                'image' => '/images/categories/bedsheets.webp',
+                                'description' => 'Intricate border embroidery on luxury king sheets with shams',
+                                'subcategories' => [],
+                            ],
+                            'queen-size-embroidered-bedsheets' => [
+                                'name' => 'Queen Size',
+                                'slug' => 'queen-size-embroidered-bedsheets',
+                                'image' => '/images/products/bedsheet-set.webp',
+                                'description' => 'Artisanal tonal stitch work on serene queen sheets',
+                                'subcategories' => [],
+                            ],
+                        ],
+                    ],
+                    'dohars' => [
+                        'name' => 'Dohars',
+                        'slug' => 'dohars',
+                        'image' => '/images/products/dohar-quilt.webp',
+                        'description' => 'Featherweight 3-layer summer mulmul quilts with microfiber core',
+                        'subcategories' => [
+                            'single-dohars' => [
+                                'name' => 'Single',
+                                'slug' => 'single-dohars',
+                                'image' => '/images/products/dohar-quilt.webp',
+                                'description' => '60x90 inch cloud-soft summer wrap for individual comfort',
+                                'subcategories' => [],
+                            ],
+                            'double-dohars' => [
+                                'name' => 'Double',
+                                'slug' => 'double-dohars',
+                                'image' => '/images/categories/dohars-quilts.webp',
+                                'description' => '90x100 inch reversible double dohar for shared comfort',
+                                'subcategories' => [],
+                            ],
+                            'kids-dohars' => [
+                                'name' => 'Kids',
+                                'slug' => 'kids-dohars',
+                                'image' => '/images/products/dohar-quilt.webp',
+                                'description' => 'Playful soothing prints crafted from gentle organic mulmul',
+                                'subcategories' => [],
+                            ],
+                        ],
+                    ],
+                    'comforters' => [
+                        'name' => 'Comforters',
+                        'slug' => 'comforters',
+                        'image' => '/images/categories/dohars-quilts.webp',
+                        'description' => 'Plush all-season microfiber comforters with baffle-box quilting',
+                        'subcategories' => [],
+                    ],
+                ],
+            ],
+
             'curtains-drapes' => [
                 'name' => 'Curtains & Drapes',
                 'slug' => 'curtains-drapes',
@@ -158,124 +276,6 @@ class CategoryService
                         'slug' => 'kids-bath-towels',
                         'image' => '/images/products/towels-luxury.webp',
                         'description' => 'Hypoallergenic, ultra-gentle hooded towels for delicate young skin',
-                        'subcategories' => [],
-                    ],
-                ],
-            ],
-
-            'bedsheets-dohars' => [
-                'name' => 'Bedsheets & Dohars',
-                'slug' => 'bedsheets-dohars',
-                'image' => '/images/categories/bedsheets.webp',
-                'description' => '400TC mulmul sheets, fitted covers, embroidered sets & summer dohars',
-                'subcategories' => [
-                    'cotton-bedsheets' => [
-                        'name' => 'Cotton Bedsheets',
-                        'slug' => 'cotton-bedsheets',
-                        'image' => '/images/products/bedsheet-set.webp',
-                        'description' => 'Breathable 100% mulmul cotton bedsheets with matching pillow covers',
-                        'subcategories' => [
-                            'king-size-cotton-bedsheets' => [
-                                'name' => 'King Size',
-                                'slug' => 'king-size-cotton-bedsheets',
-                                'image' => '/images/products/bedsheet-set.webp',
-                                'description' => '108x108 inch generous king size sheets with pillow covers',
-                                'subcategories' => [],
-                            ],
-                            'queen-size-cotton-bedsheets' => [
-                                'name' => 'Queen Size',
-                                'slug' => 'queen-size-cotton-bedsheets',
-                                'image' => '/images/categories/bedsheets.webp',
-                                'description' => '90x100 inch comfortable queen size sheets with pillow covers',
-                                'subcategories' => [],
-                            ],
-                            'single-cotton-bedsheets' => [
-                                'name' => 'Single',
-                                'slug' => 'single-cotton-bedsheets',
-                                'image' => '/images/products/bedsheet-set.webp',
-                                'description' => '60x90 inch breathable sheets for single beds and daybeds',
-                                'subcategories' => [],
-                            ],
-                        ],
-                    ],
-                    'fitted-bedsheets' => [
-                        'name' => 'Fitted Bedsheets',
-                        'slug' => 'fitted-bedsheets',
-                        'image' => '/images/categories/bed-protectors.webp',
-                        'description' => 'All-around 360° elastic hem for snug, wrinkle-free mattress fit',
-                        'subcategories' => [
-                            'king-size-fitted-bedsheets' => [
-                                'name' => 'King Size',
-                                'slug' => 'king-size-fitted-bedsheets',
-                                'image' => '/images/categories/bed-protectors.webp',
-                                'description' => 'Deep pocket fitted sheet fitting mattresses up to 12 inches',
-                                'subcategories' => [],
-                            ],
-                            'queen-size-fitted-bedsheets' => [
-                                'name' => 'Queen Size',
-                                'slug' => 'queen-size-fitted-bedsheets',
-                                'image' => '/images/products/bed-protector.webp',
-                                'description' => 'Snug elastic grip for queen-size orthopedic mattresses',
-                                'subcategories' => [],
-                            ],
-                        ],
-                    ],
-                    'embroidered-bedsheets' => [
-                        'name' => 'Embroidered Bedsheets',
-                        'slug' => 'embroidered-bedsheets',
-                        'image' => '/images/categories/bedsheets.webp',
-                        'description' => 'Delicate hand-guided needlework on crisp percale cotton',
-                        'subcategories' => [
-                            'king-size-embroidered-bedsheets' => [
-                                'name' => 'King Size',
-                                'slug' => 'king-size-embroidered-bedsheets',
-                                'image' => '/images/categories/bedsheets.webp',
-                                'description' => 'Intricate border embroidery on luxury king sheets with shams',
-                                'subcategories' => [],
-                            ],
-                            'queen-size-embroidered-bedsheets' => [
-                                'name' => 'Queen Size',
-                                'slug' => 'queen-size-embroidered-bedsheets',
-                                'image' => '/images/products/bedsheet-set.webp',
-                                'description' => 'Artisanal tonal stitch work on serene queen sheets',
-                                'subcategories' => [],
-                            ],
-                        ],
-                    ],
-                    'dohars' => [
-                        'name' => 'Dohars',
-                        'slug' => 'dohars',
-                        'image' => '/images/products/dohar-quilt.webp',
-                        'description' => 'Featherweight 3-layer summer mulmul quilts with microfiber core',
-                        'subcategories' => [
-                            'single-dohars' => [
-                                'name' => 'Single',
-                                'slug' => 'single-dohars',
-                                'image' => '/images/products/dohar-quilt.webp',
-                                'description' => '60x90 inch cloud-soft summer wrap for individual comfort',
-                                'subcategories' => [],
-                            ],
-                            'double-dohars' => [
-                                'name' => 'Double',
-                                'slug' => 'double-dohars',
-                                'image' => '/images/categories/dohars-quilts.webp',
-                                'description' => '90x100 inch reversible double dohar for shared comfort',
-                                'subcategories' => [],
-                            ],
-                            'kids-dohars' => [
-                                'name' => 'Kids',
-                                'slug' => 'kids-dohars',
-                                'image' => '/images/products/dohar-quilt.webp',
-                                'description' => 'Playful soothing prints crafted from gentle organic mulmul',
-                                'subcategories' => [],
-                            ],
-                        ],
-                    ],
-                    'comforters' => [
-                        'name' => 'Comforters',
-                        'slug' => 'comforters',
-                        'image' => '/images/categories/dohars-quilts.webp',
-                        'description' => 'Plush all-season microfiber comforters with baffle-box quilting',
                         'subcategories' => [],
                     ],
                 ],

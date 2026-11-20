@@ -108,6 +108,19 @@
         >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
+                <!-- Back to Category Navigation Button -->
+                <div class="mb-3.5 flex items-center justify-between flex-wrap gap-3">
+                    <a
+                        href="{{ route('products.index', ['category' => $categorySlug]) }}"
+                        class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg bg-[#2B3326] hover:bg-[#74826B] text-white text-xs sm:text-[13px] font-bold tracking-wide shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer group active:scale-95"
+                    >
+                        <svg class="w-4 h-4 text-white group-hover:-translate-x-1 transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        <span>Back to {{ $category }}</span>
+                    </a>
+                </div>
+
                 <!-- Breadcrumbs Navigation: Clean, aligned distance below the fixed navbar -->
                 <nav class="flex items-center flex-wrap gap-2 text-xs text-[#5C6654] mb-5 sm:mb-6 font-medium" aria-label="Breadcrumb">
                     <a href="{{ route('home') }}" class="hover:text-[#74826B] transition-colors flex items-center gap-1.5 group">

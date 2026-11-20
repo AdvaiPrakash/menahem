@@ -24,13 +24,13 @@
         <!-- Back Button & Header (Centered on mobile, Left-aligned on websites) -->
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-neutral-200 text-center sm:text-left items-center sm:items-start">
             <div class="w-full sm:w-auto">
-                <div class="mb-2 flex justify-center sm:justify-start">
+                <div class="mb-3.5 flex justify-center sm:justify-start">
                     <a
                         href="{{ route('home') }}"
-                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5C6654] hover:text-[#2B3326] transition-colors py-1 px-2.5 rounded-md hover:bg-neutral-100 sm:-ml-2.5"
+                        class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg bg-[#2B3326] hover:bg-[#74826B] text-white text-xs sm:text-[13px] font-bold tracking-wide shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer group active:scale-95"
                     >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        <svg class="w-4 h-4 text-white group-hover:-translate-x-1 transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                         </svg>
                         <span>Back to Home</span>
                     </a>

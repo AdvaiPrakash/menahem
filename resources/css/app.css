@@ -51,15 +51,108 @@
   --color-amber-hover: #636F5A;
   --color-amber-light: #B5C1A5;
 
-  /* Fonts */
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-serif: "Playfair Display", Georgia, serif;
+  /* Fonts: Moga Sans Serif Font Family as Main Luxury Heading Font */
+  --font-display: "Moga", "Moga Sans", "Moga Sans Serif", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "Moga", "Moga Sans", "Moga Sans Serif", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-heading: "Moga", "Moga Sans", "Moga Sans Serif", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 
   /* Geometry: Subtle & Refined (4px–8px) */
   --radius-pill: 6px;
   --radius-card: 8px;
   --radius-button: 6px;
+}
+
+/* Moga Sans Serif Font Family Declarations */
+@font-face {
+  font-family: 'Moga';
+  src: url('/fonts/moga/Moga-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Moga';
+  src: url('/fonts/moga/Moga-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Moga';
+  src: url('/fonts/moga/Moga-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Moga';
+  src: url('/fonts/moga/Moga-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Moga';
+  src: url('/fonts/moga/Moga-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Moga';
+  src: url('/fonts/moga/Moga-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Moga Sans';
+  src: url('/fonts/moga/Moga-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Moga Sans';
+  src: url('/fonts/moga/Moga-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Moga Sans Serif';
+  src: url('/fonts/moga/Moga-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Moga Sans Serif';
+  src: url('/fonts/moga/Moga-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Luxury Heading Font: Moga Sans Serif */
+.font-serif,
+.font-display,
+.font-heading,
+h1.font-serif,
+h2.font-serif,
+h3.font-serif,
+h4.font-serif {
+  font-family: var(--font-heading) !important;
 }
 
 [x-cloak] {

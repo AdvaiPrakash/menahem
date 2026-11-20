@@ -99,13 +99,14 @@
 
     <!-- Bottom Row: Buy Now Button & Action Buttons -->
     <div class="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-neutral-100 flex items-center justify-between gap-1.5 sm:gap-2">
-        <!-- Left: Buy Now Button -> navigates to Detail Page -->
+        <!-- Left: Buy / Buy Now Button -> navigates to Detail Page -->
         <a
             href="{{ $productUrl }}"
-            class="flex-1 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-4.5 py-1.5 sm:py-2 rounded-md bg-[#74826B] hover:bg-[#636F5A] text-white text-[11px] sm:text-sm font-bold tracking-wide transition-all duration-200 shadow-2xs hover:shadow-md transform hover:scale-[1.02] active:scale-98"
+            class="flex-1 inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-4.5 py-1.5 sm:py-2 rounded-md bg-[#74826B] hover:bg-[#636F5A] text-white text-[11px] sm:text-sm font-bold tracking-wide transition-all duration-200 shadow-2xs hover:shadow-md transform hover:scale-[1.02] active:scale-98 whitespace-nowrap"
         >
-            <span>Buy Now</span>
-            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span class="sm:hidden">Buy</span>
+            <span class="hidden sm:inline">Buy Now</span>
+            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
             </svg>
         </a>

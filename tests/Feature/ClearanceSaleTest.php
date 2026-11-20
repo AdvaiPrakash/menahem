@@ -31,14 +31,14 @@ class ClearanceSaleTest extends TestCase
         // Asserts removal of "Explore All Clearance Deals" button
         $response->assertDontSee('Explore All Clearance Deals');
 
-        // Asserts section order: "Our Essence & Story" appears before "Clearance Sale"
+        // Asserts section order: "Shop by Category" appears before "Clearance Sale"
         $content = $response->getContent();
-        $essencePos = strpos($content, 'Our Essence');
+        $categoriesPos = strpos($content, 'Shop by Category');
         $clearancePos = strpos($content, 'Clearance Sale');
 
-        $this->assertNotFalse($essencePos, 'Our Essence & Story section was not found.');
+        $this->assertNotFalse($categoriesPos, 'Shop by Category section was not found.');
         $this->assertNotFalse($clearancePos, 'Clearance Sale section was not found.');
-        $this->assertTrue($essencePos < $clearancePos, 'Clearance Sale must appear after Our Essence & Story section.');
+        $this->assertTrue($categoriesPos < $clearancePos, 'Clearance Sale must appear below Shop by Category section.');
     }
 
     /**
