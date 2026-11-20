@@ -51,11 +51,11 @@
   --color-amber-hover: #636F5A;
   --color-amber-light: #B5C1A5;
 
-  /* Fonts: Moga Sans Serif Font Family as Main Luxury Heading Font */
-  --font-display: "Moga", "Moga Sans", "Moga Sans Serif", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-serif: "Moga", "Moga Sans", "Moga Sans Serif", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-heading: "Moga", "Moga Sans", "Moga Sans Serif", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  /* Fonts: Inter & Open Sans for Main Headings, UI & Body Text */
+  --font-display: "Inter", "Open Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "Inter", "Open Sans", system-ui, -apple-system, sans-serif;
+  --font-heading: "Inter", "Open Sans", system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", "Open Sans", system-ui, -apple-system, sans-serif;
 
   /* Geometry: Subtle & Refined (4px–8px) */
   --radius-pill: 6px;
@@ -144,10 +144,16 @@
   font-display: swap;
 }
 
-/* Luxury Heading Font: Moga Sans Serif */
+/* Main Heading & Display Font: Inter & Open Sans */
 .font-serif,
 .font-display,
 .font-heading,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 h1.font-serif,
 h2.font-serif,
 h3.font-serif,
