@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -10,12 +11,40 @@ class ProductController extends Controller
 {
     /**
      * Display the Menahem Product List Page.
-     * Matches the reference e-commerce catalog layout.
+     * Matches the reference e-commerce catalog layout and pulls from MySQL.
      */
     public function index(Request $request): View
     {
         $content = require resource_path('content.php');
         $catalog = $content['CATALOG'] ?? [];
+
+        // Augment with database products if available
+        try {
+            $dbProducts = Product::where('in_stock', true)->orderBy('sort_order', 'asc')->get();
+            if ($dbProducts->isNotEmpty()) {
+                $catalog['products'] = $dbProducts->map(function ($p) {
+                    return [
+                        'id' => $p->id,
+                        'name' => $p->name,
+                        'category' => $p->category,
+                        'category_slug' => $p->category_slug,
+                        'category_slugs' => $p->category_slugs ?: [$p->category_slug],
+                        'material' => $p->material,
+                        'price' => $p->formatted_price,
+                        'numeric_price' => $p->numeric_price,
+                        'original_price' => $p->original_price,
+                        'rating' => (float) $p->rating,
+                        'reviews' => (int) $p->reviews,
+                        'badge' => $p->badge,
+                        'desc' => $p->desc,
+                        'image' => $p->image,
+                    ];
+                })->all();
+            }
+        } catch (\Throwable $e) {
+            // Keep content.php fallback
+        }
+
         $selectedCategory = $request->query('category', 'all');
 
         $categoryInfo = null;
@@ -67,12 +96,39 @@ class ProductController extends Controller
         $catalog = $content['CATALOG'] ?? [];
         $allProducts = $catalog['products'] ?? [];
 
-        // Search product by numeric id
-        $product = collect($allProducts)->first(function ($item) use ($id) {
-            return (string) ($item['id'] ?? '') === (string) $id;
-        });
+        // Try resolving from database first
+        $product = null;
+        try {
+            $dbProduct = Product::find($id);
+            if ($dbProduct) {
+                $product = [
+                    'id' => $dbProduct->id,
+                    'name' => $dbProduct->name,
+                    'category' => $dbProduct->category,
+                    'category_slug' => $dbProduct->category_slug,
+                    'category_slugs' => $dbProduct->category_slugs ?: [$dbProduct->category_slug],
+                    'material' => $dbProduct->material,
+                    'price' => $dbProduct->formatted_price,
+                    'numeric_price' => $dbProduct->numeric_price,
+                    'original_price' => $dbProduct->original_price,
+                    'rating' => (float) $dbProduct->rating,
+                    'reviews' => (int) $dbProduct->reviews,
+                    'badge' => $dbProduct->badge,
+                    'desc' => $dbProduct->desc,
+                    'image' => $dbProduct->image,
+                ];
+            }
+        } catch (\Throwable $e) {
+            // Keep fallback
+        }
 
-        // Fallback to first product if not found to prevent broken experience
+        // Fallback to searching in array if not found in DB
+        if (! $product) {
+            $product = collect($allProducts)->first(function ($item) use ($id) {
+                return (string) ($item['id'] ?? '') === (string) $id;
+            });
+        }
+
         if (! $product) {
             $product = $allProducts[0] ?? null;
         }

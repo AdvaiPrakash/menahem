@@ -2,14 +2,66 @@
 
 namespace App\Services;
 
+use App\Models\Category;
+
 class CategoryService
 {
     /**
      * Get the complete category hierarchy matching the client specification.
+     * Pulls dynamically from MySQL database with static matrix fallback.
      *
      * @return array<string, array<string, mixed>>
      */
     public static function getHierarchy(): array
+    {
+        try {
+            if (class_exists(Category::class)) {
+                $roots = Category::whereNull('parent_id')
+                    ->with('subcategories.subcategories')
+                    ->orderBy('sort_order')
+                    ->get();
+
+                if ($roots->isNotEmpty()) {
+                    return self::buildTreeFromCategories($roots);
+                }
+            }
+        } catch (\Throwable $e) {
+            // Keep static fallback
+        }
+
+        return self::getStaticHierarchy();
+    }
+
+    /**
+     * Build nested array structure from Category models.
+     */
+    private static function buildTreeFromCategories($collection): array
+    {
+        $tree = [];
+        foreach ($collection as $cat) {
+            $sub = [];
+            if ($cat->relationLoaded('subcategories') && $cat->subcategories->isNotEmpty()) {
+                $sub = self::buildTreeFromCategories($cat->subcategories);
+            }
+            $tree[$cat->slug] = [
+                'name' => $cat->name,
+                'slug' => $cat->slug,
+                'image' => $cat->image ?: '/images/categories/bedsheets.webp',
+                'description' => $cat->description ?: '',
+                'badge' => $cat->badge,
+                'subcategories' => $sub,
+            ];
+        }
+
+        return $tree;
+    }
+
+    /**
+     * Static category hierarchy fallback.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public static function getStaticHierarchy(): array
     {
         return [
             'bedsheets-dohars' => [

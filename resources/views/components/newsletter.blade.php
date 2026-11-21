@@ -31,13 +31,36 @@
                 <div
                     x-data="{
                         submitted: false,
+                        loading: false,
                         name: '',
                         email: '',
                         phone: '',
                         inquiryType: 'Curtains & Drapes',
                         message: '',
-                        submitForm() {
-                            this.submitted = true;
+                        async submitForm() {
+                            this.loading = true;
+                            try {
+                                await fetch('{{ route('inquiries.store') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({
+                                        name: this.name,
+                                        email: this.email,
+                                        phone: this.phone,
+                                        type: this.inquiryType,
+                                        message: this.message
+                                    })
+                                });
+                            } catch (e) {
+                                console.error('Inquiry submission error:', e);
+                            } finally {
+                                this.loading = false;
+                                this.submitted = true;
+                            }
                         }
                     }"
                     class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start"
