@@ -21,7 +21,25 @@
 @endphp
 
 <div
-    x-data="{ liked: false }"
+    x-data="{ 
+        liked: false,
+        toggleWishlist() {
+            this.liked = !this.liked;
+            fetch('{{ route('wishlist.toggle') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ product_id: {{ $id }} })
+            }).then(r => r.json()).then(data => {
+                if (data && typeof data.liked !== 'undefined') {
+                    this.liked = data.liked;
+                    window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { count: data.count } }));
+                }
+            }).catch(() => {});
+        }
+    }"
     class="group bg-white rounded-xl p-2.5 sm:p-4 border border-neutral-200/90 hover:border-[#74826B] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full relative"
     data-category="{{ strtolower($product['category_slug'] ?? $category) }}"
     data-material="{{ strtolower($material ?? '') }}"
@@ -116,7 +134,7 @@
             <!-- Wishlist Heart Button -->
             <button
                 type="button"
-                @click="liked = !liked"
+                @click="toggleWishlist()"
                 :class="liked ? 'bg-neutral-100 text-[#74826B] border-[#74826B]' : 'bg-white text-gray-400 border-neutral-200 hover:text-[#74826B] hover:border-[#74826B]'"
                 aria-label="Add to wishlist"
                 title="Add to wishlist"

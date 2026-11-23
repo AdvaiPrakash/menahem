@@ -22,6 +22,11 @@ class AdminMiddleware
 
         $user = Auth::user();
 
+        // Customer accounts cannot access the admin panel
+        if ($user->isCustomer() || ! in_array($user->role?->value ?? (string) $user->role, ['admin', 'editor', 'viewer'], true)) {
+            abort(403, 'Unauthorized. Staff privileges required.');
+        }
+
         // Check required role if specified
         if ($requiredRole === 'admin' && ! $user->isAdmin()) {
             abort(403, 'Unauthorized. Administrator privileges required.');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\StockMovement;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -73,11 +74,16 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'sku' => ['nullable', 'string', 'max:100'],
+            'hsn_code' => ['nullable', 'string', 'max:20'],
+            'gst_rate' => ['nullable', 'numeric', 'min:0', 'max:28'],
             'category_id' => ['nullable', 'exists:categories,id'],
             'material' => ['nullable', 'string', 'max:255'],
             'price' => ['nullable', 'string', 'max:50'],
             'numeric_price' => ['required', 'integer', 'min:0'],
             'original_price' => ['nullable', 'string', 'max:50'],
+            'stock_quantity' => ['nullable', 'integer', 'min:0'],
+            'low_stock_threshold' => ['nullable', 'integer', 'min:1'],
             'rating' => ['nullable', 'numeric', 'min:1', 'max:5'],
             'reviews' => ['nullable', 'integer', 'min:0'],
             'badge' => ['nullable', 'string', 'max:50'],
@@ -105,11 +111,18 @@ class ProductController extends Controller
         }
 
         $price = ! empty($validated['price']) ? $validated['price'] : '₹'.number_format($validated['numeric_price']);
+        $stockQty = $validated['stock_quantity'] ?? 50;
 
-        Product::create([
+        $product = Product::create([
             'category_id' => $category?->id,
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
+            'sku' => $validated['sku'] ?? ('MNH-'.strtoupper(Str::random(6))),
+            'hsn_code' => $validated['hsn_code'] ?? '6304',
+            'gst_rate' => $validated['gst_rate'] ?? 12.00,
+            'stock_quantity' => $stockQty,
+            'opening_stock' => $stockQty,
+            'low_stock_threshold' => $validated['low_stock_threshold'] ?? 10,
             'category' => $category?->name ?? 'General',
             'category_slug' => $category?->slug ?? 'general',
             'category_slugs' => $category ? [$category->slug, $category->parent_slug] : ['general'],
@@ -123,10 +136,20 @@ class ProductController extends Controller
             'desc' => $validated['desc'] ?? null,
             'image' => $imagePath,
             'gallery' => [$imagePath],
-            'in_stock' => $request->boolean('in_stock', true),
+            'in_stock' => $request->boolean('in_stock', true) && $stockQty > 0,
             'is_featured' => $request->boolean('is_featured'),
             'is_bestseller' => $request->boolean('is_bestseller'),
             'sort_order' => $validated['sort_order'] ?? 0,
+        ]);
+
+        StockMovement::create([
+            'product_id' => $product->id,
+            'movement_type' => 'initial',
+            'previous_quantity' => 0,
+            'quantity_changed' => $stockQty,
+            'updated_quantity' => $stockQty,
+            'user_id' => auth()->id(),
+            'reason' => 'Product initial inventory',
         ]);
 
         return redirect()->route('admin.products.index')
@@ -154,11 +177,16 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'sku' => ['nullable', 'string', 'max:100'],
+            'hsn_code' => ['nullable', 'string', 'max:20'],
+            'gst_rate' => ['nullable', 'numeric', 'min:0', 'max:28'],
             'category_id' => ['nullable', 'exists:categories,id'],
             'material' => ['nullable', 'string', 'max:255'],
             'price' => ['nullable', 'string', 'max:50'],
             'numeric_price' => ['required', 'integer', 'min:0'],
             'original_price' => ['nullable', 'string', 'max:50'],
+            'stock_quantity' => ['nullable', 'integer', 'min:0'],
+            'low_stock_threshold' => ['nullable', 'integer', 'min:1'],
             'rating' => ['nullable', 'numeric', 'min:1', 'max:5'],
             'reviews' => ['nullable', 'integer', 'min:0'],
             'badge' => ['nullable', 'string', 'max:50'],
@@ -187,11 +215,31 @@ class ProductController extends Controller
         }
 
         $price = ! empty($validated['price']) ? $validated['price'] : '₹'.number_format($validated['numeric_price']);
+        $newStock = isset($validated['stock_quantity']) ? (int) $validated['stock_quantity'] : $product->stock_quantity;
+
+        // Check if stock changed directly in edit form and log movement
+        if ($newStock !== $product->stock_quantity) {
+            $delta = $newStock - $product->stock_quantity;
+            StockMovement::create([
+                'product_id' => $product->id,
+                'movement_type' => 'manual_adjustment',
+                'previous_quantity' => $product->stock_quantity,
+                'quantity_changed' => $delta,
+                'updated_quantity' => $newStock,
+                'user_id' => auth()->id(),
+                'reason' => 'Product edit form manual adjustment',
+            ]);
+        }
 
         $product->update([
             'category_id' => $category?->id,
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
+            'sku' => $validated['sku'] ?? $product->sku,
+            'hsn_code' => $validated['hsn_code'] ?? ($product->hsn_code ?: '6304'),
+            'gst_rate' => $validated['gst_rate'] ?? ($product->gst_rate ?: 12.00),
+            'stock_quantity' => $newStock,
+            'low_stock_threshold' => $validated['low_stock_threshold'] ?? ($product->low_stock_threshold ?: 10),
             'category' => $category?->name ?? $product->category,
             'category_slug' => $category?->slug ?? $product->category_slug,
             'category_slugs' => $category ? array_unique(array_filter([$category->slug, $category->parent_slug])) : $product->category_slugs,
@@ -204,7 +252,7 @@ class ProductController extends Controller
             'badge' => $validated['badge'] ?? null,
             'desc' => $validated['desc'] ?? null,
             'image' => $imagePath,
-            'in_stock' => $request->boolean('in_stock'),
+            'in_stock' => $request->boolean('in_stock') && $newStock > 0,
             'is_featured' => $request->boolean('is_featured'),
             'is_bestseller' => $request->boolean('is_bestseller'),
             'sort_order' => $validated['sort_order'] ?? 0,

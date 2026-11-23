@@ -19,7 +19,7 @@
         targetCategorySlugs: {{ json_encode($targetSlugs) }},
         selectedMaterials: [],
         maxPrice: {{ $priceRange['max'] ?? 2999 }},
-        searchQuery: '',
+        searchQuery: {{ json_encode(request('search', request('q', ''))) }},
         quickFilter: 'all',
         showMoreCategories: false,
         mobileFilterOpen: false,

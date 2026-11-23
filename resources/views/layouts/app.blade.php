@@ -92,6 +92,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-white text-[var(--color-charcoal)] font-sans antialiased relative selection:bg-[#B5C1A5] selection:text-[#2B3326]">
-    {{ $slot }}
+    @if(isset($slot))
+        {{ $slot }}
+    @else
+        @yield('content')
+    @endif
+    <x-login-signup-modal />
 </body>
 </html>

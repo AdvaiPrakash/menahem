@@ -7,10 +7,12 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role'])]
+#[Fillable(['name', 'email', 'password', 'role', 'google_id', 'avatar', 'phone', 'customer_type', 'last_login_at'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -26,6 +28,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
             'role' => UserRole::class,
         ];
@@ -43,7 +46,12 @@ class User extends Authenticatable
 
     public function isViewer(): bool
     {
-        return true;
+        return in_array($this->role?->value ?? (string) $this->role, ['admin', 'editor', 'viewer'], true);
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === UserRole::Customer || $this->role?->value === 'customer';
     }
 
     public function canEditContent(): bool
@@ -54,5 +62,15 @@ class User extends Authenticatable
     public function canManageUsers(): bool
     {
         return $this->isAdmin();
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function customerLead(): HasOne
+    {
+        return $this->hasOne(CustomerLead::class);
     }
 }

@@ -1,6 +1,6 @@
 -- ============================================================
 -- MENAHEM LUXURY HOME ESSENTIALS - HOSTINGER PHPMYADMIN DUMP
--- Generated: 2026-11-21 09:49:27
+-- Generated: 2026-11-23 15:15:45
 -- Compatible with MySQL 5.7 / 8.0+ and MariaDB on Hostinger
 -- ============================================================
 

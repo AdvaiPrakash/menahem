@@ -50,6 +50,24 @@ class AdminPanelTest extends TestCase
         $dashResponse->assertSee('Dashboard Overview');
     }
 
+    public function test_admin_can_authenticate_with_username_admin_and_password_admin(): void
+    {
+        $admin = User::factory()->create([
+            'email' => 'admin@menahem.com',
+            'name' => 'admin',
+            'password' => bcrypt('admin'),
+            'role' => UserRole::Admin,
+        ]);
+
+        $loginResponse = $this->post(route('admin.login.submit'), [
+            'email' => 'admin',
+            'password' => 'admin',
+        ]);
+
+        $loginResponse->assertRedirect(route('admin.dashboard'));
+        $this->assertAuthenticatedAs($admin);
+    }
+
     public function test_admin_can_create_a_product(): void
     {
         $admin = User::factory()->create(['role' => UserRole::Admin]);
