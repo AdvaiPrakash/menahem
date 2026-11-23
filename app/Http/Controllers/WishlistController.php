@@ -19,7 +19,12 @@ class WishlistController extends Controller
         $guestToken = $this->cartService->resolveGuestToken($request);
         $user = $request->user();
 
-        $products = $this->cartService->getWishlistProducts($user, $guestToken);
+        try {
+            $products = $this->cartService->getWishlistProducts($user, $guestToken);
+        } catch (\Throwable $e) {
+            \Log::error('Wishlist database query error: '.$e->getMessage());
+            $products = collect();
+        }
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -46,15 +51,24 @@ class WishlistController extends Controller
         $guestToken = $this->cartService->resolveGuestToken($request);
         $user = $request->user();
 
-        $result = $this->cartService->toggleWishlist($user, $guestToken, (int) $validated['product_id']);
+        try {
+            $result = $this->cartService->toggleWishlist($user, $guestToken, (int) $validated['product_id']);
 
-        return response()->json([
-            'success' => true,
-            'liked' => $result['liked'],
-            'count' => $result['count'],
-            'product_id' => $result['product_id'],
-            'message' => $result['liked'] ? 'Added to wishlist' : 'Removed from wishlist',
-        ]);
+            return response()->json([
+                'success' => true,
+                'liked' => $result['liked'],
+                'count' => $result['count'],
+                'product_id' => $result['product_id'],
+                'message' => $result['liked'] ? 'Added to wishlist' : 'Removed from wishlist',
+            ]);
+        } catch (\Throwable $e) {
+            \Log::error('Wishlist toggle database error: '.$e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to update wishlist at this moment. Please check database connection.',
+            ], 500);
+        }
     }
 
     /**
@@ -65,12 +79,22 @@ class WishlistController extends Controller
         $guestToken = $this->cartService->resolveGuestToken($request);
         $user = $request->user();
 
-        $products = $this->cartService->getWishlistProducts($user, $guestToken);
+        try {
+            $products = $this->cartService->getWishlistProducts($user, $guestToken);
 
-        return response()->json([
-            'success' => true,
-            'count' => $products->count(),
-            'ids' => $products->pluck('id')->values(),
-        ]);
+            return response()->json([
+                'success' => true,
+                'count' => $products->count(),
+                'ids' => $products->pluck('id')->values(),
+            ]);
+        } catch (\Throwable $e) {
+            \Log::error('Wishlist status database error: '.$e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'count' => 0,
+                'ids' => [],
+            ]);
+        }
     }
 }

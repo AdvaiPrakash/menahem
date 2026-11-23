@@ -18,7 +18,12 @@ class CartController extends Controller
         $guestToken = $this->cartService->resolveGuestToken($request);
         $user = $request->user();
 
-        $items = $this->cartService->getItems($user, $guestToken);
+        try {
+            $items = $this->cartService->getItems($user, $guestToken);
+        } catch (\Throwable $e) {
+            \Log::error('Cart query error: '.$e->getMessage());
+            $items = collect();
+        }
 
         $subtotal = $items->sum(fn ($i) => ($i->product?->numeric_price ?? 0) * $i->quantity);
         $shipping = $subtotal >= 999 ? 0 : ($subtotal > 0 ? 99 : 0);
