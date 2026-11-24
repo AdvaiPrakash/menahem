@@ -8,6 +8,7 @@ use App\Mail\NewInquiryNotificationMail;
 use App\Models\Inquiry;
 use App\Models\InquiryReply;
 use App\Models\User;
+use App\Services\InquiryReplyService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
@@ -134,7 +135,7 @@ class AdminInquiryReplyTest extends TestCase
             'sender_email' => 'info@menahem.co.in',
             'recipient_email' => 'radhika@example.com',
             'subject' => 'Re: Living room blackout drapes',
-            'status' => 'sent',
+            'status' => 'accepted',
             'idempotency_key' => 'reply-key-001',
         ]);
 
@@ -146,7 +147,7 @@ class AdminInquiryReplyTest extends TestCase
         $showRes->assertSee('Looking for 9ft ivory linen blackout curtains.');
         $showRes->assertSee('custom-tailor 9ft ivory linen drapes');
         $showRes->assertSee('Replied');
-        $showRes->assertSee('Sent');
+        $showRes->assertSee('Accepted by SMTP');
 
         $indexRes = $this->actingAs($this->admin)->get(route('admin.inquiries.index', ['status' => 'replied']));
         $indexRes->assertOk();
@@ -311,6 +312,71 @@ class AdminInquiryReplyTest extends TestCase
             'name' => 'Rohan Verma',
             'email' => 'rohan@example.com',
             'status' => 'new',
+            'notification_status' => 'failed',
         ]);
+    }
+
+    public function test_failed_reply_can_be_retried_without_creating_duplicate_history_rows(): void
+    {
+        // Simulate unconfigured SMTP password on server (default mailer = smtp)
+        config([
+            'mail.default' => 'smtp',
+            'mail.mailers.smtp.host' => 'smtp.hostinger.com',
+            'mail.mailers.smtp.username' => 'info@menahem.co.in',
+            'mail.mailers.smtp.password' => '',
+        ]);
+
+        $inquiry = Inquiry::create([
+            'name' => 'Sneha Iyer',
+            'email' => 'retry@example.com',
+            'type' => 'general',
+            'message' => 'Can I order custom linen napkins?',
+            'status' => 'new',
+            'notification_status' => 'failed',
+        ]);
+
+        // Initial attempt fails cleanly without marking as sent
+        $this->actingAs($this->admin)->post(route('admin.inquiries.reply', $inquiry), [
+            'message' => 'Yes, we make custom linen napkins.',
+            'idempotency_key' => 'retry-flow-1',
+        ])->assertSessionHas('error');
+
+        $failedReply = InquiryReply::where('inquiry_id', $inquiry->id)->firstOrFail();
+        $this->assertEquals('failed', $failedReply->status);
+        $this->assertEquals('failed', $inquiry->fresh()->status);
+
+        // Retry after SMTP is ready reuses the exact same InquiryReply row
+        Mail::fake();
+
+        $retryRes = $this->actingAs($this->admin)
+            ->post(route('admin.inquiries.reply.retry', [$inquiry, $failedReply]));
+
+        $retryRes->assertRedirect(route('admin.inquiries.show', $inquiry));
+        $retryRes->assertSessionHas('success');
+
+        Mail::assertSent(InquiryReplyMail::class, 1);
+        $this->assertEquals(1, InquiryReply::where('inquiry_id', $inquiry->id)->count());
+        $this->assertEquals('accepted', $failedReply->fresh()->status);
+        $this->assertEquals('replied', $inquiry->fresh()->status);
+
+        // Resend failed admin notification alert
+        $resendRes = $this->actingAs($this->admin)
+            ->post(route('admin.inquiries.resend-notification', $inquiry));
+        $resendRes->assertSessionHas('success');
+        Mail::assertSent(NewInquiryNotificationMail::class, 1);
+        $this->assertEquals('accepted', $inquiry->fresh()->notification_status);
+    }
+
+    public function test_smtp_health_detects_missing_host_or_password(): void
+    {
+        config([
+            'mail.mailers.smtp.host' => '127.0.0.1',
+            'mail.mailers.smtp.username' => 'info@menahem.co.in',
+            'mail.mailers.smtp.password' => '',
+        ]);
+
+        $health = app(InquiryReplyService::class)->getSmtpHealth();
+        $this->assertFalse($health['ready']);
+        $this->assertCount(2, $health['issues']);
     }
 }

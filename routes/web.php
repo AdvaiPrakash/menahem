@@ -163,6 +163,8 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(func
     Route::get('/inquiries', [AdminInquiryController::class, 'index'])->name('inquiries.index');
     Route::get('/inquiries/{inquiry}', [AdminInquiryController::class, 'show'])->name('inquiries.show');
     Route::post('/inquiries/{inquiry}/reply', [AdminInquiryController::class, 'reply'])->name('inquiries.reply');
+    Route::post('/inquiries/{inquiry}/replies/{reply}/retry', [AdminInquiryController::class, 'retryReply'])->name('inquiries.reply.retry');
+    Route::post('/inquiries/{inquiry}/resend-notification', [AdminInquiryController::class, 'resendNotification'])->name('inquiries.resend-notification');
     Route::patch('/inquiries/{inquiry}/status', [AdminInquiryController::class, 'updateStatus'])->name('inquiries.status');
     Route::delete('/inquiries/{inquiry}', [AdminInquiryController::class, 'destroy'])->name('inquiries.destroy');
 

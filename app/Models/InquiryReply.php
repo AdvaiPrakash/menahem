@@ -20,6 +20,7 @@ class InquiryReply extends Model
         'message',
         'status',
         'error_message',
+        'smtp_message_id',
         'idempotency_key',
         'sent_at',
     ];
@@ -46,13 +47,28 @@ class InquiryReply extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function isPending(): bool
+    {
+        return $this->status === 'pending';
+    }
+
     public function isSent(): bool
     {
-        return $this->status === 'sent';
+        return in_array($this->status, ['sent', 'accepted'], true);
     }
 
     public function isFailed(): bool
     {
         return $this->status === 'failed';
+    }
+
+    public function statusLabel(): string
+    {
+        return match ($this->status) {
+            'pending' => 'Pending',
+            'sent', 'accepted' => 'Accepted by SMTP',
+            'failed' => 'Failed',
+            default => ucfirst((string) $this->status),
+        };
     }
 }

@@ -20,6 +20,9 @@ class Inquiry extends Model
         'message',
         'details',
         'status',
+        'notification_status',
+        'notification_error',
+        'notified_at',
         'admin_notes',
     ];
 
@@ -32,6 +35,7 @@ class Inquiry extends Model
     {
         return [
             'details' => 'array',
+            'notified_at' => 'datetime',
         ];
     }
 

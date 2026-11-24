@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Inquiry;
+use App\Models\InquiryReply;
 use App\Services\InquiryReplyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class InquiryController extends Controller
     public function index(Request $request): View
     {
         $query = Inquiry::query()->withCount([
-            'replies as sent_replies_count' => static fn ($q) => $q->where('status', 'sent'),
+            'replies as sent_replies_count' => static fn ($q) => $q->whereIn('status', ['sent', 'accepted']),
             'replies as failed_replies_count' => static fn ($q) => $q->where('status', 'failed'),
         ]);
 
@@ -78,6 +79,7 @@ class InquiryController extends Controller
             'defaultReplySubject' => $this->replyService->formatReplySubject($inquiry),
             'idempotencyKey' => (string) Str::uuid(),
             'senderEmail' => (string) config('mail.enquiry_from.address', 'info@menahem.co.in'),
+            'smtpHealth' => $this->replyService->getSmtpHealth(),
         ]);
     }
 
@@ -104,9 +106,11 @@ class InquiryController extends Controller
         );
 
         if ($result['success']) {
+            $senderEmail = (string) config('mail.enquiry_from.address', 'info@menahem.co.in');
+            $smtpHost = (string) config('mail.mailers.smtp.host', 'smtp.hostinger.com');
             $flash = ($result['duplicate'] ?? false)
-                ? 'This reply was already sent.'
-                : "Reply sent successfully to {$inquiry->email} from ".config('mail.enquiry_from.address', 'info@menahem.co.in').'.';
+                ? 'This reply was already accepted for delivery.'
+                : "Reply accepted by Hostinger SMTP ({$smtpHost}) for delivery to {$inquiry->email} from {$senderEmail}.";
 
             return redirect()->route('admin.inquiries.show', $inquiry)
                 ->with('success', $flash);
@@ -115,6 +119,47 @@ class InquiryController extends Controller
         return redirect()->route('admin.inquiries.show', $inquiry)
             ->withInput($request->only(['subject', 'message']))
             ->with('error', 'Failed to send reply email: '.($result['error'] ?? 'Unknown SMTP error.'));
+    }
+
+    /**
+     * Retry sending a failed reply without creating a duplicate history row.
+     */
+    public function retryReply(Inquiry $inquiry, InquiryReply $reply): RedirectResponse
+    {
+        if ($reply->inquiry_id !== $inquiry->id) {
+            abort(404);
+        }
+
+        $result = $this->replyService->retryReply($inquiry, $reply);
+
+        if ($result['success']) {
+            $senderEmail = (string) config('mail.enquiry_from.address', 'info@menahem.co.in');
+            $flash = ($result['duplicate'] ?? false)
+                ? 'This reply was already accepted by SMTP.'
+                : "Retry succeeded: reply accepted by Hostinger SMTP for delivery to {$inquiry->email} from {$senderEmail}.";
+
+            return redirect()->route('admin.inquiries.show', $inquiry)
+                ->with('success', $flash);
+        }
+
+        return redirect()->route('admin.inquiries.show', $inquiry)
+            ->with('error', 'Retry failed: '.($result['error'] ?? 'Unknown SMTP error.'));
+    }
+
+    /**
+     * Resend the new-enquiry email alert to the business mailbox.
+     */
+    public function resendNotification(Inquiry $inquiry): RedirectResponse
+    {
+        $result = $this->replyService->sendAdminNotification($inquiry);
+
+        if ($result['success']) {
+            return redirect()->route('admin.inquiries.show', $inquiry)
+                ->with('success', 'Enquiry notification email accepted by Hostinger SMTP for '.config('mail.enquiry_from.address', 'info@menahem.co.in').'.');
+        }
+
+        return redirect()->route('admin.inquiries.show', $inquiry)
+            ->with('error', 'Notification email failed: '.($result['error'] ?? 'Unknown SMTP error.'));
     }
 
     /**

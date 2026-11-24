@@ -11,6 +11,14 @@
 @endsection
 
 @section('content')
+@if(isset($smtpHealth) && !($smtpHealth['ready'] ?? true))
+    <div class="mb-6 p-4 bg-amber-50 border border-amber-300 text-amber-900 text-xs space-y-1">
+        <p class="font-bold uppercase tracking-wider">Hostinger SMTP Configuration Incomplete</p>
+        <p>{{ implode(' ', $smtpHealth['issues'] ?? []) }}</p>
+        <p class="text-[11px] text-amber-800">Update <code class="font-mono font-bold">.env</code> with Hostinger SMTP credentials and clear config cache before sending emails.</p>
+    </div>
+@endif
+
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- Left Column: Original Enquiry, Conversation History & Direct Reply -->
     <div class="lg:col-span-2 space-y-6">
@@ -23,7 +31,26 @@
                         Submitted {{ $inquiry->created_at->format('F d, Y \a\t h:i A') }} ({{ $inquiry->created_at->diffForHumans() }})
                     </p>
                 </div>
-                <div>
+                <div class="flex flex-wrap items-center gap-2">
+                    @php
+                        $notifStatus = $inquiry->notification_status ?? 'pending';
+                    @endphp
+                    @if($notifStatus === 'accepted')
+                        <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-neutral-100 text-neutral-700 border border-neutral-300"
+                              title="New enquiry email alert accepted by Hostinger SMTP for {{ $senderEmail }}">
+                            Admin Alert: Accepted
+                        </span>
+                    @elseif($notifStatus === 'failed')
+                        <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-rose-50 text-rose-800 border border-rose-200"
+                              title="{{ $inquiry->notification_error }}">
+                            Admin Alert: Failed
+                        </span>
+                    @else
+                        <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-neutral-100 text-neutral-600 border border-neutral-200">
+                            Admin Alert: Pending
+                        </span>
+                    @endif
+
                     @if($inquiry->isPending())
                         <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-none bg-amber-50 text-amber-800 border border-amber-200">Pending</span>
                     @elseif($inquiry->isReplied())
@@ -143,8 +170,13 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 @if($reply->isSent())
-                                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-900 border border-emerald-300">
-                                        Sent
+                                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-900 border border-emerald-300"
+                                          title="Accepted by Hostinger SMTP server for delivery">
+                                        Accepted by SMTP
+                                    </span>
+                                @elseif($reply->isPending())
+                                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
+                                        Pending
                                     </span>
                                 @else
                                     <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-rose-100 text-rose-900 border border-rose-300">
@@ -163,9 +195,24 @@
 
                         <div class="text-sm text-neutral-800 leading-relaxed whitespace-pre-wrap pt-1">{{ $reply->message }}</div>
 
-                        @if($reply->isFailed() && $reply->error_message)
-                            <div class="mt-2 p-2.5 bg-rose-50 border border-rose-200 text-[11px] text-rose-800">
-                                <strong>Delivery Error:</strong> {{ $reply->error_message }}
+                        @if($reply->smtp_message_id)
+                            <p class="text-[10px] font-mono text-neutral-400">SMTP Message-ID: {{ $reply->smtp_message_id }}</p>
+                        @endif
+
+                        @if($reply->isFailed())
+                            <div class="mt-2 p-3 bg-rose-50 border border-rose-200 text-[11px] text-rose-800 flex flex-wrap items-center justify-between gap-3">
+                                <div class="min-w-0 flex-1">
+                                    <strong>Delivery Error:</strong> {{ $reply->error_message ?: 'SMTP server rejected or failed to connect.' }}
+                                </div>
+                                @if(auth()->user()->canEditContent())
+                                    <form action="{{ route('admin.inquiries.reply.retry', [$inquiry, $reply]) }}" method="POST" class="shrink-0">
+                                        @csrf
+                                        <button type="submit"
+                                                class="px-3 py-1.5 bg-neutral-900 hover:bg-black text-white text-[10px] font-bold uppercase tracking-wider cursor-pointer">
+                                            Retry Sending
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         @endif
                     </div>
@@ -296,6 +343,21 @@
                 @endif
                 <p class="mt-4 italic">Viewers have read-only access.</p>
             </div>
+            @endif
+            @if(auth()->user()->canEditContent() && ($inquiry->notification_status ?? 'pending') !== 'accepted')
+                <div class="pt-4 border-t border-neutral-200 space-y-2">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-neutral-600">Business Email Alert</p>
+                    @if($inquiry->notification_error)
+                        <p class="text-[11px] text-rose-700">{{ $inquiry->notification_error }}</p>
+                    @endif
+                    <form action="{{ route('admin.inquiries.resend-notification', $inquiry) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                                class="w-full py-2 px-3 border border-neutral-300 hover:bg-neutral-100 text-neutral-800 text-[11px] font-bold uppercase tracking-wider cursor-pointer">
+                            Resend Alert to {{ $senderEmail }}
+                        </button>
+                    </form>
+                </div>
             @endif
         </div>
     </div>

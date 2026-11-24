@@ -34,7 +34,7 @@ class NewInquiryNotificationMail extends Mailable
         return new Envelope(
             from: new Address($this->fromAddress, $this->businessName),
             replyTo: $replyTo,
-            subject: "New Website Enquiry: {$this->inquiry->resolvedSubject()} ({$this->inquiry->name})",
+            subject: "New Customer Enquiry – Menahem: {$this->inquiry->resolvedSubject()}",
         );
     }
 

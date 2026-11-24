@@ -32,15 +32,20 @@
                     x-data="{
                         submitted: false,
                         loading: false,
+                        errorMsg: '',
                         name: '',
                         email: '',
                         phone: '',
                         inquiryType: 'Curtains & Drapes',
                         message: '',
                         async submitForm() {
+                            if (this.loading || this.submitted) {
+                                return;
+                            }
                             this.loading = true;
+                            this.errorMsg = '';
                             try {
-                                await fetch('{{ route('inquiries.store') }}', {
+                                const res = await fetch('{{ route('inquiries.store') }}', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -55,11 +60,17 @@
                                         message: this.message
                                     })
                                 });
+                                const data = await res.json().catch(() => ({}));
+                                if (!res.ok || data.success === false) {
+                                    this.errorMsg = data.message || 'Unable to submit your enquiry right now. Please try again.';
+                                    return;
+                                }
+                                this.submitted = true;
                             } catch (e) {
                                 console.error('Inquiry submission error:', e);
+                                this.errorMsg = 'Network error while sending your enquiry. Please try again.';
                             } finally {
                                 this.loading = false;
-                                this.submitted = true;
                             }
                         }
                     }"
@@ -164,14 +175,19 @@
                                 ></textarea>
                             </div>
 
+                            <!-- Error Banner -->
+                            <div x-show="errorMsg" x-cloak class="p-3 rounded-md bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold" x-text="errorMsg"></div>
+
                             <!-- Submit Button -->
                             <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
                                 <button
                                     type="submit"
-                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-md bg-[#74826B] hover:bg-[#636F5A] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md shadow-[#74826B]/25 cursor-pointer active:scale-98"
+                                    :disabled="loading"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-md bg-[#74826B] hover:bg-[#636F5A] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md shadow-[#74826B]/25 cursor-pointer active:scale-98 disabled:opacity-60"
                                 >
-                                    <span>Send Consultation Request</span>
-                                    <span>↗</span>
+                                    <span x-show="!loading">Send Consultation Request</span>
+                                    <span x-show="loading" x-cloak>Sending...</span>
+                                    <span x-show="!loading">↗</span>
                                 </button>
                                 <span class="text-[11px] text-[#5C6654] font-medium">
                                     Protected by privacy guarantee • No spam

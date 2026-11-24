@@ -88,7 +88,7 @@
                         @if(($inq->sent_replies_count ?? 0) > 0 || ($inq->failed_replies_count ?? 0) > 0)
                             <div class="mt-1 flex items-center gap-2 text-[11px]">
                                 @if(($inq->sent_replies_count ?? 0) > 0)
-                                    <span class="font-semibold text-emerald-700">{{ $inq->sent_replies_count }} {{ $inq->sent_replies_count === 1 ? 'reply' : 'replies' }} sent</span>
+                                    <span class="font-semibold text-emerald-700">{{ $inq->sent_replies_count }} {{ $inq->sent_replies_count === 1 ? 'reply' : 'replies' }} accepted</span>
                                 @endif
                                 @if(($inq->failed_replies_count ?? 0) > 0)
                                     <span class="font-semibold text-rose-700">{{ $inq->failed_replies_count }} failed</span>

@@ -39,10 +39,10 @@ return [
 
         'smtp' => [
             'transport' => 'smtp',
-            'scheme' => env('MAIL_SCHEME'),
+            'scheme' => env('MAIL_SCHEME') ?: (env('MAIL_ENCRYPTION') === 'ssl' ? 'smtps' : (env('MAIL_ENCRYPTION') === 'tls' ? 'smtp' : null)),
             'url' => env('MAIL_URL'),
             'host' => env('MAIL_HOST', 'smtp.hostinger.com'),
-            'port' => env('MAIL_PORT', 465),
+            'port' => (int) env('MAIL_PORT', 465),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => (int) env('MAIL_TIMEOUT', 15),
