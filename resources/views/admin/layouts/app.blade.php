@@ -109,9 +109,7 @@
                         <span>Order Management</span>
                     </div>
                     @php $pendingOrders = \App\Models\Order::whereIn('order_status', ['processing', 'confirmed'])->count(); @endphp
-                    @if($pendingOrders > 0)
-                        <span class="px-1.5 py-0.2 text-[10px] font-bold bg-neutral-900 text-white">{{ $pendingOrders }}</span>
-                    @endif
+                    <span id="admin-sidebar-orders-badge" class="px-1.5 py-0.2 text-[10px] font-bold bg-neutral-900 text-white {{ $pendingOrders > 0 ? '' : 'hidden' }}">{{ $pendingOrders }}</span>
                 </a>
 
                 <a href="{{ route('admin.products.index') }}" 
@@ -170,9 +168,7 @@
                         <span>Custom Inquiries</span>
                     </div>
                     @php $newCount = \App\Models\Inquiry::where('status', 'new')->count(); @endphp
-                    @if($newCount > 0)
-                        <span class="px-1.5 py-0.2 text-[10px] font-bold bg-amber-500 text-neutral-900">{{ $newCount }}</span>
-                    @endif
+                    <span id="admin-sidebar-inquiries-badge" class="px-1.5 py-0.2 text-[10px] font-bold bg-amber-500 text-neutral-900 {{ $newCount > 0 ? '' : 'hidden' }}">{{ $newCount }}</span>
                 </a>
 
                 @if(auth()->user()->isAdmin())
@@ -224,7 +220,8 @@
                     </h1>
                 </div>
 
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    @include('admin.partials.notifications-header')
                     @yield('header_actions')
                 </div>
             </header>
@@ -260,5 +257,7 @@
             </main>
         </div>
     </div>
+
+    @include('admin.partials.notifications-runtime')
 </body>
 </html>

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CustomerLeadController as AdminCustomerLeadContro
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentSettingController as AdminPaymentSettingController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -119,6 +120,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(function () {
     // Overview Dashboard
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/notifications/poll', [AdminNotificationController::class, 'poll'])->name('notifications.poll');
 
     // Products Management
     Route::resource('products', AdminProductController::class)->except(['show']);
