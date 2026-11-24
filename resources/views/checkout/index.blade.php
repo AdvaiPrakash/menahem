@@ -33,15 +33,29 @@
             shippingLine1: '',
             shippingLine2: '',
             shippingCity: '',
-            shippingState: 'Maharashtra',
+            shippingState: '{{ $shippingSettings['origin_state'] ?? 'Maharashtra' }}',
             shippingPin: '',
             billingSame: true,
             billingLine1: '',
             billingLine2: '',
             billingCity: '',
-            billingState: 'Maharashtra',
+            billingState: '{{ $shippingSettings['origin_state'] ?? 'Maharashtra' }}',
             billingPin: '',
-            customerGstin: '',
+
+            // PIN Code Auto-Fill & Dynamic Shipping State
+            pinLookupLoading: false,
+            pinLookupError: '',
+            pinLookupInfo: '',
+            pinLookupCache: {},
+            shippingCalculated: false,
+            shippingCalculating: false,
+            shippingError: '',
+            shippingMessage: 'Enter delivery PIN code to calculate',
+            shippingDistanceKm: null,
+            shippingFreeKm: {{ (float) ($shippingSettings['free_distance_km'] ?? 5) }},
+            shippingRatePerKm: {{ (float) ($shippingSettings['charge_per_km'] ?? 10) }},
+            shippingBillableKm: null,
+            calcDebounceTimer: null,
 
             // UI & Payment State
             isProcessing: false,
@@ -74,10 +88,121 @@
                 }
             },
 
+            handlePinInput() {
+                const clean = String(this.shippingPin || '').replace(/\D/g, '').slice(0, 6);
+                this.shippingPin = clean;
+                this.pinLookupInfo = '';
+                this.shippingError = '';
+
+                if (clean.length === 0) {
+                    this.pinLookupError = '';
+                    this.shippingCalculated = false;
+                    this.shippingFee = 0;
+                    this.shippingDistanceKm = null;
+                    this.shippingBillableKm = null;
+                    this.shippingMessage = 'Enter delivery PIN code to calculate';
+                    this.scheduleCalculateBreakdown(0);
+                    return;
+                }
+
+                if (clean.length < 6) {
+                    this.pinLookupError = '';
+                    this.shippingCalculated = false;
+                    this.shippingFee = 0;
+                    this.shippingDistanceKm = null;
+                    this.shippingBillableKm = null;
+                    this.shippingMessage = 'Enter all 6 digits of your PIN code';
+                    return;
+                }
+
+                this.lookupPinCode(clean);
+            },
+
+            validatePinOnBlur() {
+                const clean = String(this.shippingPin || '').trim();
+                if (clean.length > 0 && !/^[1-9]\d{5}$/.test(clean)) {
+                    this.pinLookupError = 'Please enter a valid 6-digit Indian PIN code.';
+                    this.shippingCalculated = false;
+                }
+            },
+
+            lookupPinCode(pin) {
+                if (!/^[1-9]\d{5}$/.test(pin)) {
+                    this.pinLookupError = 'Please enter a valid 6-digit Indian PIN code (cannot start with 0).';
+                    this.pinLookupInfo = '';
+                    this.shippingCalculated = false;
+                    this.shippingError = this.pinLookupError;
+                    this.shippingMessage = 'Invalid PIN code';
+                    return;
+                }
+
+                if (this.pinLookupCache[pin]) {
+                    const cached = this.pinLookupCache[pin];
+                    if (cached.valid) {
+                        if (cached.city) this.shippingCity = cached.city;
+                        if (cached.state) this.shippingState = cached.state;
+                        this.pinLookupError = '';
+                        this.pinLookupInfo = [cached.post_office, cached.district, cached.state].filter(Boolean).join(', ');
+                        this.scheduleCalculateBreakdown(0);
+                    } else {
+                        this.pinLookupError = cached.message || 'PIN code not found.';
+                        this.pinLookupInfo = '';
+                        this.shippingCalculated = false;
+                        this.shippingError = this.pinLookupError;
+                    }
+                    return;
+                }
+
+                this.pinLookupLoading = true;
+                this.pinLookupError = '';
+                this.pinLookupInfo = '';
+
+                fetch('{{ route('checkout.pincode-lookup') }}?pincode=' + encodeURIComponent(pin), {
+                    headers: { 'Accept': 'application/json' }
+                })
+                .then(r => r.json().then(data => ({ ok: r.ok, data })))
+                .then(({ ok, data }) => {
+                    this.pinLookupLoading = false;
+                    this.pinLookupCache[pin] = data;
+
+                    if (ok && data.valid) {
+                        if (data.city) this.shippingCity = data.city;
+                        if (data.state) this.shippingState = data.state;
+                        this.pinLookupError = '';
+                        this.pinLookupInfo = [data.post_office, data.district, data.state].filter(Boolean).join(', ');
+                        this.scheduleCalculateBreakdown(0);
+                    } else {
+                        this.pinLookupError = data.message || 'Invalid or unavailable Indian PIN code.';
+                        this.pinLookupInfo = '';
+                        this.shippingCalculated = false;
+                        this.shippingError = this.pinLookupError;
+                        this.shippingMessage = 'Unable to verify PIN code';
+                    }
+                })
+                .catch(() => {
+                    this.pinLookupLoading = false;
+                    this.pinLookupError = 'Unable to verify PIN code right now. Please try again.';
+                });
+            },
+
+            scheduleCalculateBreakdown(delay = 350) {
+                if (this.calcDebounceTimer) {
+                    clearTimeout(this.calcDebounceTimer);
+                }
+                this.calcDebounceTimer = setTimeout(() => {
+                    this.calculateBreakdown();
+                }, delay);
+            },
+
             calculateBreakdown() {
                 let sub = 0;
                 this.items.forEach(i => sub += (parseFloat(i.price) * parseInt(i.quantity)));
                 this.subtotal = sub;
+
+                const cleanPin = String(this.shippingPin || '').trim();
+                if (cleanPin.length === 6) {
+                    this.shippingCalculating = true;
+                }
 
                 fetch('{{ route('checkout.calculate') }}', {
                     method: 'POST',
@@ -88,18 +213,31 @@
                     body: JSON.stringify({
                         items: this.items,
                         coupon_code: this.couponCode,
-                        state: this.shippingState
+                        state: this.shippingState,
+                        shipping_state: this.shippingState,
+                        shipping_city: this.shippingCity,
+                        shipping_pin_code: cleanPin,
+                        shipping_address_line1: this.shippingLine1,
+                        shipping_address_line2: this.shippingLine2
                     })
                 })
                 .then(r => r.json())
                 .then(data => {
+                    this.shippingCalculating = false;
                     this.subtotal = data.subtotal;
                     this.couponDiscount = data.discount;
                     this.taxableAmount = data.taxable_amount;
                     this.cgstAmount = data.cgst_amount;
                     this.sgstAmount = data.sgst_amount;
                     this.igstAmount = data.igst_amount;
-                    this.shippingFee = data.shipping_fee;
+                    this.shippingCalculated = Boolean(data.shipping_calculated);
+                    this.shippingFee = data.shipping_fee !== null && data.shipping_fee !== undefined ? Number(data.shipping_fee) : 0;
+                    this.shippingError = data.shipping_error || '';
+                    this.shippingMessage = data.shipping_message || '';
+                    this.shippingDistanceKm = data.distance_km ?? null;
+                    this.shippingFreeKm = data.free_distance_km ?? this.shippingFreeKm;
+                    this.shippingRatePerKm = data.charge_per_km ?? this.shippingRatePerKm;
+                    this.shippingBillableKm = data.billable_distance_km ?? null;
                     this.gatewayFee = data.gateway_fee;
                     this.grandTotal = data.grand_total;
                     this.isIntraState = data.is_intra_state;
@@ -113,7 +251,10 @@
                         this.couponError = data.coupon_message;
                     }
                 })
-                .catch(err => console.error(err));
+                .catch(err => {
+                    this.shippingCalculating = false;
+                    console.error(err);
+                });
             },
 
             applyCoupon() {
@@ -182,6 +323,16 @@
                     window.scrollTo({ top: 100, behavior: 'smooth' });
                     return;
                 }
+                if (!/^[1-9]\d{5}$/.test(this.shippingPin.trim()) || this.pinLookupError) {
+                    this.errorMessage = this.pinLookupError || 'Please enter a valid 6-digit Indian delivery PIN code.';
+                    window.scrollTo({ top: 100, behavior: 'smooth' });
+                    return;
+                }
+                if (this.shippingError || !this.shippingCalculated) {
+                    this.errorMessage = this.shippingError || 'Please wait for delivery shipping calculation to complete.';
+                    window.scrollTo({ top: 100, behavior: 'smooth' });
+                    return;
+                }
 
                 this.isProcessing = true;
                 this.errorMessage = '';
@@ -209,7 +360,6 @@
                         billing_city: this.billingCity,
                         billing_state: this.billingState,
                         billing_pin_code: this.billingPin,
-                        customer_gstin: this.customerGstin,
                         coupon_code: this.couponApplied ? this.couponCode : null
                     })
                 })
@@ -372,7 +522,7 @@
                             <label class="block text-xs font-semibold text-[#2B3326] uppercase tracking-wider mb-1.5">
                                 Flat / House No., Building Name <span class="text-rose-500">*</span>
                             </label>
-                            <input type="text" x-model="shippingLine1" placeholder="Flat 402, Oakwood Residences" required
+                            <input type="text" x-model="shippingLine1" @input.debounce.450ms="if (shippingPin.length === 6) scheduleCalculateBreakdown(100)" placeholder="Flat 402, Oakwood Residences" required
                                    class="w-full px-4 py-2.5 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#74826B]/20 focus:border-[#74826B]">
                         </div>
 
@@ -380,16 +530,42 @@
                             <label class="block text-xs font-semibold text-[#2B3326] uppercase tracking-wider mb-1.5">
                                 Street Address, Area, Landmark
                             </label>
-                            <input type="text" x-model="shippingLine2" placeholder="Near Bandra Kurla Complex, Bandra East"
+                            <input type="text" x-model="shippingLine2" @input.debounce.450ms="if (shippingPin.length === 6) scheduleCalculateBreakdown(100)" placeholder="Near Bandra Kurla Complex, Bandra East"
                                    class="w-full px-4 py-2.5 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#74826B]/20 focus:border-[#74826B]">
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold text-[#2B3326] uppercase tracking-wider mb-1.5">
+                                    PIN Code <span class="text-rose-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="text"
+                                           x-model="shippingPin"
+                                           @input="handlePinInput()"
+                                           @blur="validatePinOnBlur()"
+                                           placeholder="400051"
+                                           required
+                                           maxlength="6"
+                                           inputmode="numeric"
+                                           :class="pinLookupError ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20' : 'border-neutral-200 focus:border-[#74826B] focus:ring-[#74826B]/20'"
+                                           class="w-full px-4 py-2.5 rounded-lg border text-sm font-mono focus:outline-none focus:ring-2">
+                                    <span x-show="pinLookupLoading" x-cloak class="absolute right-3 top-3 text-[11px] font-semibold text-[#74826B]">
+                                        ...
+                                    </span>
+                                </div>
+                                <p x-show="pinLookupLoading" x-cloak class="text-[11px] text-[#74826B] font-medium mt-1">Looking up PIN code...</p>
+                                <p x-show="!pinLookupLoading && pinLookupInfo" x-cloak class="text-[11px] text-emerald-700 font-medium mt-1">
+                                    ✓ <span x-text="pinLookupInfo"></span>
+                                </p>
+                                <p x-show="!pinLookupLoading && pinLookupError" x-cloak class="text-[11px] text-rose-600 font-semibold mt-1" x-text="pinLookupError"></p>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-[#2B3326] uppercase tracking-wider mb-1.5">
                                     City <span class="text-rose-500">*</span>
                                 </label>
-                                <input type="text" x-model="shippingCity" placeholder="Mumbai" required
+                                <input type="text" x-model="shippingCity" @input.debounce.450ms="if (shippingPin.length === 6) scheduleCalculateBreakdown(100)" placeholder="Mumbai" required
                                        class="w-full px-4 py-2.5 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#74826B]/20 focus:border-[#74826B]">
                             </div>
 
@@ -403,14 +579,6 @@
                                         <option value="{{ $stateName }}">{{ $stateName }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-semibold text-[#2B3326] uppercase tracking-wider mb-1.5">
-                                    PIN Code <span class="text-rose-500">*</span>
-                                </label>
-                                <input type="text" x-model="shippingPin" placeholder="400051" required maxlength="10"
-                                       class="w-full px-4 py-2.5 rounded-lg border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#74826B]/20 focus:border-[#74826B]">
                             </div>
                         </div>
 
@@ -431,16 +599,6 @@
                                 <input type="text" x-model="billingState" placeholder="State" class="px-3 py-2 rounded-lg border border-neutral-200 text-sm">
                                 <input type="text" x-model="billingPin" placeholder="PIN" class="px-3 py-2 rounded-lg border border-neutral-200 text-sm">
                             </div>
-                        </div>
-
-                        <!-- Optional Customer GSTIN -->
-                        <div class="pt-2">
-                            <label class="block text-xs font-semibold text-[#2B3326] uppercase tracking-wider mb-1.5">
-                                Business GSTIN (Optional)
-                            </label>
-                            <input type="text" x-model="customerGstin" placeholder="e.g. 27ABCDE1234F1Z5 (For tax credit)"
-                                   class="w-full px-4 py-2 rounded-lg border border-neutral-200 text-sm font-mono uppercase">
-                            <p class="text-[11px] text-[#5C6654] mt-1">If entered, your GSTIN will be printed on the official GST Tax Invoice.</p>
                         </div>
                     </div>
                 </div>
@@ -471,8 +629,8 @@
             </div>
 
             <!-- Right Column: Order Summary & Live Offer Code (5 cols) -->
-            <div class="lg:col-span-5 space-y-6">
-                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-neutral-200 shadow-xs sticky top-28">
+            <div class="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-neutral-200 shadow-xs">
                     <h2 class="text-base font-bold text-[#2B3326] pb-4 border-b border-neutral-100 flex items-center justify-between">
                         <span>Order Summary</span>
                         <span class="text-xs font-semibold text-[#74826B]" x-text="items.length + ' item(s)'"></span>
@@ -580,10 +738,25 @@
                             </div>
                         </template>
 
-                        <div class="flex justify-between text-[#5C6654]">
-                            <span>Shipping & Delivery</span>
-                            <span class="font-bold" :class="shippingFee === 0 ? 'text-[#74826B]' : 'text-[#2B3326]'" 
-                                  x-text="shippingFee === 0 ? 'FREE' : '₹' + shippingFee"></span>
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[#5C6654]">
+                                <span>Shipping & Delivery</span>
+                                <template x-if="shippingCalculating">
+                                    <span class="font-semibold text-[#74826B]">Calculating...</span>
+                                </template>
+                                <template x-if="!shippingCalculating && shippingError">
+                                    <span class="font-semibold text-rose-600">Unavailable</span>
+                                </template>
+                                <template x-if="!shippingCalculating && !shippingError && !shippingCalculated">
+                                    <span class="font-medium text-neutral-500">Enter PIN code</span>
+                                </template>
+                                <template x-if="!shippingCalculating && !shippingError && shippingCalculated">
+                                    <span class="font-bold" :class="shippingFee === 0 ? 'text-[#74826B]' : 'text-[#2B3326]'"
+                                          x-text="shippingFee === 0 ? 'FREE' : '₹' + shippingFee.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
+                                </template>
+                            </div>
+                            <p x-show="shippingError" x-cloak class="text-[11px] text-rose-600 font-medium" x-text="shippingError"></p>
+                            <p x-show="!shippingError && shippingCalculated && shippingMessage" x-cloak class="text-[11px] text-[#5C6654]" x-text="shippingMessage"></p>
                         </div>
 
                         <template x-if="gatewayFee > 0">
@@ -604,7 +777,7 @@
                             @click="proceedToPayment()" 
                             :disabled="isProcessing || !items || items.length === 0"
                             class="w-full mt-6 py-3.5 px-6 rounded-lg bg-[#384230] hover:bg-[#2C3424] text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2">
-                        <span x-show="!isProcessing">Pay Now via Razorpay &rarr;</span>
+                        <span x-show="!isProcessing">Pay Now</span>
                         <span x-show="isProcessing" class="flex items-center gap-2">
                             <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

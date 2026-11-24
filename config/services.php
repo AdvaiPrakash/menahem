@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'google_maps' => [
+        'api_key' => env('GOOGLE_MAPS_API_KEY'),
+    ],
+
+    'geocoding' => [
+        'nominatim_enabled' => env('GEOCODING_NOMINATIM_ENABLED', true),
+        'user_agent' => env('GEOCODING_USER_AGENT', 'MenahemStoreCheckout/1.0'),
+    ],
+
 ];

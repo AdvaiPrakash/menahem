@@ -60,7 +60,8 @@ class TaxCalculationService
         float $discount = 0.0,
         string $customerState = 'Maharashtra',
         float $shippingThreshold = 999.0,
-        float $defaultShipping = 99.0
+        float $defaultShipping = 99.0,
+        ?float $shippingFeeOverride = null
     ): array {
         $sellerState = Setting::get('seller_state', 'Maharashtra');
         $isIntraState = strcasecmp(trim($customerState), trim($sellerState)) === 0;
@@ -117,8 +118,10 @@ class TaxCalculationService
 
         $totalTax = $totalCgst + $totalSgst + $totalIgst;
 
-        // Shipping logic: Free over threshold (default ₹999)
-        $shippingFee = $subtotal >= $shippingThreshold ? 0.0 : $defaultShipping;
+        // Shipping logic: Use distance-based override when supplied, else fallback to threshold rule
+        $shippingFee = $shippingFeeOverride !== null
+            ? max(0.0, round($shippingFeeOverride, 2))
+            : ($subtotal >= $shippingThreshold ? 0.0 : $defaultShipping);
 
         // Gateway fee handling: configurable by admin (absorbed vs customer_charged)
         $gatewayFeeMode = Setting::get('gateway_fee_mode', 'absorbed');

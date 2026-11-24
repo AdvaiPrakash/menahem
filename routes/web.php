@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\NotificationController as AdminNotificationContro
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentSettingController as AdminPaymentSettingController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ShippingSettingController as AdminShippingSettingController;
 use App\Http\Controllers\Admin\StockController as AdminStockController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\CustomerAuthController;
@@ -64,6 +65,7 @@ Route::get('/wishlist/status', [WishlistController::class, 'status'])->name('wis
 */
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::get('/checkout/pincode-lookup', [CheckoutController::class, 'lookupPincode'])->middleware('throttle:60,1')->name('checkout.pincode-lookup');
 Route::post('/checkout/validate-coupon', [CheckoutController::class, 'validateCoupon'])->name('checkout.validate-coupon');
 Route::post('/checkout/calculate', [CheckoutController::class, 'calculateTotals'])->name('checkout.calculate');
 Route::post('/checkout/create-order', [CheckoutController::class, 'createOrder'])->name('checkout.create-order');
@@ -163,8 +165,10 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(func
     Route::patch('/inquiries/{inquiry}/status', [AdminInquiryController::class, 'updateStatus'])->name('inquiries.status');
     Route::delete('/inquiries/{inquiry}', [AdminInquiryController::class, 'destroy'])->name('inquiries.destroy');
 
-    // User & Team Management (Restricted to Administrator role only)
+    // User & Team Management & Shipping Settings (Restricted to Administrator role only)
     Route::middleware('admin:admin')->group(function () {
+        Route::get('/settings/shipping', [AdminShippingSettingController::class, 'index'])->name('settings.shipping');
+        Route::post('/settings/shipping', [AdminShippingSettingController::class, 'update'])->name('settings.shipping.update');
         Route::resource('users', AdminUserController::class)->except(['show']);
     });
 });

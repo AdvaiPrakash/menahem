@@ -10,7 +10,9 @@ use App\Models\Setting;
 use App\Services\CouponService;
 use App\Services\CustomerLeadService;
 use App\Services\InvoiceService;
+use App\Services\PincodeService;
 use App\Services\RazorpayService;
+use App\Services\ShippingCalculationService;
 use App\Services\StockService;
 use App\Services\TaxCalculationService;
 use Carbon\Carbon;
@@ -29,7 +31,9 @@ class CheckoutController extends Controller
         protected RazorpayService $razorpayService,
         protected StockService $stockService,
         protected InvoiceService $invoiceService,
-        protected CustomerLeadService $leadService
+        protected CustomerLeadService $leadService,
+        protected PincodeService $pincodeService,
+        protected ShippingCalculationService $shippingService
     ) {}
 
     /**
@@ -41,13 +45,26 @@ class CheckoutController extends Controller
         $user = Auth::user();
         $states = TaxCalculationService::STATES;
         $razorpayKeyId = $this->razorpayService->getKeyId();
+        $shippingSettings = $this->shippingService->getSettings();
 
         return view('checkout.index', [
             'content' => $content,
             'user' => $user,
             'states' => $states,
             'razorpayKeyId' => $razorpayKeyId,
+            'shippingSettings' => $shippingSettings,
         ]);
+    }
+
+    /**
+     * Look up Indian PIN code details (city, district, post office, state).
+     */
+    public function lookupPincode(Request $request): JsonResponse
+    {
+        $pincode = (string) $request->query('pincode', '');
+        $result = $this->pincodeService->lookup($pincode);
+
+        return response()->json($result, $result['valid'] ? 200 : 422);
     }
 
     /**
@@ -66,13 +83,14 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Calculate financial totals via AJAX.
+     * Calculate financial totals via AJAX (including server-side distance shipping).
      */
     public function calculateTotals(Request $request): JsonResponse
     {
         $items = $request->input('items', []);
         $couponCode = $request->input('coupon_code');
-        $customerState = $request->input('state', 'Maharashtra');
+        $customerState = (string) ($request->input('shipping_state') ?: $request->input('state', 'Maharashtra'));
+        $shippingPin = trim((string) $request->input('shipping_pin_code', ''));
 
         $subtotal = 0.0;
         $itemsWithGst = [];
@@ -111,9 +129,43 @@ class CheckoutController extends Controller
             }
         }
 
-        $calc = $this->taxService->calculate($itemsWithGst, $discount, $customerState);
+        $shippingCalculated = false;
+        $shippingError = null;
+        $shippingMessage = 'Enter a 6-digit delivery PIN code to calculate shipping.';
+        $shippingResult = null;
+        $shippingOverride = 0.0;
+
+        if ($shippingPin !== '') {
+            $shippingResult = $this->shippingService->calculateForAddress([
+                'pincode' => $shippingPin,
+                'address_line1' => $request->input('shipping_address_line1'),
+                'address_line2' => $request->input('shipping_address_line2'),
+                'city' => $request->input('shipping_city'),
+                'state' => $customerState,
+            ]);
+
+            if ($shippingResult['determined']) {
+                $shippingCalculated = true;
+                $shippingOverride = (float) $shippingResult['shipping_fee'];
+                $shippingMessage = (string) $shippingResult['message'];
+            } else {
+                $shippingError = (string) $shippingResult['message'];
+                $shippingMessage = $shippingError;
+            }
+        }
+
+        $calc = $this->taxService->calculate($itemsWithGst, $discount, $customerState, 999.0, 99.0, $shippingOverride);
 
         return response()->json(array_merge($calc, [
+            'shipping_fee' => $shippingCalculated ? $calc['shipping_fee'] : null,
+            'shipping_calculated' => $shippingCalculated,
+            'shipping_error' => $shippingError,
+            'shipping_message' => $shippingMessage,
+            'distance_km' => $shippingResult['distance_km'] ?? null,
+            'free_distance_km' => $shippingResult['free_distance_km'] ?? null,
+            'charge_per_km' => $shippingResult['charge_per_km'] ?? null,
+            'billable_distance_km' => $shippingResult['billable_distance_km'] ?? null,
+            'distance_source' => $shippingResult['distance_source'] ?? null,
             'coupon_valid' => $couponValid,
             'coupon_message' => $couponMessage,
         ]));
@@ -142,7 +194,7 @@ class CheckoutController extends Controller
             'shipping_address_line2' => ['nullable', 'string', 'max:255'],
             'shipping_city' => ['required', 'string', 'max:100'],
             'shipping_state' => ['required', 'string', 'max:100'],
-            'shipping_pin_code' => ['required', 'string', 'max:20'],
+            'shipping_pin_code' => ['required', 'string', 'regex:/^[1-9]\d{5}$/'],
 
             'billing_same_as_shipping' => ['boolean'],
             'billing_address_line1' => ['nullable', 'string', 'max:255'],
@@ -151,8 +203,9 @@ class CheckoutController extends Controller
             'billing_state' => ['nullable', 'string', 'max:100'],
             'billing_pin_code' => ['nullable', 'string', 'max:20'],
 
-            'customer_gstin' => ['nullable', 'string', 'max:20'],
             'coupon_code' => ['nullable', 'string'],
+        ], [
+            'shipping_pin_code.regex' => 'Please enter a valid 6-digit Indian delivery PIN code.',
         ]);
 
         // 1. Stock check
@@ -198,11 +251,34 @@ class CheckoutController extends Controller
             }
         }
 
-        // 4. Tax and Totals Calculation
-        $customerState = $validated['shipping_state'];
-        $calc = $this->taxService->calculate($itemsWithGst, $discount, $customerState);
+        // 4. Server-side Distance & Shipping Calculation (Never trust frontend shipping charges)
+        $shippingResult = $this->shippingService->calculateForAddress([
+            'pincode' => $validated['shipping_pin_code'],
+            'address_line1' => $validated['shipping_address_line1'],
+            'address_line2' => $validated['shipping_address_line2'] ?? null,
+            'city' => $validated['shipping_city'],
+            'state' => $validated['shipping_state'],
+        ]);
 
-        // 5. Build shipping and billing address payloads
+        if (! $shippingResult['determined']) {
+            return response()->json([
+                'success' => false,
+                'message' => $shippingResult['message'] ?? 'Unable to verify delivery PIN code or calculate shipping distance.',
+            ], 422);
+        }
+
+        // 5. Tax and Totals Calculation
+        $customerState = $this->pincodeService->normalizeStateName($validated['shipping_state']);
+        $calc = $this->taxService->calculate(
+            $itemsWithGst,
+            $discount,
+            $customerState,
+            999.0,
+            99.0,
+            (float) $shippingResult['shipping_fee']
+        );
+
+        // 6. Build shipping and billing address payloads
         $shippingAddress = [
             'full_name' => $validated['customer_name'],
             'phone' => $validated['customer_phone'],
@@ -210,8 +286,10 @@ class CheckoutController extends Controller
             'address_line1' => $validated['shipping_address_line1'],
             'address_line2' => $validated['shipping_address_line2'] ?? null,
             'city' => $validated['shipping_city'],
-            'state' => $validated['shipping_state'],
+            'state' => $customerState,
             'pin_code' => $validated['shipping_pin_code'],
+            'distance_km' => $shippingResult['distance_km'],
+            'distance_source' => $shippingResult['distance_source'],
         ];
 
         $billingSame = $request->boolean('billing_same_as_shipping', true);
@@ -255,7 +333,7 @@ class CheckoutController extends Controller
                 'customer_phone' => $validated['customer_phone'],
                 'shipping_address' => $shippingAddress,
                 'billing_address' => $billingAddress,
-                'customer_gstin' => $validated['customer_gstin'] ?? null,
+                'customer_gstin' => null,
                 'subtotal' => $calc['subtotal'],
                 'coupon_id' => $coupon?->id,
                 'coupon_code' => $coupon?->code,
