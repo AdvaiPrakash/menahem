@@ -51,7 +51,7 @@ return [
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'u441536679_menahemDb'),
             'username' => env('DB_USERNAME', 'u441536679_menahemUsr'),
-            'password' => env('DB_PASSWORD', ''),
+            'password' => env('DB_PASSWORD', "v)Af-s8z%jt)E{'UtxP6VxSSK=u)"),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),

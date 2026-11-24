@@ -39,23 +39,31 @@ class AuthController extends Controller
         $password = $validated['password'];
         $remember = $request->boolean('remember');
 
-        // Look up by email, by name, or if 'admin', map to primary admin account
-        $user = User::where(function ($query) use ($login) {
-            $query->where('email', $login)
-                ->orWhere('name', $login);
+        try {
+            // Look up by email, by name, or if 'admin', map to primary admin account
+            $user = User::where(function ($query) use ($login) {
+                $query->where('email', $login)
+                    ->orWhere('name', $login);
 
-            if (strtolower($login) === 'admin') {
-                $query->orWhere('role', UserRole::Admin);
+                if (strtolower($login) === 'admin') {
+                    $query->orWhere('role', UserRole::Admin);
+                }
+            })->whereIn('role', [UserRole::Admin, UserRole::Editor, UserRole::Viewer])->first();
+
+            if ($user && Hash::check($password, $user->password)) {
+                Auth::login($user, $remember);
+                $request->session()->regenerate();
+                $user->update(['last_login_at' => now()]);
+
+                return redirect()->intended(route('admin.dashboard'))
+                    ->with('success', 'Welcome back, '.$user->name.'!');
             }
-        })->whereIn('role', [UserRole::Admin, UserRole::Editor, UserRole::Viewer])->first();
+        } catch (\Throwable $e) {
+            \Log::error('Admin login database connection error: '.$e->getMessage());
 
-        if ($user && Hash::check($password, $user->password)) {
-            Auth::login($user, $remember);
-            $request->session()->regenerate();
-            $user->update(['last_login_at' => now()]);
-
-            return redirect()->intended(route('admin.dashboard'))
-                ->with('success', 'Welcome back, '.$user->name.'!');
+            return back()->withErrors([
+                'email' => 'Database connection error: '.$e->getMessage(),
+            ])->onlyInput('email');
         }
 
         return back()->withErrors([

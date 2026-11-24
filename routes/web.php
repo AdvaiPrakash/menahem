@@ -23,6 +23,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RazorpayWebhookController;
 use App\Http\Controllers\WishlistController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -165,3 +166,21 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(func
         Route::resource('users', AdminUserController::class)->except(['show']);
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| System Maintenance & Cache Utilities
+|--------------------------------------------------------------------------
+*/
+Route::get('/system/clear-cache', function () {
+    Artisan::call('optimize:clear');
+    $output = Artisan::output();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Cache, config, route, and view caches successfully cleared.',
+        'database_connection' => config('database.default'),
+        'database_name' => config('database.connections.'.config('database.default').'.database'),
+        'output' => $output,
+    ]);
+})->name('system.clear-cache');
