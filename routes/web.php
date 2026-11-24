@@ -159,9 +159,10 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(func
     Route::get('/leads/export', [AdminCustomerLeadController::class, 'export'])->name('leads.export');
     Route::get('/leads/{lead}', [AdminCustomerLeadController::class, 'show'])->name('leads.show');
 
-    // Customer Inquiries / Custom Requests
+    // Customer Inquiries / Custom Requests & Email Replies
     Route::get('/inquiries', [AdminInquiryController::class, 'index'])->name('inquiries.index');
     Route::get('/inquiries/{inquiry}', [AdminInquiryController::class, 'show'])->name('inquiries.show');
+    Route::post('/inquiries/{inquiry}/reply', [AdminInquiryController::class, 'reply'])->name('inquiries.reply');
     Route::patch('/inquiries/{inquiry}/status', [AdminInquiryController::class, 'updateStatus'])->name('inquiries.status');
     Route::delete('/inquiries/{inquiry}', [AdminInquiryController::class, 'destroy'])->name('inquiries.destroy');
 

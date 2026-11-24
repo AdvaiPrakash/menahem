@@ -125,7 +125,7 @@ class AdminNotificationService
     public function getBadgeCounts(): array
     {
         return [
-            'new_inquiries' => Inquiry::where('status', 'new')->count(),
+            'new_inquiries' => Inquiry::whereIn('status', ['new', 'pending'])->count(),
             'pending_orders' => Order::whereIn('order_status', ['processing', 'confirmed'])->count(),
         ];
     }
