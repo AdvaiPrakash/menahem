@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\UserRole;
 use App\Mail\InquiryReplyMail;
+use App\Mail\NewInquiryNotificationMail;
 use App\Models\Inquiry;
 use App\Models\InquiryReply;
 use App\Models\User;
@@ -258,6 +259,8 @@ class AdminInquiryReplyTest extends TestCase
 
     public function test_public_enquiry_submission_continues_to_work_with_optional_subject(): void
     {
+        Mail::fake();
+
         $res = $this->post(route('inquiries.store'), [
             'name' => 'Meera Kapoor',
             'email' => 'meera@example.com',
@@ -272,6 +275,41 @@ class AdminInquiryReplyTest extends TestCase
             'name' => 'Meera Kapoor',
             'email' => 'meera@example.com',
             'subject' => 'Bedroom Sheer Drapes Quote',
+            'status' => 'new',
+        ]);
+
+        Mail::assertSent(NewInquiryNotificationMail::class, function (NewInquiryNotificationMail $mail): bool {
+            return $mail->hasTo('info@menahem.co.in')
+                && $mail->hasFrom('info@menahem.co.in')
+                && $mail->hasReplyTo('meera@example.com')
+                && $mail->inquiry->name === 'Meera Kapoor'
+                && $mail->inquiry->message === 'Need pricing for 4 windows.';
+        });
+    }
+
+    public function test_public_enquiry_still_saves_to_database_if_notification_email_fails(): void
+    {
+        Mail::shouldReceive('to')
+            ->once()
+            ->andReturnSelf();
+        Mail::shouldReceive('send')
+            ->once()
+            ->andThrow(new \RuntimeException('Temporary SMTP outage'));
+
+        $res = $this->postJson(route('inquiries.store'), [
+            'name' => 'Rohan Verma',
+            'email' => 'rohan@example.com',
+            'phone' => '+919800011122',
+            'type' => 'Bedsheets & Dohars',
+            'message' => 'Bulk hotel order inquiry.',
+        ]);
+
+        $res->assertOk()
+            ->assertJsonPath('success', true);
+
+        $this->assertDatabaseHas('inquiries', [
+            'name' => 'Rohan Verma',
+            'email' => 'rohan@example.com',
             'status' => 'new',
         ]);
     }
