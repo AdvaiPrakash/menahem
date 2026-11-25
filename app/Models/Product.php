@@ -113,6 +113,10 @@ class Product extends Model
     public function effectivePrice(): float
     {
         $base = (float) $this->numeric_price;
+        if (! ClearanceItem::tableExists()) {
+            return $base;
+        }
+
         $clearance = $this->clearanceItem;
 
         if ($clearance && $clearance->is_active) {
@@ -137,6 +141,10 @@ class Product extends Model
      */
     public function effectiveOriginalPrice(): ?string
     {
+        if (! ClearanceItem::tableExists()) {
+            return $this->original_price;
+        }
+
         $clearance = $this->clearanceItem;
         if ($clearance && $clearance->is_active && $this->effectivePrice() < (float) $this->numeric_price) {
             return '₹'.number_format((float) $this->numeric_price);

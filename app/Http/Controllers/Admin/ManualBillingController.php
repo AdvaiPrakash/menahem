@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClearanceItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -36,9 +37,12 @@ class ManualBillingController extends Controller
     {
         abort_unless(auth()->user()?->canEditContent(), 403);
 
-        $products = Product::with('clearanceItem')
-            ->where('in_stock', true)
-            ->orderBy('name')
+        $productsQuery = Product::query()->where('in_stock', true)->orderBy('name');
+        if (ClearanceItem::tableExists()) {
+            $productsQuery->with('clearanceItem');
+        }
+
+        $products = $productsQuery
             ->get(['id', 'name', 'sku', 'hsn_code', 'price', 'numeric_price', 'gst_rate', 'stock_quantity', 'image'])
             ->map(static fn (Product $p): array => [
                 'id' => $p->id,
@@ -90,7 +94,11 @@ class ManualBillingController extends Controller
         ]);
 
         $productIds = collect($validated['items'])->pluck('product_id')->unique()->values();
-        $products = Product::with('clearanceItem')->whereIn('id', $productIds)->get()->keyBy('id');
+        $productsQuery = Product::whereIn('id', $productIds);
+        if (ClearanceItem::tableExists()) {
+            $productsQuery->with('clearanceItem');
+        }
+        $products = $productsQuery->get()->keyBy('id');
 
         $stockItems = [];
         $itemsWithGst = [];

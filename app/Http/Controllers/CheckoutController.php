@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClearanceItem;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -97,7 +98,9 @@ class CheckoutController extends Controller
 
         foreach ($items as $item) {
             $qty = max(1, (int) ($item['quantity'] ?? 1));
-            $product = ! empty($item['id']) ? Product::with('clearanceItem')->find($item['id']) : null;
+            $product = ! empty($item['id'])
+                ? (ClearanceItem::tableExists() ? Product::with('clearanceItem')->find($item['id']) : Product::find($item['id']))
+                : null;
             $price = $product ? $product->effectivePrice() : max(0.0, (float) ($item['price'] ?? 0));
             $subtotal += ($price * $qty);
 
@@ -218,7 +221,9 @@ class CheckoutController extends Controller
         $subtotal = 0.0;
         foreach ($validated['items'] as $item) {
             $qty = (int) $item['quantity'];
-            $product = Product::with('clearanceItem')->find($item['id']);
+            $product = ClearanceItem::tableExists()
+                ? Product::with('clearanceItem')->find($item['id'])
+                : Product::find($item['id']);
             $price = $product ? $product->effectivePrice() : max(0.0, (float) $item['price']);
             $subtotal += ($price * $qty);
 

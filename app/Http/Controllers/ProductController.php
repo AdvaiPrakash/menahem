@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClearanceItem;
 use App\Models\Product;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
@@ -20,7 +21,11 @@ class ProductController extends Controller
 
         // Augment with database products if available
         try {
-            $dbProducts = Product::with('clearanceItem')->where('in_stock', true)->orderBy('sort_order', 'asc')->get();
+            $dbProductsQuery = Product::query()->where('in_stock', true)->orderBy('sort_order', 'asc');
+            if (ClearanceItem::tableExists()) {
+                $dbProductsQuery->with('clearanceItem');
+            }
+            $dbProducts = $dbProductsQuery->get();
             if ($dbProducts->isNotEmpty()) {
                 $catalog['products'] = $dbProducts
                     ->filter(static function (Product $p): bool {
@@ -107,7 +112,11 @@ class ProductController extends Controller
         // Try resolving from database first
         $product = null;
         try {
-            $dbProduct = Product::with('clearanceItem')->find($id);
+            $dbProductQuery = Product::query();
+            if (ClearanceItem::tableExists()) {
+                $dbProductQuery->with('clearanceItem');
+            }
+            $dbProduct = $dbProductQuery->find($id);
             if ($dbProduct) {
                 $product = [
                     'id' => $dbProduct->id,

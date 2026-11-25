@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class AdminManualBillingTest extends TestCase
@@ -48,6 +49,13 @@ class AdminManualBillingTest extends TestCase
             ->get(route('admin.billing.create'))
             ->assertOk()
             ->assertSee('Manual Billing')
+            ->assertSee('Handloom Cotton Curtain');
+
+        Schema::dropIfExists('clearance_items');
+
+        $this->actingAs($admin)
+            ->get(route('admin.billing.create'))
+            ->assertOk()
             ->assertSee('Handloom Cotton Curtain');
     }
 

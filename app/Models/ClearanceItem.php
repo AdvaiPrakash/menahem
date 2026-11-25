@@ -4,9 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Schema;
 
 class ClearanceItem extends Model
 {
+    /**
+     * Check whether the clearance_items table has been migrated.
+     */
+    public static function tableExists(): bool
+    {
+        try {
+            return Schema::hasTable('clearance_items');
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
     protected $fillable = [
         'product_id',
         'discount_type',

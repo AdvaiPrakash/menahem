@@ -20,10 +20,14 @@ class LandingPageController extends Controller
 
         // Dynamically pull latest products & clearance items from database
         try {
-            $dbProducts = Product::with('clearanceItem')
+            $hasClearanceTable = ClearanceItem::tableExists();
+            $dbProductsQuery = Product::query()
                 ->where('in_stock', true)
-                ->orderBy('sort_order', 'asc')
-                ->get();
+                ->orderBy('sort_order', 'asc');
+            if ($hasClearanceTable) {
+                $dbProductsQuery->with('clearanceItem');
+            }
+            $dbProducts = $dbProductsQuery->get();
 
             if ($dbProducts->isNotEmpty()) {
                 $content['CATALOG']['products'] = $dbProducts
