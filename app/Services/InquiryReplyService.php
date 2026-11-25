@@ -72,7 +72,7 @@ class InquiryReplyService
     public function sendAdminNotification(Inquiry $inquiry): array
     {
         $adminEmail = (string) config('mail.enquiry_from.address', 'info@menahem.co.in');
-        $businessName = trim((string) Setting::get('seller_name', config('mail.enquiry_from.name', 'Menahem Home & Living')));
+        $businessName = $this->resolveBusinessName();
 
         try {
             $mailable = new NewInquiryNotificationMail(
@@ -178,7 +178,7 @@ class InquiryReplyService
         }
 
         $senderEmail = (string) config('mail.enquiry_from.address', 'info@menahem.co.in');
-        $businessName = trim((string) Setting::get('seller_name', config('mail.enquiry_from.name', 'Menahem Home & Living')));
+        $businessName = $this->resolveBusinessName();
         $senderDisplayName = $sender?->name ?: $businessName;
         $subject = $this->formatReplySubject($inquiry, $customSubject);
 
@@ -237,9 +237,21 @@ class InquiryReplyService
             'error_message' => null,
         ]);
 
-        $businessName = trim((string) Setting::get('seller_name', config('mail.enquiry_from.name', 'Menahem Home & Living')));
+        $businessName = $this->resolveBusinessName();
 
         return $this->attemptReplyDelivery($inquiry, $reply, $businessName);
+    }
+
+    /**
+     * Resolve a non-empty business display name for email headers.
+     */
+    protected function resolveBusinessName(): string
+    {
+        $sellerName = trim((string) Setting::get('seller_name', ''));
+
+        return $sellerName !== ''
+            ? $sellerName
+            : (string) config('mail.enquiry_from.name', 'Menahem Home & Living');
     }
 
     /**
