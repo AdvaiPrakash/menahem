@@ -16,7 +16,7 @@
         <div class="text-right shrink-0">
             <span class="text-xs font-black text-neutral-900 block">₹{{ number_format($ord->grand_total, 2) }}</span>
             @if($ord->invoice)
-                <a href="{{ route('admin.invoices.download', $ord->invoice) }}" class="text-neutral-800 hover:underline font-bold text-[11px]">
+                <a href="{{ route('admin.orders.invoice', $ord) }}" class="text-neutral-800 hover:underline font-bold text-[11px]">
                     Download PDF
                 </a>
             @else

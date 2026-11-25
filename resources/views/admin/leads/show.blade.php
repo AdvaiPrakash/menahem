@@ -92,7 +92,7 @@
                         <div class="text-right">
                             <span class="text-base font-bold text-neutral-900">₹{{ number_format($order->grand_total, 2) }}</span>
                             @if($order->invoice)
-                                <a href="{{ route('admin.invoices.download', $order->invoice) }}" 
+                                <a href="{{ route('admin.orders.invoice', $order) }}" 
                                    class="block mt-1 text-xs font-semibold text-neutral-900 underline hover:text-black">
                                     Download Invoice PDF &rarr;
                                 </a>

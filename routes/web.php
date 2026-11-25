@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Admin\CustomerLeadController as AdminCustomerLeadController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
-use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
+use App\Http\Controllers\Admin\ManualBillingController as AdminManualBillingController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentSettingController as AdminPaymentSettingController;
@@ -135,22 +135,21 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(func
     Route::resource('categories', AdminCategoryController::class)->except(['show']);
     Route::patch('/categories/{category}/toggle-status', [AdminCategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
 
-    // Module 2: Order Management & Invoice Download
+    // Module 2: Order Management, Manual Billing & Invoice Download
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
     Route::get('/orders/{order}/invoice', [AdminOrderController::class, 'downloadInvoice'])->name('orders.invoice');
+    Route::get('/billing/create', [AdminManualBillingController::class, 'create'])->name('billing.create');
+    Route::post('/billing', [AdminManualBillingController::class, 'store'])->name('billing.store');
 
     // Module 1: Offer & Coupon Management
     Route::resource('coupons', AdminCouponController::class)->except(['show']);
     Route::patch('/coupons/{coupon}/toggle', [AdminCouponController::class, 'toggle'])->name('coupons.toggle');
 
-    // Module 2: Payment Settings & GST Invoice Management
+    // Module 2: Payment Settings
     Route::get('/settings/payment', [AdminPaymentSettingController::class, 'index'])->name('settings.payment');
     Route::post('/settings/payment', [AdminPaymentSettingController::class, 'update'])->name('settings.payment.update');
-    Route::get('/invoices', [AdminInvoiceController::class, 'index'])->name('invoices.index');
-    Route::get('/invoices/{invoice}', [AdminInvoiceController::class, 'show'])->name('invoices.show');
-    Route::get('/invoices/{invoice}/download', [AdminInvoiceController::class, 'download'])->name('invoices.download');
 
     // Module 3: Inventory & Stock Management
     Route::get('/stock', [AdminStockController::class, 'index'])->name('stock.index');

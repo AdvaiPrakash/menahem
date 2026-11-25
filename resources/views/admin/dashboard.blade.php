@@ -5,11 +5,18 @@
 
 @section('header_actions')
     @if(auth()->user()->canEditContent())
-    <a href="{{ route('admin.products.create') }}" 
-       class="inline-flex items-center gap-2 px-3.5 py-2 rounded-none bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider transition-all border border-neutral-900">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span>Add Product</span>
-    </a>
+    <div class="flex items-center gap-2">
+        <a href="{{ route('admin.billing.create') }}"
+           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-none bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold uppercase tracking-wider transition-all border border-emerald-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Manual Billing</span>
+        </a>
+        <a href="{{ route('admin.products.create') }}" 
+           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-none bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider transition-all border border-neutral-900">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>Add Product</span>
+        </a>
+    </div>
     @endif
 @endsection
 
@@ -72,8 +79,8 @@
             <h2 class="text-xs font-bold text-neutral-900 uppercase tracking-wider">Recent Customer Purchases</h2>
             <p class="text-[11px] text-neutral-500 mt-0.5">Live transactions and payment gateway statuses</p>
         </div>
-        <a href="{{ route('admin.invoices.index') }}" class="text-xs font-bold text-neutral-900 hover:underline">
-            View All Invoices &rarr;
+        <a href="{{ route('admin.orders.index') }}" class="text-xs font-bold text-neutral-900 hover:underline">
+            View All Orders &rarr;
         </a>
     </div>
 

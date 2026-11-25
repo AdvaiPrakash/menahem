@@ -108,9 +108,17 @@
                         <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
                         <span>Order Management</span>
                     </div>
-                    @php $pendingOrders = \App\Models\Order::whereIn('order_status', ['processing', 'confirmed'])->count(); @endphp
+                    @php $pendingOrders = \App\Models\Order::whereIn('order_status', ['placed', 'processing', 'confirmed'])->count(); @endphp
                     <span id="admin-sidebar-orders-badge" class="px-1.5 py-0.2 text-[10px] font-bold bg-neutral-900 text-white {{ $pendingOrders > 0 ? '' : 'hidden' }}">{{ $pendingOrders }}</span>
                 </a>
+
+                @if(auth()->user()->canEditContent())
+                <a href="{{ route('admin.billing.create') }}"
+                   class="flex items-center gap-3 px-3 py-2 text-xs transition-colors border-l-2 {{ request()->routeIs('admin.billing.*') ? 'bg-neutral-100 text-neutral-900 font-bold border-neutral-900' : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 border-transparent font-medium' }}">
+                    <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>Manual Billing</span>
+                </a>
+                @endif
 
                 <a href="{{ route('admin.products.index') }}" 
                    class="flex items-center gap-3 px-3 py-2 text-xs transition-colors border-l-2 {{ request()->routeIs('admin.products.*') ? 'bg-neutral-100 text-neutral-900 font-bold border-neutral-900' : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 border-transparent font-medium' }}">
@@ -145,12 +153,6 @@
                    class="flex items-center gap-3 px-3 py-2 text-xs transition-colors border-l-2 {{ request()->routeIs('admin.coupons.*') ? 'bg-neutral-100 text-neutral-900 font-bold border-neutral-900' : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 border-transparent font-medium' }}">
                     <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
                     <span>Offer & Coupons</span>
-                </a>
-
-                <a href="{{ route('admin.invoices.index') }}" 
-                   class="flex items-center gap-3 px-3 py-2 text-xs transition-colors border-l-2 {{ request()->routeIs('admin.invoices.*') ? 'bg-neutral-100 text-neutral-900 font-bold border-neutral-900' : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 border-transparent font-medium' }}">
-                    <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>Invoice Management</span>
                 </a>
 
                 <a href="{{ route('admin.leads.index') }}" 
