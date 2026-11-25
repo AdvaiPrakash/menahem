@@ -28,6 +28,29 @@ class AdminManualBillingTest extends TestCase
         $response->assertDontSee('View All Invoices');
     }
 
+    public function test_admin_can_open_manual_billing_create_page(): void
+    {
+        $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+        Product::create([
+            'name' => 'Handloom Cotton Curtain',
+            'slug' => 'handloom-cotton-curtain-view',
+            'category' => 'Curtains',
+            'category_slug' => 'curtains',
+            'price' => '₹1,500',
+            'numeric_price' => 1500,
+            'gst_rate' => 12.00,
+            'stock_quantity' => 10,
+            'in_stock' => true,
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.billing.create'))
+            ->assertOk()
+            ->assertSee('Manual Billing')
+            ->assertSee('Handloom Cotton Curtain');
+    }
+
     public function test_viewer_cannot_access_manual_billing(): void
     {
         $viewer = User::factory()->create(['role' => UserRole::Viewer]);
@@ -54,7 +77,6 @@ class AdminManualBillingTest extends TestCase
             'gst_rate' => 12.00,
             'stock_quantity' => 10,
             'in_stock' => true,
-            'is_active' => true,
         ]);
 
         $response = $this->actingAs($admin)->post(route('admin.billing.store'), [
@@ -107,7 +129,6 @@ class AdminManualBillingTest extends TestCase
             'gst_rate' => 12.00,
             'stock_quantity' => 1,
             'in_stock' => true,
-            'is_active' => true,
         ]);
 
         $response = $this->actingAs($admin)->post(route('admin.billing.store'), [

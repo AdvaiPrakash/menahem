@@ -36,10 +36,21 @@ class ManualBillingController extends Controller
     {
         abort_unless(auth()->user()?->canEditContent(), 403);
 
-        $products = Product::query()
-            ->where('is_active', true)
+        $products = Product::with('clearanceItem')
+            ->where('in_stock', true)
             ->orderBy('name')
-            ->get(['id', 'name', 'sku', 'hsn_code', 'price', 'gst_rate', 'stock_quantity', 'image']);
+            ->get(['id', 'name', 'sku', 'hsn_code', 'price', 'numeric_price', 'gst_rate', 'stock_quantity', 'image'])
+            ->map(static fn (Product $p): array => [
+                'id' => $p->id,
+                'name' => $p->name,
+                'sku' => $p->sku,
+                'hsn_code' => $p->hsn_code,
+                'price' => $p->effectivePrice(),
+                'gst_rate' => (float) ($p->gst_rate ?? 12.0),
+                'stock_quantity' => (int) $p->stock_quantity,
+                'image' => $p->image,
+            ])
+            ->values();
 
         $sellerState = (string) Setting::get('seller_state', 'Maharashtra');
 
@@ -79,7 +90,7 @@ class ManualBillingController extends Controller
         ]);
 
         $productIds = collect($validated['items'])->pluck('product_id')->unique()->values();
-        $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+        $products = Product::with('clearanceItem')->whereIn('id', $productIds)->get()->keyBy('id');
 
         $stockItems = [];
         $itemsWithGst = [];
@@ -93,7 +104,7 @@ class ManualBillingController extends Controller
             $qty = (int) $row['quantity'];
             $unitPrice = isset($row['unit_price']) && $row['unit_price'] !== ''
                 ? (float) $row['unit_price']
-                : (float) $product->price;
+                : $product->effectivePrice();
 
             $stockItems[] = [
                 'id' => $product->id,
