@@ -8,15 +8,38 @@ use App\Models\Inquiry;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class AdminNotificationService
 {
+    protected ?bool $tablesAvailable = null;
+
+    /**
+     * Check whether the persistent notification tables have been migrated.
+     */
+    public function hasNotificationTables(): bool
+    {
+        if ($this->tablesAvailable !== null) {
+            return $this->tablesAvailable;
+        }
+
+        try {
+            return $this->tablesAvailable = Schema::hasTable('admin_notifications')
+                && Schema::hasTable('admin_notification_reads');
+        } catch (\Throwable) {
+            return $this->tablesAvailable = false;
+        }
+    }
+
     /**
      * Record a persistent notification when a customer submits an enquiry.
      */
-    public function recordInquiryCreated(Inquiry $inquiry): AdminNotification
+    public function recordInquiryCreated(Inquiry $inquiry): ?AdminNotification
     {
+        if (! $this->hasNotificationTables()) {
+            return null;
+        }
         $occurredAt = $inquiry->created_at ?? Carbon::now();
         $subject = $inquiry->resolvedSubject();
         $typeLabel = str_replace('_', ' ', (string) ($inquiry->type ?: 'general'));
@@ -50,8 +73,11 @@ class AdminNotificationService
     /**
      * Record a persistent notification when a customer creates a new order.
      */
-    public function recordOrderCreated(Order $order): AdminNotification
+    public function recordOrderCreated(Order $order): ?AdminNotification
     {
+        if (! $this->hasNotificationTables()) {
+            return null;
+        }
         $occurredAt = $order->created_at ?? Carbon::now();
         $formattedAmount = '₹'.number_format((float) $order->grand_total, 2);
         $orderStatusLabel = ucfirst((string) ($order->order_status ?: 'placed'));
@@ -86,8 +112,11 @@ class AdminNotificationService
     /**
      * Record a persistent notification when an order payment is confirmed.
      */
-    public function recordOrderPaid(Order $order): AdminNotification
+    public function recordOrderPaid(Order $order): ?AdminNotification
     {
+        if (! $this->hasNotificationTables()) {
+            return null;
+        }
         $occurredAt = $order->paid_at ?? Carbon::now();
         $formattedAmount = '₹'.number_format((float) $order->grand_total, 2);
         $orderStatusLabel = ucfirst((string) ($order->order_status ?: 'confirmed'));
@@ -125,6 +154,22 @@ class AdminNotificationService
      */
     public function getInitialState(?int $userId = null): array
     {
+        if (! $this->hasNotificationTables()) {
+            return [
+                'cursor' => [
+                    'after_id' => 0,
+                ],
+                'unread_count' => 0,
+                'recent_notifications' => [],
+                'counts' => $this->getBadgeCounts(),
+                'sync_tokens' => $this->getSyncTokens(),
+                'audio' => [
+                    'inquiry' => asset('audio/enquiry-notification.mp3'),
+                    'order' => asset('audio/order-notification.mp3'),
+                ],
+            ];
+        }
+
         $latestId = (int) (AdminNotification::max('id') ?? 0);
         $recent = $this->getRecentNotifications($userId, 15);
 
@@ -150,6 +195,18 @@ class AdminNotificationService
      */
     public function poll(int $afterId = 0, ?int $userId = null): array
     {
+        if (! $this->hasNotificationTables()) {
+            return [
+                'notifications' => [],
+                'cursor' => [
+                    'after_id' => $afterId,
+                ],
+                'unread_count' => 0,
+                'counts' => $this->getBadgeCounts(),
+                'sync_tokens' => $this->getSyncTokens(),
+            ];
+        }
+
         $newItems = AdminNotification::query()
             ->where('id', '>', $afterId)
             ->orderBy('id')
@@ -191,6 +248,10 @@ class AdminNotificationService
      */
     public function markAsRead(AdminNotification $notification, int $userId): int
     {
+        if (! $this->hasNotificationTables()) {
+            return 0;
+        }
+
         AdminNotificationRead::firstOrCreate(
             [
                 'admin_notification_id' => $notification->id,
@@ -209,6 +270,10 @@ class AdminNotificationService
      */
     public function markAllAsRead(int $userId): int
     {
+        if (! $this->hasNotificationTables()) {
+            return 0;
+        }
+
         $unreadIds = AdminNotification::query()
             ->whereDoesntHave('reads', function ($query) use ($userId): void {
                 $query->where('user_id', $userId);
@@ -238,6 +303,10 @@ class AdminNotificationService
      */
     public function getRecentNotifications(?int $userId = null, int $limit = 15): array
     {
+        if (! $this->hasNotificationTables()) {
+            return [];
+        }
+
         $items = AdminNotification::query()
             ->orderByDesc('id')
             ->limit($limit)
@@ -258,6 +327,10 @@ class AdminNotificationService
      */
     public function getUnreadCount(?int $userId = null): int
     {
+        if (! $this->hasNotificationTables()) {
+            return 0;
+        }
+
         if (! $userId) {
             return AdminNotification::count();
         }

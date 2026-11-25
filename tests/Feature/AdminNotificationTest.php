@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class AdminNotificationTest extends TestCase
@@ -302,5 +303,23 @@ class AdminNotificationTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertStringContainsString('text/event-stream', (string) $response->headers->get('Content-Type'));
+    }
+
+    public function test_notification_service_degrades_gracefully_before_migration(): void
+    {
+        $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+        Schema::dropIfExists('admin_notification_reads');
+        Schema::dropIfExists('admin_notifications');
+
+        $this->actingAs($admin)
+            ->get(route('admin.dashboard'))
+            ->assertStatus(200);
+
+        $this->actingAs($admin)
+            ->getJson(route('admin.notifications.poll', ['after_id' => 0]))
+            ->assertOk()
+            ->assertJsonCount(0, 'notifications')
+            ->assertJsonPath('unread_count', 0);
     }
 }
