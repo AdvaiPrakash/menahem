@@ -1,6 +1,6 @@
 @inject('adminNotificationService', 'App\Services\AdminNotificationService')
 @php
-    $initialNotificationState = $adminNotificationService->getInitialState();
+    $initialNotificationState = $adminNotificationService->getInitialState(auth()->id());
 @endphp
 
 <!-- Live Notification Toast Stack -->
@@ -22,13 +22,15 @@
 
         const initialState = @json($initialNotificationState);
         const pollUrl = @json(route('admin.notifications.poll'));
+        const streamUrl = @json(route('admin.notifications.stream'));
+        const liveDataUrl = @json(route('admin.notifications.live-data'));
+        const markReadUrlTemplate = @json(route('admin.notifications.read', ['notification' => '__ID__']));
+        const markAllReadUrl = @json(route('admin.notifications.read-all'));
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
         const STORAGE_SOUND_KEY = 'menahem_admin_voice_enabled';
-        const STORAGE_READ_KEY = 'menahem_admin_read_notification_keys';
-        const SESSION_CURSOR_KEY = 'menahem_admin_poll_cursor';
-        const SESSION_SEEN_KEY = 'menahem_admin_seen_notification_keys';
-        const CURSOR_MAX_AGE_MS = 10 * 60 * 1000;
-        const POLL_INTERVAL_MS = 5000;
+        const SESSION_PLAYED_AUDIO_KEY = 'menahem_admin_played_audio_ids';
+        const POLL_FALLBACK_INTERVAL_MS = 3500;
         const TOAST_TTL_MS = 12000;
 
         const inquiryAudio = document.getElementById('admin-audio-inquiry');
@@ -49,6 +51,8 @@
         const unlockBanner = document.getElementById('admin-notification-unlock-banner');
         const unlockBtn = document.getElementById('admin-notification-unlock-btn');
         const notificationList = document.getElementById('admin-notification-list');
+        const realtimeStatusDot = document.getElementById('admin-realtime-status-dot');
+        const realtimeStatusText = document.getElementById('admin-realtime-status-text');
 
         const ordersSidebarBadge = document.getElementById('admin-sidebar-orders-badge');
         const inquiriesSidebarBadge = document.getElementById('admin-sidebar-inquiries-badge');
@@ -58,22 +62,25 @@
         let audioBlocked = false;
         let isPlayingAudio = false;
         let isPolling = false;
-        let lastPollTimestamp = 0;
+        let isSyncingLiveData = false;
+        let lastBlockedAudio = null;
 
-        const audioQueue = [];
-        const pendingBlockedAudio = [];
+        let eventSource = null;
+        let fallbackPollTimer = null;
+        let sseReconnectTimer = null;
+        let sseRetryCount = 0;
 
-        const readKeys = new Set(readJsonArray(localStorage, STORAGE_READ_KEY));
-        const seenKeys = new Set([
-            ...(Array.isArray(initialState.seen_keys) ? initialState.seen_keys : []),
-            ...readJsonArray(sessionStorage, SESSION_SEEN_KEY),
-        ]);
+        let cursorAfterId = Number(initialState.cursor?.after_id || 0);
+        let unreadCount = Number(initialState.unread_count || 0);
+        let currentSyncTokens = initialState.sync_tokens || {};
 
         let recentNotifications = Array.isArray(initialState.recent_notifications)
             ? initialState.recent_notifications.slice(0, 15)
             : [];
 
-        let cursor = loadCursor();
+        const seenIds = new Set(recentNotifications.map((item) => Number(item.id)));
+        const playedAudioIds = new Set(readJsonArray(sessionStorage, SESSION_PLAYED_AUDIO_KEY).map(Number));
+        const audioQueue = [];
 
         function readJsonArray(storage, key) {
             try {
@@ -107,47 +114,20 @@
             } catch (e) {}
         }
 
-        function loadCursor() {
-            const fallback = {
-                after_inquiry_id: Number(initialState.cursor?.after_inquiry_id || 0),
-                since_order_at: initialState.cursor?.since_order_at || new Date().toISOString(),
-                saved_at: Date.now(),
-            };
-
-            try {
-                const raw = sessionStorage.getItem(SESSION_CURSOR_KEY);
-                if (!raw) {
-                    return fallback;
-                }
-                const parsed = JSON.parse(raw);
-                if (!parsed || typeof parsed.saved_at !== 'number') {
-                    return fallback;
-                }
-                if (Date.now() - parsed.saved_at > CURSOR_MAX_AGE_MS) {
-                    return fallback;
-                }
-                return {
-                    after_inquiry_id: Math.min(
-                        Number(parsed.after_inquiry_id || 0),
-                        fallback.after_inquiry_id
-                    ),
-                    since_order_at: parsed.since_order_at || fallback.since_order_at,
-                    saved_at: Date.now(),
-                };
-            } catch (e) {
-                return fallback;
+        function setConnectionStatus(mode) {
+            if (!realtimeStatusDot || !realtimeStatusText) {
+                return;
             }
-        }
-
-        function saveCursor(nextCursor) {
-            cursor = {
-                after_inquiry_id: Number(nextCursor.after_inquiry_id ?? cursor.after_inquiry_id),
-                since_order_at: nextCursor.since_order_at || cursor.since_order_at,
-                saved_at: Date.now(),
-            };
-            try {
-                sessionStorage.setItem(SESSION_CURSOR_KEY, JSON.stringify(cursor));
-            } catch (e) {}
+            if (mode === 'sse') {
+                realtimeStatusDot.className = 'w-1.5 h-1.5 bg-emerald-600 inline-block';
+                realtimeStatusText.textContent = 'Enquiries & orders • Live';
+            } else if (mode === 'poll') {
+                realtimeStatusDot.className = 'w-1.5 h-1.5 bg-amber-500 inline-block';
+                realtimeStatusText.textContent = 'Enquiries & orders • Syncing';
+            } else {
+                realtimeStatusDot.className = 'w-1.5 h-1.5 bg-rose-600 inline-block';
+                realtimeStatusText.textContent = 'Connection lost • Reconnecting...';
+            }
         }
 
         function updateVoiceToggleUI() {
@@ -199,7 +179,7 @@
                             audioUnlocked = true;
                             audioBlocked = false;
                             updateVoiceToggleUI();
-                            flushPendingBlockedAudio();
+                            flushRecentBlockedAudio();
                         }).catch(() => {
                             audioEl.muted = prevMuted;
                         });
@@ -208,19 +188,28 @@
             });
         }
 
-        function flushPendingBlockedAudio() {
-            if (!soundEnabled || pendingBlockedAudio.length === 0) {
+        function flushRecentBlockedAudio() {
+            if (!soundEnabled || !lastBlockedAudio) {
                 return;
             }
-            while (pendingBlockedAudio.length > 0) {
-                audioQueue.push(pendingBlockedAudio.shift());
+            if (Date.now() - lastBlockedAudio.blockedAt <= 60000) {
+                audioQueue.push(lastBlockedAudio.type);
+                processAudioQueue();
             }
-            processAudioQueue();
+            lastBlockedAudio = null;
         }
 
-        function enqueueAudio(type) {
+        function enqueueAudio(notificationId, type) {
             if (!soundEnabled) {
                 return;
+            }
+            const numericId = Number(notificationId);
+            if (numericId && playedAudioIds.has(numericId)) {
+                return;
+            }
+            if (numericId) {
+                playedAudioIds.add(numericId);
+                writeJsonArray(sessionStorage, SESSION_PLAYED_AUDIO_KEY, playedAudioIds, 200);
             }
             audioQueue.push(type);
             processAudioQueue();
@@ -265,7 +254,7 @@
                         audioEl.removeEventListener('error', finish);
                         isPlayingAudio = false;
                         audioBlocked = true;
-                        pendingBlockedAudio.push(type);
+                        lastBlockedAudio = { type, blockedAt: Date.now() };
                         updateVoiceToggleUI();
                     });
                 }
@@ -295,30 +284,67 @@
             }
         }
 
-        function getUnreadCount() {
-            return recentNotifications.filter((item) => !readKeys.has(item.key)).length;
-        }
-
-        function markAsRead(key) {
-            if (!key) {
+        async function markNotificationRead(id) {
+            if (!id) {
                 return;
             }
-            readKeys.add(key);
-            writeJsonArray(localStorage, STORAGE_READ_KEY, readKeys, 200);
+            recentNotifications = recentNotifications.map((item) =>
+                Number(item.id) === Number(id) ? { ...item, is_read: true } : item
+            );
+            unreadCount = Math.max(0, unreadCount - 1);
             renderDropdown();
+
+            try {
+                const url = markReadUrlTemplate.replace('__ID__', String(id));
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                    keepalive: true,
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (typeof data.unread_count === 'number') {
+                        unreadCount = data.unread_count;
+                        renderDropdown();
+                    }
+                }
+            } catch (e) {}
         }
 
-        function markAllRead() {
-            recentNotifications.forEach((item) => readKeys.add(item.key));
-            writeJsonArray(localStorage, STORAGE_READ_KEY, readKeys, 200);
+        async function markAllRead() {
+            recentNotifications = recentNotifications.map((item) => ({ ...item, is_read: true }));
+            unreadCount = 0;
             renderDropdown();
+
+            try {
+                const response = await fetch(markAllReadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (typeof data.unread_count === 'number') {
+                        unreadCount = data.unread_count;
+                        renderDropdown();
+                    }
+                }
+            } catch (e) {}
         }
 
         function renderDropdown() {
-            const unread = getUnreadCount();
             if (unreadBadge) {
-                unreadBadge.textContent = unread > 99 ? '99+' : String(unread);
-                unreadBadge.classList.toggle('hidden', unread <= 0);
+                unreadBadge.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+                unreadBadge.classList.toggle('hidden', unreadCount <= 0);
             }
 
             if (!notificationList) {
@@ -336,11 +362,15 @@
             }
 
             recentNotifications.forEach((item) => {
-                const isRead = readKeys.has(item.key);
+                const isRead = Boolean(item.is_read);
                 const row = document.createElement('a');
                 row.href = isSafeUrl(item.url) ? item.url : '#';
-                row.className = 'block px-4 py-3 hover:bg-neutral-50 transition-colors ' + (isRead ? 'bg-white opacity-75' : 'bg-neutral-50/70');
-                row.addEventListener('click', () => markAsRead(item.key));
+                row.className = 'block px-4 py-3 hover:bg-neutral-50 transition-colors ' + (isRead ? 'bg-white opacity-75' : 'bg-neutral-50/80');
+                row.addEventListener('click', () => {
+                    if (!isRead) {
+                        markNotificationRead(item.id);
+                    }
+                });
 
                 const top = document.createElement('div');
                 top.className = 'flex items-center justify-between gap-2 mb-1';
@@ -349,7 +379,7 @@
                 badge.className = item.type === 'order'
                     ? 'px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-900 border border-emerald-300'
                     : 'px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300';
-                badge.textContent = item.type === 'order' ? 'Order Received' : 'Enquiry';
+                badge.textContent = item.title || (item.type === 'order' ? 'New Order' : 'Enquiry');
 
                 const metaRight = document.createElement('div');
                 metaRight.className = 'flex items-center gap-1.5';
@@ -400,7 +430,7 @@
             badge.className = isOrder
                 ? 'px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-900 border border-emerald-300'
                 : 'px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300';
-            badge.textContent = item.title || (isOrder ? 'New Order Received' : 'New Enquiry Received');
+            badge.textContent = item.title || (isOrder ? 'New Order Placed' : 'New Enquiry Received');
 
             const closeBtn = document.createElement('button');
             closeBtn.type = 'button';
@@ -427,7 +457,7 @@
             link.href = isSafeUrl(item.url) ? item.url : '#';
             link.className = 'text-[11px] font-bold uppercase tracking-wider text-neutral-900 hover:underline';
             link.textContent = isOrder ? 'View Order →' : 'View Enquiry →';
-            link.addEventListener('click', () => markAsRead(item.key));
+            link.addEventListener('click', () => markNotificationRead(item.id));
 
             footer.appendChild(link);
 
@@ -440,14 +470,15 @@
                     audioBlocked = false;
                     audioUnlocked = true;
                     updateVoiceToggleUI();
-                    enqueueAudio(item.type);
+                    audioQueue.push(item.type);
+                    processAudioQueue();
                     playBtn.remove();
                 });
                 footer.appendChild(playBtn);
             } else {
                 const timeSpan = document.createElement('span');
                 timeSpan.className = 'text-[10px] text-neutral-400';
-                timeSpan.textContent = 'Just now';
+                timeSpan.textContent = item.payload?.submitted_at || item.payload?.order_date || 'Just now';
                 footer.appendChild(timeSpan);
             }
 
@@ -467,46 +498,160 @@
             });
         }
 
-        function handleIncomingNotifications(items) {
-            if (!Array.isArray(items) || items.length === 0) {
+        async function syncLiveData() {
+            const contextEl = document.querySelector('[data-live-context]');
+            if (!contextEl || isSyncingLiveData) {
                 return;
             }
 
-            const freshItems = [];
-            items.forEach((item) => {
-                if (!item || !item.key || seenKeys.has(item.key)) {
+            const context = contextEl.getAttribute('data-live-context');
+            const currentParams = new URLSearchParams(window.location.search);
+            const currentPage = currentParams.get('page');
+
+            // Only auto-refresh list tables on page 1 so we don't disrupt pagination browsing
+            if (currentPage && currentPage !== '1' && context !== 'dashboard') {
+                return;
+            }
+
+            isSyncingLiveData = true;
+
+            try {
+                const query = new URLSearchParams(currentParams.toString());
+                query.set('context', context);
+
+                const response = await fetch(`${liveDataUrl}?${query.toString()}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                });
+
+                if (!response.ok) {
                     return;
                 }
-                seenKeys.add(item.key);
+
+                const data = await response.json();
+
+                if (data.context === 'dashboard') {
+                    const revEl = document.getElementById('live-dashboard-total-revenue');
+                    const paidEl = document.getElementById('live-dashboard-paid-orders');
+                    const inqTotalEl = document.getElementById('live-dashboard-total-inquiries');
+                    const inqNewEl = document.getElementById('live-dashboard-new-inquiries');
+                    const recentOrdersEl = document.getElementById('live-dashboard-recent-orders');
+                    const recentInquiriesEl = document.getElementById('live-dashboard-recent-inquiries');
+
+                    if (revEl && data.metrics?.total_revenue) revEl.textContent = data.metrics.total_revenue;
+                    if (paidEl && data.metrics?.paid_orders_label) paidEl.textContent = data.metrics.paid_orders_label;
+                    if (inqTotalEl && data.metrics?.total_inquiries) inqTotalEl.textContent = data.metrics.total_inquiries;
+                    if (inqNewEl && data.metrics?.new_inquiries_label) inqNewEl.textContent = data.metrics.new_inquiries_label;
+                    if (recentOrdersEl && typeof data.html?.recent_orders === 'string') recentOrdersEl.innerHTML = data.html.recent_orders;
+                    if (recentInquiriesEl && typeof data.html?.recent_inquiries === 'string') recentInquiriesEl.innerHTML = data.html.recent_inquiries;
+                } else if (data.context === 'inquiries') {
+                    const counts = data.status_counts || {};
+                    const setTabText = (id, label, count) => {
+                        const el = document.getElementById(id);
+                        if (el && typeof count === 'number') {
+                            el.textContent = `${label} (${count})`;
+                        }
+                    };
+                    setTabText('live-inquiries-tab-all', 'All', counts.all);
+                    setTabText('live-inquiries-tab-pending', 'Pending', counts.pending);
+                    setTabText('live-inquiries-tab-replied', 'Replied', counts.replied);
+                    setTabText('live-inquiries-tab-failed', 'Failed', counts.failed);
+                    setTabText('live-inquiries-tab-closed', 'Closed', counts.closed);
+
+                    const desktopTbody = document.getElementById('live-inquiries-desktop-tbody');
+                    const mobileCards = document.getElementById('live-inquiries-mobile-cards');
+                    if (desktopTbody && typeof data.html?.desktop_rows === 'string') desktopTbody.innerHTML = data.html.desktop_rows;
+                    if (mobileCards && typeof data.html?.mobile_cards === 'string') mobileCards.innerHTML = data.html.mobile_cards;
+                } else if (data.context === 'orders') {
+                    const totalEl = document.getElementById('live-orders-total');
+                    const revEl = document.getElementById('live-orders-revenue');
+                    const paidEl = document.getElementById('live-orders-paid-label');
+                    const procEl = document.getElementById('live-orders-processing');
+                    const delivEl = document.getElementById('live-orders-delivered');
+                    const tbodyEl = document.getElementById('live-orders-tbody');
+
+                    if (totalEl && data.stats?.total) totalEl.textContent = data.stats.total;
+                    if (revEl && data.stats?.total_revenue) revEl.textContent = data.stats.total_revenue;
+                    if (paidEl && data.stats?.paid_label) paidEl.textContent = data.stats.paid_label;
+                    if (procEl && data.stats?.processing) procEl.textContent = data.stats.processing;
+                    if (delivEl && data.stats?.delivered) delivEl.textContent = data.stats.delivered;
+                    if (tbodyEl && typeof data.html?.table_rows === 'string') tbodyEl.innerHTML = data.html.table_rows;
+                }
+            } catch (e) {
+                // Ignore transient network errors
+            } finally {
+                isSyncingLiveData = false;
+            }
+        }
+
+        function processServerPayload(data) {
+            if (!data || typeof data !== 'object') {
+                return;
+            }
+
+            if (data.cursor && typeof data.cursor.after_id === 'number') {
+                cursorAfterId = Math.max(cursorAfterId, data.cursor.after_id);
+            }
+
+            if (typeof data.unread_count === 'number') {
+                unreadCount = data.unread_count;
+            }
+
+            if (data.counts) {
+                updateSidebarBadges(data.counts);
+            }
+
+            if (Array.isArray(data.recent_notifications)) {
+                recentNotifications = data.recent_notifications.slice(0, 15);
+            }
+
+            const incoming = Array.isArray(data.notifications) ? data.notifications : [];
+            const freshItems = [];
+
+            incoming.forEach((item) => {
+                const numericId = Number(item?.id || 0);
+                if (!numericId || seenIds.has(numericId)) {
+                    return;
+                }
+                seenIds.add(numericId);
                 freshItems.push(item);
             });
 
-            if (freshItems.length === 0) {
-                return;
+            if (freshItems.length > 0) {
+                freshItems.forEach((item) => {
+                    if (!Array.isArray(data.recent_notifications)) {
+                        recentNotifications = [item, ...recentNotifications.filter((n) => Number(n.id) !== Number(item.id))].slice(0, 15);
+                    }
+                    showToast(item);
+                    enqueueAudio(item.id, item.type);
+                });
             }
 
-            writeJsonArray(sessionStorage, SESSION_SEEN_KEY, seenKeys, 200);
-
-            freshItems.forEach((item) => {
-                recentNotifications = [item, ...recentNotifications.filter((n) => n.key !== item.key)].slice(0, 15);
-                enqueueAudio(item.type);
-                showToast(item);
-            });
-
             renderDropdown();
+
+            const nextTokens = data.sync_tokens || {};
+            const tokensChanged =
+                nextTokens.inquiry !== currentSyncTokens.inquiry ||
+                nextTokens.order !== currentSyncTokens.order;
+
+            if (tokensChanged || freshItems.length > 0) {
+                currentSyncTokens = nextTokens;
+                syncLiveData();
+            }
         }
 
         async function pollNotifications() {
-            if (isPolling) {
+            if (isPolling || !navigator.onLine) {
                 return;
             }
             isPolling = true;
-            lastPollTimestamp = Date.now();
 
             try {
                 const params = new URLSearchParams({
-                    after_inquiry_id: String(cursor.after_inquiry_id || 0),
-                    since_order_at: String(cursor.since_order_at || ''),
+                    after_id: String(cursorAfterId || 0),
                 });
 
                 const response = await fetch(`${pollUrl}?${params.toString()}`, {
@@ -522,20 +667,83 @@
                 }
 
                 const data = await response.json();
-                if (data.cursor) {
-                    saveCursor(data.cursor);
-                }
-                if (data.counts) {
-                    updateSidebarBadges(data.counts);
-                }
-                if (Array.isArray(data.notifications) && data.notifications.length > 0) {
-                    handleIncomingNotifications(data.notifications);
-                }
+                processServerPayload(data);
             } catch (e) {
-                // Ignore transient network errors during background polling
+                // Ignore transient network errors
             } finally {
                 isPolling = false;
             }
+        }
+
+        function startFallbackPolling() {
+            if (fallbackPollTimer) {
+                return;
+            }
+            setConnectionStatus('poll');
+            pollNotifications();
+            fallbackPollTimer = setInterval(pollNotifications, POLL_FALLBACK_INTERVAL_MS);
+        }
+
+        function stopFallbackPolling() {
+            if (fallbackPollTimer) {
+                clearInterval(fallbackPollTimer);
+                fallbackPollTimer = null;
+            }
+        }
+
+        function connectSSE() {
+            if (typeof window.EventSource !== 'function') {
+                startFallbackPolling();
+                return;
+            }
+
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
+            }
+
+            const params = new URLSearchParams({
+                after_id: String(cursorAfterId || 0),
+            });
+
+            eventSource = new EventSource(`${streamUrl}?${params.toString()}`, {
+                withCredentials: true,
+            });
+
+            eventSource.addEventListener('open', () => {
+                sseRetryCount = 0;
+                stopFallbackPolling();
+                setConnectionStatus('sse');
+            });
+
+            eventSource.addEventListener('notification', (event) => {
+                sseRetryCount = 0;
+                stopFallbackPolling();
+                setConnectionStatus('sse');
+                try {
+                    const data = JSON.parse(event.data);
+                    processServerPayload(data);
+                } catch (e) {}
+            });
+
+            eventSource.addEventListener('error', () => {
+                if (eventSource) {
+                    eventSource.close();
+                    eventSource = null;
+                }
+
+                if (!navigator.onLine) {
+                    setConnectionStatus('offline');
+                    return;
+                }
+
+                sseRetryCount += 1;
+                startFallbackPolling();
+
+                const delayMs = Math.min(15000, 2000 * Math.pow(2, Math.min(sseRetryCount - 1, 3)));
+                clearTimeout(sseReconnectTimer);
+                sseReconnectTimer = setTimeout(connectSSE, delayMs);
+            });
         }
 
         // Event bindings
@@ -549,10 +757,10 @@
             if (soundEnabled) {
                 audioBlocked = false;
                 unlockAudioElements();
-                flushPendingBlockedAudio();
+                flushRecentBlockedAudio();
             } else {
                 audioQueue.length = 0;
-                pendingBlockedAudio.length = 0;
+                lastBlockedAudio = null;
             }
             updateVoiceToggleUI();
         });
@@ -561,7 +769,7 @@
             audioBlocked = false;
             audioUnlocked = true;
             updateVoiceToggleUI();
-            flushPendingBlockedAudio();
+            flushRecentBlockedAudio();
         });
 
         bellBtn?.addEventListener('click', (e) => {
@@ -586,18 +794,31 @@
             }
         });
 
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && Date.now() - lastPollTimestamp >= 2000) {
-                pollNotifications();
+        window.addEventListener('online', () => {
+            pollNotifications();
+            connectSSE();
+        });
+
+        window.addEventListener('offline', () => {
+            setConnectionStatus('offline');
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
             }
         });
 
-        // Initial render & polling loop
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && navigator.onLine) {
+                pollNotifications();
+                if (!eventSource || eventSource.readyState === EventSource.CLOSED) {
+                    connectSSE();
+                }
+            }
+        });
+
+        // Initial render & real-time startup
         updateVoiceToggleUI();
         renderDropdown();
-        saveCursor(cursor);
-
-        setTimeout(pollNotifications, 1500);
-        setInterval(pollNotifications, POLL_INTERVAL_MS);
+        connectSSE();
     })();
 </script>

@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Inquiry;
+use App\Models\Order;
+use App\Services\AdminNotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -36,5 +39,19 @@ class AppServiceProvider extends ServiceProvider
                 DB::setDefaultConnection('mysql');
             }
         }
+
+        Inquiry::created(function (Inquiry $inquiry): void {
+            app(AdminNotificationService::class)->recordInquiryCreated($inquiry);
+        });
+
+        Order::created(function (Order $order): void {
+            app(AdminNotificationService::class)->recordOrderCreated($order);
+        });
+
+        Order::updated(function (Order $order): void {
+            if ($order->wasChanged('payment_status') && $order->payment_status === 'paid') {
+                app(AdminNotificationService::class)->recordOrderPaid($order);
+            }
+        });
     }
 }

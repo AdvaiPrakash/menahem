@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\AdminLiveDataService;
 use App\Services\InvoiceService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
@@ -13,56 +14,17 @@ use Illuminate\View\View;
 
 class OrderController extends Controller
 {
-    public function __construct(protected InvoiceService $invoiceService) {}
+    public function __construct(
+        protected InvoiceService $invoiceService,
+        protected AdminLiveDataService $liveDataService
+    ) {}
 
     /**
      * Display a listing of orders.
      */
     public function index(Request $request): View
     {
-        $search = $request->input('search');
-        $paymentStatus = $request->input('payment_status');
-        $orderStatus = $request->input('order_status');
-
-        $query = Order::with(['items', 'invoice', 'user'])->latest('created_at');
-
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('order_number', 'like', "%{$search}%")
-                    ->orWhere('customer_name', 'like', "%{$search}%")
-                    ->orWhere('customer_email', 'like', "%{$search}%")
-                    ->orWhere('customer_phone', 'like', "%{$search}%")
-                    ->orWhere('razorpay_payment_id', 'like', "%{$search}%");
-            });
-        }
-
-        if ($paymentStatus) {
-            $query->where('payment_status', $paymentStatus);
-        }
-
-        if ($orderStatus) {
-            $query->where('order_status', $orderStatus);
-        }
-
-        $orders = $query->paginate(20)->withQueryString();
-
-        // Metrics for dashboard counters
-        $stats = [
-            'total' => Order::count(),
-            'paid' => Order::where('payment_status', 'paid')->count(),
-            'processing' => Order::where('order_status', 'processing')->count(),
-            'shipped' => Order::where('order_status', 'shipped')->count(),
-            'delivered' => Order::where('order_status', 'delivered')->count(),
-            'total_revenue' => Order::where('payment_status', 'paid')->sum('grand_total'),
-        ];
-
-        return view('admin.orders.index', [
-            'orders' => $orders,
-            'stats' => $stats,
-            'search' => $search,
-            'paymentStatus' => $paymentStatus,
-            'orderStatus' => $orderStatus,
-        ]);
+        return view('admin.orders.index', $this->liveDataService->getOrdersData($request));
     }
 
     /**

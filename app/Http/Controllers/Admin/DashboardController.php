@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\CustomerLead;
-use App\Models\Inquiry;
-use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\AdminLiveDataService;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(protected AdminLiveDataService $liveDataService) {}
+
     /**
      * Display the Admin overview dashboard with summary analytics.
      */
@@ -24,18 +25,11 @@ class DashboardController extends Controller
         $outOfStockCount = Product::where('stock_quantity', '<=', 0)->count();
 
         $totalCategories = Category::count();
-        $totalOrders = Order::count();
-        $paidOrdersCount = Order::where('payment_status', 'paid')->count();
-        $totalRevenue = (float) Order::where('payment_status', 'paid')->sum('grand_total');
         $totalLeads = CustomerLead::count();
-
-        $totalInquiries = Inquiry::count();
-        $newInquiriesCount = Inquiry::where('status', 'new')->count();
         $totalUsers = User::count();
-
-        $recentOrders = Order::with('invoice')->latest()->take(5)->get();
-        $recentInquiries = Inquiry::latest()->take(5)->get();
         $recentProducts = Product::latest()->take(5)->get();
+
+        $liveData = $this->liveDataService->getDashboardData();
 
         return view('admin.dashboard', [
             'totalProducts' => $totalProducts,
@@ -43,15 +37,14 @@ class DashboardController extends Controller
             'lowStockCount' => $lowStockCount,
             'outOfStockCount' => $outOfStockCount,
             'totalCategories' => $totalCategories,
-            'totalOrders' => $totalOrders,
-            'paidOrdersCount' => $paidOrdersCount,
-            'totalRevenue' => $totalRevenue,
+            'paidOrdersCount' => $liveData['paidOrdersCount'],
+            'totalRevenue' => $liveData['totalRevenue'],
             'totalLeads' => $totalLeads,
-            'totalInquiries' => $totalInquiries,
-            'newInquiriesCount' => $newInquiriesCount,
+            'totalInquiries' => $liveData['totalInquiries'],
+            'newInquiriesCount' => $liveData['newInquiriesCount'],
             'totalUsers' => $totalUsers,
-            'recentOrders' => $recentOrders,
-            'recentInquiries' => $recentInquiries,
+            'recentOrders' => $liveData['recentOrders'],
+            'recentInquiries' => $liveData['recentInquiries'],
             'recentProducts' => $recentProducts,
         ]);
     }

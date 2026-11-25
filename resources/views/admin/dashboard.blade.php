@@ -15,15 +15,15 @@
 
 @section('content')
 <!-- Key Statistics Cards: Fully White Theme, Sharp Corners -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" data-live-context="dashboard">
     <div class="bg-white rounded-none p-5 border border-neutral-200 flex items-center gap-4">
         <div class="w-11 h-11 rounded-none bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
         <div class="min-w-0">
             <p class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Paid Revenue</p>
-            <h3 class="text-xl font-black text-neutral-900 mt-0.5">₹{{ number_format($totalRevenue) }}</h3>
-            <p class="text-[11px] text-emerald-700 font-semibold mt-0.5">{{ $paidOrdersCount }} Confirmed Orders</p>
+            <h3 id="live-dashboard-total-revenue" class="text-xl font-black text-neutral-900 mt-0.5">₹{{ number_format($totalRevenue) }}</h3>
+            <p id="live-dashboard-paid-orders" class="text-[11px] text-emerald-700 font-semibold mt-0.5">{{ $paidOrdersCount }} Confirmed Orders</p>
         </div>
     </div>
 
@@ -59,8 +59,8 @@
         </div>
         <div class="min-w-0">
             <p class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Custom Inquiries</p>
-            <h3 class="text-xl font-black text-neutral-900 mt-0.5">{{ $totalInquiries }}</h3>
-            <p class="text-[11px] text-amber-700 font-bold mt-0.5">{{ $newInquiriesCount }} Awaiting Reply</p>
+            <h3 id="live-dashboard-total-inquiries" class="text-xl font-black text-neutral-900 mt-0.5">{{ $totalInquiries }}</h3>
+            <p id="live-dashboard-new-inquiries" class="text-[11px] text-amber-700 font-bold mt-0.5">{{ $newInquiriesCount }} Awaiting Reply</p>
         </div>
     </div>
 </div>
@@ -77,35 +77,8 @@
         </a>
     </div>
 
-    <div class="divide-y divide-neutral-200">
-        @forelse($recentOrders as $ord)
-            <div class="p-3.5 hover:bg-neutral-50 transition-colors flex items-center justify-between gap-4 text-xs">
-                <div class="min-w-0">
-                    <div class="flex items-center gap-2">
-                        <span class="font-mono font-bold text-neutral-900">{{ $ord->order_number }}</span>
-                        <span class="px-1.5 py-0.5 rounded-none font-bold text-[9px] uppercase tracking-wider {{ $ord->isPaid() ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' : 'bg-amber-100 text-amber-900 border border-amber-300' }}">
-                            {{ $ord->payment_status }}
-                        </span>
-                        <span class="text-neutral-500 text-[11px]">({{ ucfirst($ord->customer_type) }})</span>
-                    </div>
-                    <p class="text-neutral-500 text-[11px] mt-0.5">{{ $ord->customer_name }} • {{ $ord->customer_email }}</p>
-                </div>
-                <div class="text-right shrink-0">
-                    <span class="text-xs font-black text-neutral-900 block">₹{{ number_format($ord->grand_total, 2) }}</span>
-                    @if($ord->invoice)
-                        <a href="{{ route('admin.invoices.download', $ord->invoice) }}" class="text-neutral-800 hover:underline font-bold text-[11px]">
-                            Download PDF
-                        </a>
-                    @else
-                        <span class="text-neutral-400 text-[10px]">{{ $ord->created_at->diffForHumans() }}</span>
-                    @endif
-                </div>
-            </div>
-        @empty
-            <div class="p-6 text-center text-neutral-400 text-xs">
-                No customer orders placed yet.
-            </div>
-        @endforelse
+    <div id="live-dashboard-recent-orders" class="divide-y divide-neutral-200">
+        @include('admin.dashboard.partials.recent-orders', ['recentOrders' => $recentOrders])
     </div>
 </div>
 
@@ -122,40 +95,8 @@
             </a>
         </div>
 
-        <div class="divide-y divide-neutral-200">
-            @forelse($recentInquiries as $inq)
-                <div class="p-3.5 hover:bg-neutral-50 transition-colors flex items-start justify-between gap-4">
-                    <div class="min-w-0 flex-1">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="font-bold text-xs text-neutral-900">{{ $inq->name }}</span>
-                            @if($inq->isNew())
-                                <span class="px-1.5 py-0.2 text-[9px] uppercase font-bold tracking-wider rounded-none bg-amber-100 text-amber-900 border border-amber-300">New</span>
-                            @elseif($inq->isContacted())
-                                <span class="px-1.5 py-0.2 text-[9px] uppercase font-bold tracking-wider rounded-none bg-blue-100 text-blue-900 border border-blue-300">Contacted</span>
-                            @else
-                                <span class="px-1.5 py-0.2 text-[9px] uppercase font-bold tracking-wider rounded-none bg-neutral-100 text-neutral-800 border border-neutral-300">Closed</span>
-                            @endif
-                        </div>
-                        <p class="text-[11px] text-neutral-500 truncate">
-                            {{ $inq->phone ?: $inq->email ?: 'No contact' }} 
-                            @if($inq->product_name) • <span class="font-medium text-neutral-800">{{ $inq->product_name }}</span>@endif
-                        </p>
-                        @if($inq->message)
-                            <p class="text-xs text-neutral-600 mt-1 line-clamp-1 italic">"{{ $inq->message }}"</p>
-                        @endif
-                    </div>
-                    <div class="text-right shrink-0">
-                        <span class="text-[10px] text-neutral-400 block">{{ $inq->created_at->diffForHumans() }}</span>
-                        <a href="{{ route('admin.inquiries.show', $inq) }}" class="inline-block mt-1 text-xs font-bold text-neutral-900 hover:underline">
-                            Details
-                        </a>
-                    </div>
-                </div>
-            @empty
-                <div class="p-6 text-center text-xs text-neutral-400">
-                    No inquiries recorded yet.
-                </div>
-            @endforelse
+        <div id="live-dashboard-recent-inquiries" class="divide-y divide-neutral-200">
+            @include('admin.dashboard.partials.recent-inquiries', ['recentInquiries' => $recentInquiries])
         </div>
     </div>
 

@@ -123,6 +123,10 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(func
     // Overview Dashboard
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/notifications/poll', [AdminNotificationController::class, 'poll'])->name('notifications.poll');
+    Route::get('/notifications/stream', [AdminNotificationController::class, 'stream'])->name('notifications.stream');
+    Route::get('/notifications/live-data', [AdminNotificationController::class, 'liveData'])->name('notifications.live-data');
+    Route::post('/notifications/{notification}/read', [AdminNotificationController::class, 'markRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [AdminNotificationController::class, 'markAllRead'])->name('notifications.read-all');
 
     // Products Management
     Route::resource('products', AdminProductController::class)->except(['show']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Inquiry;
 use App\Models\InquiryReply;
+use App\Services\AdminLiveDataService;
 use App\Services\InquiryReplyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,58 +14,17 @@ use Illuminate\View\View;
 
 class InquiryController extends Controller
 {
-    public function __construct(protected InquiryReplyService $replyService) {}
+    public function __construct(
+        protected InquiryReplyService $replyService,
+        protected AdminLiveDataService $liveDataService
+    ) {}
 
     /**
      * Display a listing of customer enquiries.
      */
     public function index(Request $request): View
     {
-        $query = Inquiry::query()->withCount([
-            'replies as sent_replies_count' => static fn ($q) => $q->whereIn('status', ['sent', 'accepted']),
-            'replies as failed_replies_count' => static fn ($q) => $q->where('status', 'failed'),
-        ]);
-
-        if ($status = $request->input('status')) {
-            if ($status === 'pending' || $status === 'new') {
-                $query->whereIn('status', ['new', 'pending']);
-            } else {
-                $query->where('status', $status);
-            }
-        }
-
-        if ($type = $request->input('type')) {
-            $query->where('type', $type);
-        }
-
-        if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhere('subject', 'like', "%{$search}%")
-                    ->orWhere('product_name', 'like', "%{$search}%")
-                    ->orWhere('message', 'like', "%{$search}%");
-            });
-        }
-
-        $inquiries = $query->latest()->paginate(20)->withQueryString();
-
-        $statusCounts = [
-            'all' => Inquiry::count(),
-            'pending' => Inquiry::whereIn('status', ['new', 'pending'])->count(),
-            'replied' => Inquiry::where('status', 'replied')->count(),
-            'failed' => Inquiry::where('status', 'failed')->count(),
-            'closed' => Inquiry::where('status', 'closed')->count(),
-        ];
-
-        return view('admin.inquiries.index', [
-            'inquiries' => $inquiries,
-            'statusCounts' => $statusCounts,
-            'currentStatus' => $status,
-            'currentType' => $type,
-            'search' => $search,
-        ]);
+        return view('admin.inquiries.index', $this->liveDataService->getInquiriesData($request));
     }
 
     /**

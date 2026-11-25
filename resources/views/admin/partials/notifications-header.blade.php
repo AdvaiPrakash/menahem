@@ -37,8 +37,11 @@
              class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-neutral-300 shadow-lg z-50">
             <div class="px-4 py-3 border-b border-neutral-200 bg-neutral-50 flex items-center justify-between">
                 <div>
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-neutral-900">Live Alerts</p>
-                    <p class="text-[10px] text-neutral-500">Enquiries &amp; received orders</p>
+                    <div class="flex items-center gap-1.5">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-neutral-900">Live Alerts</p>
+                        <span id="admin-realtime-status-dot" title="Real-time connection active" class="w-1.5 h-1.5 bg-emerald-600 inline-block"></span>
+                    </div>
+                    <p id="admin-realtime-status-text" class="text-[10px] text-neutral-500">Enquiries &amp; orders • Live</p>
                 </div>
                 <button type="button"
                         id="admin-notification-mark-read-btn"
