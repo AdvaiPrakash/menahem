@@ -2,7 +2,7 @@
     $pageTitle = !empty($categoryInfo['name'])
         ? ($categoryInfo['name'] . ' · Menahem Collection')
         : 'Menahem Collection · Home Essentials';
-    $catalog = $content['CATALOG'] ?? [];
+    $catalog = ! empty($catalog) ? $catalog : ($content['CATALOG'] ?? []);
     $allProducts = $catalog['products'] ?? [];
     $categories = $catalog['filters']['categories'] ?? [];
     $materials = $catalog['filters']['materials'] ?? [];

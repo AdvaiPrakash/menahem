@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -31,6 +32,10 @@ class Product extends Model
         'desc',
         'image',
         'gallery',
+        'highlights',
+        'fabric_details',
+        'wash_care',
+        'shipping_returns',
         'in_stock',
         'stock_quantity',
         'opening_stock',
@@ -52,6 +57,8 @@ class Product extends Model
         return [
             'category_slugs' => 'array',
             'gallery' => 'array',
+            'highlights' => 'array',
+            'fabric_details' => 'array',
             'in_stock' => 'boolean',
             'is_featured' => 'boolean',
             'is_bestseller' => 'boolean',
@@ -90,6 +97,74 @@ class Product extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Clearance sale configuration for this product, if any.
+     */
+    public function clearanceItem(): HasOne
+    {
+        return $this->hasOne(ClearanceItem::class);
+    }
+
+    /**
+     * Effective selling price (applies active clearance discount without double-discounting).
+     */
+    public function effectivePrice(): float
+    {
+        $base = (float) $this->numeric_price;
+        $clearance = $this->clearanceItem;
+
+        if ($clearance && $clearance->is_active) {
+            return $clearance->calculateSalePrice($base);
+        }
+
+        return $base;
+    }
+
+    /**
+     * Effective formatted selling price string.
+     */
+    public function effectiveFormattedPrice(): string
+    {
+        $effective = $this->effectivePrice();
+
+        return '₹'.number_format($effective, fmod($effective, 1.0) === 0.0 ? 0 : 2);
+    }
+
+    /**
+     * Effective original (strikethrough) price string when a clearance discount or original price exists.
+     */
+    public function effectiveOriginalPrice(): ?string
+    {
+        $clearance = $this->clearanceItem;
+        if ($clearance && $clearance->is_active && $this->effectivePrice() < (float) $this->numeric_price) {
+            return '₹'.number_format((float) $this->numeric_price);
+        }
+
+        return $this->original_price;
+    }
+
+    /**
+     * Ordered list of all product images starting with the primary image.
+     *
+     * @return array<int, string>
+     */
+    public function allImages(): array
+    {
+        $images = [];
+        if (! empty($this->image)) {
+            $images[] = $this->image;
+        }
+        if (is_array($this->gallery)) {
+            foreach ($this->gallery as $img) {
+                if (is_string($img) && trim($img) !== '' && ! in_array($img, $images, true)) {
+                    $images[] = $img;
+                }
+            }
+        }
+
+        return $images;
     }
 
     /**

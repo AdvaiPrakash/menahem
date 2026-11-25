@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\StockMovement;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -58,6 +59,8 @@ class ProductController extends Controller
      */
     public function create(): View
     {
+        abort_unless(auth()->user()?->canEditContent(), 403);
+
         $categories = Category::orderBy('name')->get();
 
         return view('admin.products.form', [
@@ -72,6 +75,8 @@ class ProductController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        abort_unless(auth()->user()?->canEditContent(), 403);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'sku' => ['nullable', 'string', 'max:100'],
@@ -89,7 +94,16 @@ class ProductController extends Controller
             'badge' => ['nullable', 'string', 'max:50'],
             'desc' => ['nullable', 'string'],
             'image' => ['nullable', 'string', 'max:500'],
-            'image_file' => ['nullable', 'image', 'max:5120'], // 5MB max
+            'image_file' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:5120'],
+            'gallery_files' => ['nullable', 'array'],
+            'gallery_files.*' => ['image', 'mimes:jpeg,jpg,png,webp,gif', 'max:5120'],
+            'highlights' => ['nullable', 'array'],
+            'highlights.*' => ['nullable', 'string', 'max:255'],
+            'fabric_summary' => ['nullable', 'string', 'max:2000'],
+            'weave_density' => ['nullable', 'string', 'max:255'],
+            'craft_origin' => ['nullable', 'string', 'max:255'],
+            'wash_care' => ['nullable', 'string', 'max:3000'],
+            'shipping_returns' => ['nullable', 'string', 'max:3000'],
             'in_stock' => ['boolean'],
             'is_featured' => ['boolean'],
             'is_bestseller' => ['boolean'],
@@ -101,13 +115,20 @@ class ProductController extends Controller
             $category = Category::find($validated['category_id']);
         }
 
-        // Handle image upload if provided
+        // Handle primary & gallery image uploads
         $imagePath = $validated['image'] ?? '/images/products/bedsheet-set.webp';
         if ($request->hasFile('image_file')) {
-            $file = $request->file('image_file');
-            $filename = time().'_'.Str::slug($validated['name']).'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('images/uploads'), $filename);
-            $imagePath = '/images/uploads/'.$filename;
+            $imagePath = $this->storeUploadedImage($request->file('image_file'), $validated['name']);
+        }
+
+        $gallery = [$imagePath];
+        if ($request->hasFile('gallery_files')) {
+            foreach ($request->file('gallery_files') as $file) {
+                $uploaded = $this->storeUploadedImage($file, $validated['name']);
+                if (! in_array($uploaded, $gallery, true)) {
+                    $gallery[] = $uploaded;
+                }
+            }
         }
 
         $price = ! empty($validated['price']) ? $validated['price'] : '₹'.number_format($validated['numeric_price']);
@@ -135,7 +156,11 @@ class ProductController extends Controller
             'badge' => $validated['badge'] ?? null,
             'desc' => $validated['desc'] ?? null,
             'image' => $imagePath,
-            'gallery' => [$imagePath],
+            'gallery' => $gallery,
+            'highlights' => $this->sanitizeHighlights($validated['highlights'] ?? []),
+            'fabric_details' => $this->buildFabricDetails($validated),
+            'wash_care' => $this->nullableTrim($validated['wash_care'] ?? null),
+            'shipping_returns' => $this->nullableTrim($validated['shipping_returns'] ?? null),
             'in_stock' => $request->boolean('in_stock', true) && $stockQty > 0,
             'is_featured' => $request->boolean('is_featured'),
             'is_bestseller' => $request->boolean('is_bestseller'),
@@ -161,6 +186,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
+        abort_unless(auth()->user()?->canEditContent(), 403);
+
         $categories = Category::orderBy('name')->get();
 
         return view('admin.products.form', [
@@ -175,6 +202,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product): RedirectResponse
     {
+        abort_unless(auth()->user()?->canEditContent(), 403);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'sku' => ['nullable', 'string', 'max:100'],
@@ -192,7 +221,22 @@ class ProductController extends Controller
             'badge' => ['nullable', 'string', 'max:50'],
             'desc' => ['nullable', 'string'],
             'image' => ['nullable', 'string', 'max:500'],
-            'image_file' => ['nullable', 'image', 'max:5120'],
+            'image_file' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:5120'],
+            'gallery_files' => ['nullable', 'array'],
+            'gallery_files.*' => ['image', 'mimes:jpeg,jpg,png,webp,gif', 'max:5120'],
+            'replace_gallery_files' => ['nullable', 'array'],
+            'replace_gallery_files.*' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:5120'],
+            'remove_gallery' => ['nullable', 'array'],
+            'remove_gallery.*' => ['string'],
+            'gallery_order' => ['nullable', 'array'],
+            'primary_image' => ['nullable', 'string', 'max:500'],
+            'highlights' => ['nullable', 'array'],
+            'highlights.*' => ['nullable', 'string', 'max:255'],
+            'fabric_summary' => ['nullable', 'string', 'max:2000'],
+            'weave_density' => ['nullable', 'string', 'max:255'],
+            'craft_origin' => ['nullable', 'string', 'max:255'],
+            'wash_care' => ['nullable', 'string', 'max:3000'],
+            'shipping_returns' => ['nullable', 'string', 'max:3000'],
             'in_stock' => ['boolean'],
             'is_featured' => ['boolean'],
             'is_bestseller' => ['boolean'],
@@ -204,14 +248,61 @@ class ProductController extends Controller
             $category = Category::find($validated['category_id']);
         }
 
-        $imagePath = $product->image;
+        // Rebuild ordered gallery preserving existing images unless removed/replaced
+        $existingGallery = $product->allImages();
+        $removeSet = array_flip($validated['remove_gallery'] ?? []);
+        $orderMap = $validated['gallery_order'] ?? [];
+        $replaceFiles = $request->file('replace_gallery_files', []);
+
+        $galleryItems = [];
+        foreach ($existingGallery as $idx => $path) {
+            if (isset($removeSet[$path])) {
+                continue;
+            }
+            $finalPath = $path;
+            if (isset($replaceFiles[$idx]) && $replaceFiles[$idx]) {
+                $finalPath = $this->storeUploadedImage($replaceFiles[$idx], $validated['name']);
+            }
+            $galleryItems[] = [
+                'path' => $finalPath,
+                'was_primary' => ($validated['primary_image'] ?? '') === $path,
+                'order' => isset($orderMap[$path]) ? (int) $orderMap[$path] : $idx,
+            ];
+        }
+
+        usort($galleryItems, static fn (array $a, array $b): int => $a['order'] <=> $b['order']);
+        $gallery = array_values(array_unique(array_column($galleryItems, 'path')));
+
         if ($request->hasFile('image_file')) {
-            $file = $request->file('image_file');
-            $filename = time().'_'.Str::slug($validated['name']).'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('images/uploads'), $filename);
-            $imagePath = '/images/uploads/'.$filename;
-        } elseif (! empty($validated['image'])) {
-            $imagePath = $validated['image'];
+            $uploadedPrimary = $this->storeUploadedImage($request->file('image_file'), $validated['name']);
+            array_unshift($gallery, $uploadedPrimary);
+            $gallery = array_values(array_unique($gallery));
+            $imagePath = $uploadedPrimary;
+        } else {
+            $selectedPrimary = collect($galleryItems)->firstWhere('was_primary', true)['path'] ?? null;
+            if ($selectedPrimary) {
+                $imagePath = $selectedPrimary;
+            } elseif (! empty($validated['image']) && $validated['image'] !== $product->image) {
+                $imagePath = $validated['image'];
+                if (! in_array($imagePath, $gallery, true)) {
+                    array_unshift($gallery, $imagePath);
+                }
+            } else {
+                $imagePath = $gallery[0] ?? $product->image;
+            }
+        }
+
+        if ($request->hasFile('gallery_files')) {
+            foreach ($request->file('gallery_files') as $file) {
+                $uploaded = $this->storeUploadedImage($file, $validated['name']);
+                if (! in_array($uploaded, $gallery, true)) {
+                    $gallery[] = $uploaded;
+                }
+            }
+        }
+
+        if ($imagePath && ! in_array($imagePath, $gallery, true)) {
+            array_unshift($gallery, $imagePath);
         }
 
         $price = ! empty($validated['price']) ? $validated['price'] : '₹'.number_format($validated['numeric_price']);
@@ -252,6 +343,11 @@ class ProductController extends Controller
             'badge' => $validated['badge'] ?? null,
             'desc' => $validated['desc'] ?? null,
             'image' => $imagePath,
+            'gallery' => array_values($gallery),
+            'highlights' => $this->sanitizeHighlights($validated['highlights'] ?? []),
+            'fabric_details' => $this->buildFabricDetails($validated),
+            'wash_care' => $this->nullableTrim($validated['wash_care'] ?? null),
+            'shipping_returns' => $this->nullableTrim($validated['shipping_returns'] ?? null),
             'in_stock' => $request->boolean('in_stock') && $newStock > 0,
             'is_featured' => $request->boolean('is_featured'),
             'is_bestseller' => $request->boolean('is_bestseller'),
@@ -267,10 +363,64 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
+        abort_unless(auth()->user()?->canEditContent(), 403);
+
         $name = $product->name;
         $product->delete();
 
         return redirect()->route('admin.products.index')
             ->with('success', "Product '{$name}' deleted successfully.");
+    }
+
+    /**
+     * Safely store an uploaded product image in public/images/uploads.
+     */
+    protected function storeUploadedImage(UploadedFile $file, string $productName): string
+    {
+        $ext = strtolower($file->getClientOriginalExtension() ?: 'webp');
+        $filename = time().'_'.Str::random(6).'_'.Str::slug($productName).'.'.$ext;
+        $file->move(public_path('images/uploads'), $filename);
+
+        return '/images/uploads/'.$filename;
+    }
+
+    /**
+     * Clean and re-index product highlights array.
+     *
+     * @param  array<int, string|null>  $highlights
+     * @return array<int, string>|null
+     */
+    protected function sanitizeHighlights(array $highlights): ?array
+    {
+        $clean = array_values(array_filter(array_map(
+            static fn ($item): string => trim((string) $item),
+            $highlights
+        ), static fn (string $item): bool => $item !== ''));
+
+        return $clean !== [] ? $clean : null;
+    }
+
+    /**
+     * Build structured fabric_details payload or null when unconfigured.
+     *
+     * @param  array<string, mixed>  $validated
+     * @return array<string, string>|null
+     */
+    protected function buildFabricDetails(array $validated): ?array
+    {
+        $details = array_filter([
+            'summary' => $this->nullableTrim($validated['fabric_summary'] ?? null),
+            'weave_density' => $this->nullableTrim($validated['weave_density'] ?? null),
+            'craft_origin' => $this->nullableTrim($validated['craft_origin'] ?? null),
+        ], static fn ($v): bool => $v !== null);
+
+        return $details !== [] ? $details : null;
+    }
+
+    protected function nullableTrim(?string $value): ?string
+    {
+        $trimmed = trim((string) $value);
+
+        return $trimmed !== '' ? $trimmed : null;
     }
 }

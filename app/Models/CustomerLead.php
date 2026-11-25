@@ -50,4 +50,27 @@ class CustomerLead extends Model
     {
         return $this->hasMany(Order::class, 'customer_email', 'email');
     }
+
+    public function inquiries(): HasMany
+    {
+        return $this->hasMany(Inquiry::class, 'email', 'email');
+    }
+
+    /**
+     * Determine the CRM lifecycle status from actual order and enquiry records.
+     */
+    public function resolvedStatus(?int $ordersCount = null, ?int $inquiriesCount = null): string
+    {
+        $orders = $ordersCount ?? ($this->orders_count ?? $this->total_orders ?? 0);
+        if ($orders > 0) {
+            return 'Ordered';
+        }
+
+        $inquiries = $inquiriesCount ?? ($this->inquiries_count ?? 0);
+        if ($inquiries > 0) {
+            return 'Enquiry Only';
+        }
+
+        return 'Lead';
+    }
 }

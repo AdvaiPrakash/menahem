@@ -61,13 +61,22 @@
             </select>
         </div>
 
+        <div class="sm:w-40">
+            <select name="status" class="w-full px-3 py-2 text-xs rounded-none border border-neutral-300 focus:outline-none focus:border-neutral-900 bg-white">
+                <option value="">All Statuses</option>
+                <option value="ordered" {{ ($statusFilter ?? '') === 'ordered' ? 'selected' : '' }}>Ordered</option>
+                <option value="enquiry_only" {{ ($statusFilter ?? '') === 'enquiry_only' ? 'selected' : '' }}>Enquiry Only</option>
+                <option value="lead" {{ ($statusFilter ?? '') === 'lead' ? 'selected' : '' }}>Lead</option>
+            </select>
+        </div>
+
         <div class="flex gap-2">
             <input type="date" name="date_from" value="{{ $dateFrom }}" class="px-2.5 py-1.5 text-xs rounded-none border border-neutral-300 text-neutral-800 bg-white">
             <input type="date" name="date_to" value="{{ $dateTo }}" class="px-2.5 py-1.5 text-xs rounded-none border border-neutral-300 text-neutral-800 bg-white">
             <button type="submit" class="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-none uppercase tracking-wider transition-colors border border-neutral-900 cursor-pointer">
                 Search
             </button>
-            @if($search || $typeFilter || $dateFrom || $dateTo)
+            @if($search || $typeFilter || ($statusFilter ?? '') || $dateFrom || $dateTo)
                 <a href="{{ route('admin.leads.index') }}" class="px-3 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-bold rounded-none flex items-center justify-center border border-neutral-300">
                     Reset
                 </a>
@@ -83,10 +92,11 @@
             <thead class="bg-neutral-50 text-[10px] uppercase tracking-wider text-neutral-600 font-bold border-b border-neutral-200">
                 <tr>
                     <th class="py-3 px-4 sm:px-6">Customer ID & Name</th>
+                    <th class="py-3 px-4">Status</th>
                     <th class="py-3 px-4">Type</th>
                     <th class="py-3 px-4">Contact Details</th>
                     <th class="py-3 px-4">Delivery City / State</th>
-                    <th class="py-3 px-4 text-center">Total Orders</th>
+                    <th class="py-3 px-4 text-center">Orders / Enquiries</th>
                     <th class="py-3 px-4">Lifetime Spend</th>
                     <th class="py-3 px-4">Last Activity</th>
                     <th class="py-3 px-4 sm:px-6 text-right">Actions</th>
@@ -94,10 +104,28 @@
             </thead>
             <tbody class="divide-y divide-neutral-200">
                 @forelse($leads as $lead)
+                    @php
+                        $statusLabel = $lead->resolvedStatus();
+                    @endphp
                     <tr class="hover:bg-neutral-50 transition-colors">
                         <td class="py-3 px-4 sm:px-6">
                             <span class="font-bold text-neutral-900 block text-xs">{{ $lead->name }}</span>
                             <span class="font-mono text-[10px] text-neutral-400">#CUS-{{ str_pad($lead->id, 4, '0', STR_PAD_LEFT) }}</span>
+                        </td>
+                        <td class="py-3 px-4">
+                            @if($statusLabel === 'Ordered')
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-none font-bold text-[9px] uppercase bg-emerald-100 text-emerald-900 border border-emerald-300">
+                                    Ordered
+                                </span>
+                            @elseif($statusLabel === 'Enquiry Only')
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-none font-bold text-[9px] uppercase bg-amber-100 text-amber-900 border border-amber-300">
+                                    Enquiry Only
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-none font-bold text-[9px] uppercase bg-neutral-100 text-neutral-800 border border-neutral-300">
+                                    Lead
+                                </span>
+                            @endif
                         </td>
                         <td class="py-3 px-4">
                             @if($lead->customer_type === 'google')
@@ -116,13 +144,15 @@
                         </td>
                         <td class="py-3 px-4">
                             <p class="font-semibold text-neutral-800">{{ $lead->phone ?: '—' }}</p>
-                            <p class="text-[11px] text-neutral-500">{{ $lead->email }}</p>
+                            <p class="text-[11px] text-neutral-500">{{ str_ends_with((string) $lead->email, '@enquiry.local') ? 'No email provided' : $lead->email }}</p>
                         </td>
                         <td class="py-3 px-4 text-neutral-700">
                             {{ $lead->city ? $lead->city . ', ' . $lead->state : ($lead->delivery_address ? Str::limit($lead->delivery_address, 25) : '—') }}
                         </td>
                         <td class="py-3 px-4 text-center font-bold text-neutral-900">
-                            {{ $lead->total_orders }}
+                            <span>{{ max((int) $lead->total_orders, (int) ($lead->orders_count ?? 0)) }}</span>
+                            <span class="text-neutral-400 font-normal">/</span>
+                            <span class="text-amber-800">{{ $lead->inquiries_count ?? 0 }}</span>
                         </td>
                         <td class="py-3 px-4 font-black text-neutral-900">
                             ₹{{ number_format($lead->total_purchase_amount, 2) }}
@@ -139,8 +169,8 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="p-8 text-center text-neutral-400">
-                            No customer leads recorded yet. Every customer purchase automatically records here.
+                        <td colspan="9" class="p-8 text-center text-neutral-400">
+                            No customer leads recorded yet. Enquiries and customer purchases automatically record here.
                         </td>
                     </tr>
                 @endforelse

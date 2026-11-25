@@ -38,8 +38,8 @@ class AdminMiddleware
 
         // For non-safe HTTP methods (POST, PUT, PATCH, DELETE), require edit permissions
         if (in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
-            // Logout is allowed for all authenticated users
-            if (! $request->routeIs('admin.logout') && ! $user->canEditContent()) {
+            // Logout and personal notification read-state updates are allowed for all authenticated staff
+            if (! $request->routeIs('admin.logout', 'admin.notifications.read', 'admin.notifications.read-all') && ! $user->canEditContent()) {
                 abort(403, 'Viewers have read-only access. You cannot modify records.');
             }
         }

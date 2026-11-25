@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerLead;
+use App\Models\Inquiry;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class CustomerLeadController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = CustomerLead::query();
+        $query = CustomerLead::query()->withCount(['orders', 'inquiries']);
 
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
@@ -32,6 +33,22 @@ class CustomerLeadController extends Controller
             $query->where('customer_type', $type);
         }
 
+        if ($status = $request->input('status')) {
+            if ($status === 'ordered') {
+                $query->where(function ($q): void {
+                    $q->where('total_orders', '>', 0)->orWhereHas('orders');
+                });
+            } elseif ($status === 'enquiry_only') {
+                $query->where('total_orders', 0)
+                    ->whereDoesntHave('orders')
+                    ->whereHas('inquiries');
+            } elseif ($status === 'lead') {
+                $query->where('total_orders', 0)
+                    ->whereDoesntHave('orders')
+                    ->whereDoesntHave('inquiries');
+            }
+        }
+
         if ($dateFrom = $request->input('date_from')) {
             $query->whereDate('created_at', '>=', $dateFrom);
         }
@@ -44,6 +61,13 @@ class CustomerLeadController extends Controller
 
         $stats = [
             'total' => CustomerLead::count(),
+            'ordered' => CustomerLead::where(function ($q): void {
+                $q->where('total_orders', '>', 0)->orWhereHas('orders');
+            })->count(),
+            'enquiry_only' => CustomerLead::where('total_orders', 0)
+                ->whereDoesntHave('orders')
+                ->whereHas('inquiries')
+                ->count(),
             'guest' => CustomerLead::where('customer_type', 'guest')->count(),
             'registered' => CustomerLead::where('customer_type', 'registered')->count(),
             'google' => CustomerLead::where('customer_type', 'google')->count(),
@@ -55,24 +79,49 @@ class CustomerLeadController extends Controller
             'stats' => $stats,
             'search' => $search,
             'typeFilter' => $type,
+            'statusFilter' => $status,
             'dateFrom' => $dateFrom,
             'dateTo' => $dateTo,
         ]);
     }
 
     /**
-     * Display the specified customer lead and their complete order history.
+     * Display the specified customer lead, their enquiries, and their complete order history.
      */
     public function show(CustomerLead $lead): View
     {
-        $orders = Order::where('customer_email', $lead->email)
+        $orders = Order::query()
+            ->where(function ($q) use ($lead): void {
+                $q->where('customer_email', $lead->email);
+                if ($lead->user_id) {
+                    $q->orWhere('user_id', $lead->user_id);
+                }
+            })
             ->with(['items', 'invoice'])
             ->orderBy('id', 'desc')
             ->get();
 
+        $inquiries = Inquiry::query()
+            ->where(function ($q) use ($lead): void {
+                if (! str_ends_with((string) $lead->email, '@enquiry.local')) {
+                    $q->where('email', $lead->email);
+                } elseif (! empty($lead->phone)) {
+                    $q->whereNull('email')->where('phone', $lead->phone);
+                }
+            })
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $leadStatus = $lead->resolvedStatus(
+            max($orders->count(), (int) $lead->total_orders),
+            $inquiries->count()
+        );
+
         return view('admin.leads.show', [
             'lead' => $lead,
             'orders' => $orders,
+            'inquiries' => $inquiries,
+            'leadStatus' => $leadStatus,
         ]);
     }
 

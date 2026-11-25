@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inquiry;
+use App\Services\CustomerLeadService;
 use App\Services\InquiryReplyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -10,7 +11,10 @@ use Illuminate\Http\Request;
 
 class InquirySubmissionController extends Controller
 {
-    public function __construct(protected InquiryReplyService $replyService) {}
+    public function __construct(
+        protected InquiryReplyService $replyService,
+        protected CustomerLeadService $leadService
+    ) {}
 
     /**
      * Handle public form submissions (newsletter, curtain measurements, contact).
@@ -44,6 +48,7 @@ class InquirySubmissionController extends Controller
             'notification_status' => 'pending',
         ]);
 
+        $this->leadService->recordLeadFromInquiry($inquiry);
         $this->replyService->sendAdminNotification($inquiry);
 
         if ($request->expectsJson() || $request->ajax()) {

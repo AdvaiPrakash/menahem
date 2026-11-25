@@ -40,7 +40,8 @@ class CartService
     public function getItems(?User $user, string $guestToken): Collection
     {
         $query = CartItem::with(['product' => function ($q) {
-            $q->select('id', 'name', 'numeric_price', 'price', 'original_price', 'image', 'stock_quantity', 'in_stock', 'category_id', 'sku');
+            $q->with('clearanceItem')
+                ->select('id', 'name', 'numeric_price', 'price', 'original_price', 'image', 'stock_quantity', 'in_stock', 'category_id', 'sku');
         }]);
 
         if ($user) {

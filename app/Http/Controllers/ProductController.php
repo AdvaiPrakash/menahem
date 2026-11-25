@@ -20,26 +20,34 @@ class ProductController extends Controller
 
         // Augment with database products if available
         try {
-            $dbProducts = Product::where('in_stock', true)->orderBy('sort_order', 'asc')->get();
+            $dbProducts = Product::with('clearanceItem')->where('in_stock', true)->orderBy('sort_order', 'asc')->get();
             if ($dbProducts->isNotEmpty()) {
-                $catalog['products'] = $dbProducts->map(function ($p) {
-                    return [
-                        'id' => $p->id,
-                        'name' => $p->name,
-                        'category' => $p->category,
-                        'category_slug' => $p->category_slug,
-                        'category_slugs' => $p->category_slugs ?: [$p->category_slug],
-                        'material' => $p->material,
-                        'price' => $p->formatted_price,
-                        'numeric_price' => $p->numeric_price,
-                        'original_price' => $p->original_price,
-                        'rating' => (float) $p->rating,
-                        'reviews' => (int) $p->reviews,
-                        'badge' => $p->badge,
-                        'desc' => $p->desc,
-                        'image' => $p->image,
-                    ];
-                })->all();
+                $catalog['products'] = $dbProducts
+                    ->filter(static function (Product $p): bool {
+                        $c = $p->clearanceItem;
+
+                        return ! ($c && $c->is_active && ! $c->show_in_all_products);
+                    })
+                    ->map(function (Product $p): array {
+                        return [
+                            'id' => $p->id,
+                            'name' => $p->name,
+                            'category' => $p->category,
+                            'category_slug' => $p->category_slug,
+                            'category_slugs' => $p->category_slugs ?: [$p->category_slug],
+                            'material' => $p->material,
+                            'price' => $p->effectiveFormattedPrice(),
+                            'numeric_price' => $p->effectivePrice(),
+                            'original_price' => $p->effectiveOriginalPrice(),
+                            'rating' => (float) $p->rating,
+                            'reviews' => (int) $p->reviews,
+                            'badge' => $p->badge,
+                            'desc' => $p->desc,
+                            'image' => $p->image,
+                        ];
+                    })
+                    ->values()
+                    ->all();
             }
         } catch (\Throwable $e) {
             // Keep content.php fallback
@@ -75,7 +83,7 @@ class ProductController extends Controller
         }
 
         return view('products.index', [
-            'content' => $content,
+            'content' => array_merge($content, ['CATALOG' => $catalog]),
             'catalog' => $catalog,
             'selectedCategory' => $selectedCategory,
             'categoryInfo' => $categoryInfo,
@@ -99,7 +107,7 @@ class ProductController extends Controller
         // Try resolving from database first
         $product = null;
         try {
-            $dbProduct = Product::find($id);
+            $dbProduct = Product::with('clearanceItem')->find($id);
             if ($dbProduct) {
                 $product = [
                     'id' => $dbProduct->id,
@@ -108,14 +116,19 @@ class ProductController extends Controller
                     'category_slug' => $dbProduct->category_slug,
                     'category_slugs' => $dbProduct->category_slugs ?: [$dbProduct->category_slug],
                     'material' => $dbProduct->material,
-                    'price' => $dbProduct->formatted_price,
-                    'numeric_price' => $dbProduct->numeric_price,
-                    'original_price' => $dbProduct->original_price,
+                    'price' => $dbProduct->effectiveFormattedPrice(),
+                    'numeric_price' => $dbProduct->effectivePrice(),
+                    'original_price' => $dbProduct->effectiveOriginalPrice(),
                     'rating' => (float) $dbProduct->rating,
                     'reviews' => (int) $dbProduct->reviews,
                     'badge' => $dbProduct->badge,
                     'desc' => $dbProduct->desc,
                     'image' => $dbProduct->image,
+                    'gallery' => $dbProduct->allImages(),
+                    'highlights' => is_array($dbProduct->highlights) ? $dbProduct->highlights : [],
+                    'fabric_details' => is_array($dbProduct->fabric_details) ? $dbProduct->fabric_details : [],
+                    'wash_care' => $dbProduct->wash_care,
+                    'shipping_returns' => $dbProduct->shipping_returns,
                 ];
             }
         } catch (\Throwable $e) {

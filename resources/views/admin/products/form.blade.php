@@ -142,36 +142,182 @@
         </div>
 
         <div class="bg-white p-6 rounded-none border border-neutral-200 shadow-none space-y-6">
-            <h2 class="text-sm font-bold uppercase tracking-wider text-neutral-500 border-b border-neutral-200 pb-3">Media & Presentation</h2>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-neutral-500 border-b border-neutral-200 pb-3">Media &amp; Product Gallery</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Image Asset URL / Path</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Primary Image Asset URL / Path</label>
                     <input type="text" name="image" value="{{ old('image', $product->image) }}"
                            class="w-full px-4 py-2.5 rounded-none border border-neutral-300 text-sm focus:outline-none focus:border-neutral-900 bg-white"
                            placeholder="/images/products/bedsheet-set.webp">
                     <p class="text-xs text-neutral-400 mt-1">Direct public URL or local asset path</p>
                     
                     <div class="mt-4">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Or Upload New Image File</label>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Or Upload New Primary Image</label>
                         <input type="file" name="image_file" accept="image/*"
                                class="w-full text-xs text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-none file:border file:border-neutral-300 file:text-xs file:font-semibold file:bg-neutral-900 file:text-white hover:file:bg-black">
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Upload Additional Gallery Images (Multiple)</label>
+                        <input type="file" name="gallery_files[]" accept="image/*" multiple
+                               class="w-full text-xs text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-none file:border file:border-neutral-300 file:text-xs file:font-semibold file:bg-neutral-900 file:text-white hover:file:bg-black">
+                        <p class="text-[11px] text-neutral-400 mt-1">Select one or more photos (JPG, PNG, WebP, GIF, max 5MB each)</p>
                     </div>
                 </div>
 
                 @if($product->image)
                 <div class="p-3 bg-neutral-50 rounded-none border border-neutral-200 text-center">
-                    <p class="text-xs font-semibold text-neutral-500 mb-2">Current Image Preview</p>
+                    <p class="text-xs font-semibold text-neutral-500 mb-2">Current Primary Image</p>
                     <img src="{{ $product->image }}" alt="Current Image" class="w-32 h-32 object-cover rounded-none mx-auto border border-neutral-300">
                 </div>
                 @endif
             </div>
+
+            @php
+                $existingImages = $isEdit ? $product->allImages() : [];
+            @endphp
+            @if(!empty($existingImages))
+                <div class="pt-4 border-t border-neutral-200 space-y-3">
+                    <p class="text-xs font-bold uppercase tracking-wider text-neutral-700">
+                        Manage Uploaded Gallery Images ({{ count($existingImages) }})
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @foreach($existingImages as $idx => $imgPath)
+                            <div class="p-3 border border-neutral-200 bg-neutral-50 space-y-2.5">
+                                <div class="aspect-[4/3] bg-white border border-neutral-200 overflow-hidden flex items-center justify-center">
+                                    <img src="{{ $imgPath }}" alt="Product image {{ $idx + 1 }}" class="w-full h-full object-contain">
+                                </div>
+
+                                <div class="flex items-center justify-between text-xs">
+                                    <label class="inline-flex items-center gap-1.5 font-semibold text-neutral-800 cursor-pointer">
+                                        <input type="radio" name="primary_image" value="{{ $imgPath }}"
+                                               {{ ($product->image === $imgPath) ? 'checked' : '' }}
+                                               class="text-neutral-900 focus:ring-neutral-900">
+                                        <span>Primary</span>
+                                    </label>
+
+                                    <label class="inline-flex items-center gap-1.5 text-rose-700 font-semibold cursor-pointer">
+                                        <input type="checkbox" name="remove_gallery[]" value="{{ $imgPath }}" class="border-rose-300 text-rose-700">
+                                        <span>Remove</span>
+                                    </label>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 items-center">
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-neutral-500">Order</label>
+                                        <input type="number" min="0" name="gallery_order[{{ $imgPath }}]" value="{{ $idx }}"
+                                               class="w-full px-2 py-1 text-xs border border-neutral-300 bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase text-neutral-500">Replace</label>
+                                        <input type="file" name="replace_gallery_files[{{ $idx }}]" accept="image/*"
+                                               class="w-full text-[10px] text-neutral-500">
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Detailed Description</label>
                 <textarea name="desc" rows="4" 
                           class="w-full px-4 py-2.5 rounded-none border border-neutral-300 text-sm focus:outline-none focus:border-neutral-900 bg-white"
                           placeholder="Silk and linen blend texture with breathable weave and matching pillow covers...">{{ old('desc', $product->desc) }}</textarea>
+            </div>
+        </div>
+
+        <!-- Product Highlights, Fabric Details, Wash Care & Shipping -->
+        @php
+            $initialHighlights = old('highlights', is_array($product->highlights) ? $product->highlights : []);
+            $fabricDetails = is_array($product->fabric_details) ? $product->fabric_details : [];
+        @endphp
+        <div class="bg-white p-6 rounded-none border border-neutral-200 shadow-none space-y-6"
+             x-data="{
+                highlights: @js(array_values($initialHighlights)),
+                addHighlight() { this.highlights.push(''); },
+                removeHighlight(i) { this.highlights.splice(i, 1); },
+                moveHighlight(i, dir) {
+                    const target = i + dir;
+                    if (target < 0 || target >= this.highlights.length) return;
+                    const copy = [...this.highlights];
+                    [copy[i], copy[target]] = [copy[target], copy[i]];
+                    this.highlights = copy;
+                }
+             }">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-neutral-500 border-b border-neutral-200 pb-3">
+                Product Information &amp; Care (Per Product)
+            </h2>
+
+            <!-- Highlights -->
+            <div class="space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700">Product Highlights</label>
+                        <p class="text-[11px] text-neutral-500">Only highlights configured here will display on this product's page.</p>
+                    </div>
+                    <button type="button" @click="addHighlight()"
+                            class="px-3 py-1.5 bg-neutral-900 hover:bg-black text-white text-xs font-bold uppercase tracking-wider cursor-pointer">
+                        + Add Highlight
+                    </button>
+                </div>
+
+                <div class="space-y-2">
+                    <template x-for="(hl, index) in highlights" :key="index">
+                        <div class="flex items-center gap-2">
+                            <input type="text" name="highlights[]" x-model="highlights[index]"
+                                   placeholder="e.g. 100% Breathable Weave"
+                                   class="flex-1 px-3 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900">
+                            <button type="button" @click="moveHighlight(index, -1)" :disabled="index === 0"
+                                    class="px-2 py-2 border border-neutral-300 text-xs disabled:opacity-30 cursor-pointer" title="Move up">&uarr;</button>
+                            <button type="button" @click="moveHighlight(index, 1)" :disabled="index === highlights.length - 1"
+                                    class="px-2 py-2 border border-neutral-300 text-xs disabled:opacity-30 cursor-pointer" title="Move down">&darr;</button>
+                            <button type="button" @click="removeHighlight(index)"
+                                    class="px-2.5 py-2 border border-rose-200 bg-rose-50 text-rose-700 text-xs font-bold cursor-pointer">&times;</button>
+                        </div>
+                    </template>
+                    <p x-show="highlights.length === 0" class="text-xs text-neutral-400 italic">No highlights configured for this product.</p>
+                </div>
+            </div>
+
+            <!-- Fabric Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-neutral-200">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Fabric Details Summary</label>
+                    <textarea name="fabric_summary" rows="2"
+                              class="w-full px-4 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900"
+                              placeholder="Describe fabric texture, weave, and finish...">{{ old('fabric_summary', $fabricDetails['summary'] ?? '') }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Weave Density / Weight</label>
+                    <input type="text" name="weave_density" value="{{ old('weave_density', $fabricDetails['weave_density'] ?? '') }}"
+                           class="w-full px-4 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900"
+                           placeholder="e.g. 400+ Thread Count / 220 GSM">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Craft Origin</label>
+                    <input type="text" name="craft_origin" value="{{ old('craft_origin', $fabricDetails['craft_origin'] ?? '') }}"
+                           class="w-full px-4 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900"
+                           placeholder="e.g. Handcrafted in Karur, India">
+                </div>
+            </div>
+
+            <!-- Wash & Care -->
+            <div class="pt-4 border-t border-neutral-200">
+                <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Wash &amp; Care Instructions</label>
+                <textarea name="wash_care" rows="3"
+                          class="w-full px-4 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900"
+                          placeholder="One instruction per line (e.g. Machine wash cold gentle cycle)...">{{ old('wash_care', $product->wash_care) }}</textarea>
+            </div>
+
+            <!-- Shipping & Returns -->
+            <div class="pt-4 border-t border-neutral-200">
+                <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Shipping &amp; Returns</label>
+                <textarea name="shipping_returns" rows="3"
+                          class="w-full px-4 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900"
+                          placeholder="Product-specific dispatch timeline and return policy...">{{ old('shipping_returns', $product->shipping_returns) }}</textarea>
             </div>
         </div>
 

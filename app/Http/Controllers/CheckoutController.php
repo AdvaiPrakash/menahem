@@ -97,17 +97,13 @@ class CheckoutController extends Controller
 
         foreach ($items as $item) {
             $qty = max(1, (int) ($item['quantity'] ?? 1));
-            $price = (float) ($item['price'] ?? 0);
+            $product = ! empty($item['id']) ? Product::with('clearanceItem')->find($item['id']) : null;
+            $price = $product ? $product->effectivePrice() : max(0.0, (float) ($item['price'] ?? 0));
             $subtotal += ($price * $qty);
-
-            $product = null;
-            if (! empty($item['id'])) {
-                $product = Product::find($item['id']);
-            }
 
             $itemsWithGst[] = [
                 'id' => $item['id'] ?? null,
-                'name' => $item['name'] ?? 'Product',
+                'name' => $product?->name ?? ($item['name'] ?? 'Product'),
                 'price' => $price,
                 'quantity' => $qty,
                 'gst_rate' => $product?->gst_rate ?? 12.0,
@@ -217,19 +213,18 @@ class CheckoutController extends Controller
             ], 422);
         }
 
-        // 2. Prepare items with GST info
+        // 2. Prepare items with server-verified pricing (including active clearance discounts) & GST info
         $itemsWithGst = [];
         $subtotal = 0.0;
         foreach ($validated['items'] as $item) {
             $qty = (int) $item['quantity'];
-            $price = (float) $item['price'];
+            $product = Product::with('clearanceItem')->find($item['id']);
+            $price = $product ? $product->effectivePrice() : max(0.0, (float) $item['price']);
             $subtotal += ($price * $qty);
-
-            $product = Product::find($item['id']);
 
             $itemsWithGst[] = [
                 'id' => $item['id'],
-                'name' => $item['name'],
+                'name' => $product?->name ?? $item['name'],
                 'sku' => $product?->sku,
                 'hsn_code' => $product?->hsn_code ?? '6304',
                 'price' => $price,

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\ClearanceSaleController as AdminClearanceSaleController;
 use App\Http\Controllers\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Admin\CustomerLeadController as AdminCustomerLeadController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -143,9 +144,13 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(func
     Route::get('/billing/create', [AdminManualBillingController::class, 'create'])->name('billing.create');
     Route::post('/billing', [AdminManualBillingController::class, 'store'])->name('billing.store');
 
-    // Module 1: Offer & Coupon Management
+    // Module 1: Offer, Coupon & Clearance Sale Management
     Route::resource('coupons', AdminCouponController::class)->except(['show']);
     Route::patch('/coupons/{coupon}/toggle', [AdminCouponController::class, 'toggle'])->name('coupons.toggle');
+    Route::get('/clearance-sale', [AdminClearanceSaleController::class, 'index'])->name('clearance.index');
+    Route::post('/clearance-sale', [AdminClearanceSaleController::class, 'store'])->name('clearance.store');
+    Route::put('/clearance-sale/{clearanceItem}', [AdminClearanceSaleController::class, 'update'])->name('clearance.update');
+    Route::delete('/clearance-sale/{clearanceItem}', [AdminClearanceSaleController::class, 'destroy'])->name('clearance.destroy');
 
     // Module 2: Payment Settings
     Route::get('/settings/payment', [AdminPaymentSettingController::class, 'index'])->name('settings.payment');
@@ -192,7 +197,6 @@ Route::get('/system/clear-cache', function () {
         'success' => true,
         'message' => 'Cache, config, route, and view caches successfully cleared.',
         'database_connection' => config('database.default'),
-        'database_name' => config('database.connections.'.config('database.default').'.database'),
         'output' => $output,
     ]);
-})->name('system.clear-cache');
+})->middleware(['web', 'admin:admin'])->name('system.clear-cache');

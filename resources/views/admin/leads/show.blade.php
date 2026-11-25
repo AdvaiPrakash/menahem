@@ -20,8 +20,12 @@
                     {{ strtoupper(substr($lead->name, 0, 1)) }}
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
                         <h2 class="text-xl font-bold text-neutral-900">{{ $lead->name }}</h2>
+                        <span class="px-2.5 py-0.5 rounded-none text-[10px] font-bold uppercase tracking-wider border
+                            {{ $leadStatus === 'Ordered' ? 'bg-emerald-50 text-emerald-900 border-emerald-300' : ($leadStatus === 'Enquiry Only' ? 'bg-amber-50 text-amber-900 border-amber-300' : 'bg-neutral-100 text-neutral-800 border-neutral-300') }}">
+                            {{ $leadStatus }}
+                        </span>
                         <span class="px-2.5 py-0.5 rounded-none text-[10px] font-bold uppercase tracking-wider border
                             {{ $lead->customer_type === 'google' ? 'bg-purple-50 text-purple-900 border-purple-200' : ($lead->customer_type === 'registered' ? 'bg-blue-50 text-blue-900 border-blue-200' : 'bg-neutral-100 text-neutral-800 border-neutral-300') }}">
                             {{ ucfirst($lead->customer_type) }} Customer
@@ -81,7 +85,7 @@
                     <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-3">
                         <div>
                             <div class="flex items-center gap-2.5">
-                                <span class="font-mono font-bold text-sm text-neutral-900">{{ $order->order_number }}</span>
+                                <a href="{{ route('admin.orders.show', $order) }}" class="font-mono font-bold text-sm text-neutral-900 hover:underline">{{ $order->order_number }}</a>
                                 <span class="px-2 py-0.5 text-[11px] font-bold rounded-none border {{ $order->isPaid() ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-800 border-amber-200' }}">
                                     {{ ucfirst($order->payment_status) }}
                                 </span>
@@ -121,6 +125,44 @@
             @empty
                 <div class="p-8 text-center text-neutral-400 text-sm">
                     No orders recorded for this customer lead yet.
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Connected Enquiries History -->
+    <div class="bg-white rounded-none border border-neutral-200 shadow-none overflow-hidden">
+        <div class="p-5 border-b border-neutral-200">
+            <h3 class="text-base font-bold text-neutral-900">Customer Enquiries History ({{ $inquiries->count() }})</h3>
+            <p class="text-xs text-neutral-500">Every website enquiry submitted by this customer</p>
+        </div>
+
+        <div class="divide-y divide-neutral-200">
+            @forelse($inquiries as $inq)
+                <div class="p-5 hover:bg-neutral-50 transition-colors flex flex-col sm:flex-row justify-between items-start gap-4">
+                    <div class="space-y-1 min-w-0 flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-sm font-bold text-neutral-900">{{ $inq->resolvedSubject() }}</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-none border bg-neutral-100 text-neutral-800 border-neutral-300">
+                                {{ $inq->statusLabel() }}
+                            </span>
+                        </div>
+                        <p class="text-xs text-neutral-500">
+                            Submitted on {{ $inq->created_at->format('d M Y, h:i A') }}
+                            @if($inq->phone) • {{ $inq->phone }} @endif
+                        </p>
+                        @if($inq->message)
+                            <p class="text-xs text-neutral-700 bg-neutral-50 border border-neutral-200 p-2.5 mt-2">{{ $inq->message }}</p>
+                        @endif
+                    </div>
+                    <a href="{{ route('admin.inquiries.show', $inq) }}"
+                       class="px-3 py-1.5 bg-neutral-900 hover:bg-black text-white text-xs font-bold uppercase tracking-wider shrink-0">
+                        View / Reply &rarr;
+                    </a>
+                </div>
+            @empty
+                <div class="p-8 text-center text-neutral-400 text-sm">
+                    No enquiries recorded for this customer yet.
                 </div>
             @endforelse
         </div>

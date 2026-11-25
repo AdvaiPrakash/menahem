@@ -40,7 +40,8 @@ class ProductDetailPageTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Cotton Bedsheet & Dohar Set');
-        $response->assertSee('Buy via WhatsApp');
+        $response->assertDontSee('Buy via WhatsApp');
+        $response->assertSee('Buy Now');
         $response->assertSee('Add to Bag');
     }
 }

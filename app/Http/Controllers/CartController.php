@@ -25,7 +25,7 @@ class CartController extends Controller
             $items = collect();
         }
 
-        $subtotal = $items->sum(fn ($i) => ($i->product?->numeric_price ?? 0) * $i->quantity);
+        $subtotal = $items->sum(fn ($i) => ($i->product?->effectivePrice() ?? 0) * $i->quantity);
         $shipping = $subtotal >= 999 ? 0 : ($subtotal > 0 ? 99 : 0);
 
         return response()->json([
@@ -39,7 +39,7 @@ class CartController extends Controller
                 'cart_item_id' => $i->id,
                 'id' => $i->product_id,
                 'name' => $i->product?->name,
-                'price' => $i->product?->numeric_price,
+                'price' => $i->product?->effectivePrice(),
                 'image' => $i->product?->image,
                 'quantity' => $i->quantity,
                 'custom_size' => $i->custom_size,
