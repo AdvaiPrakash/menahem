@@ -6,7 +6,10 @@
 <div class="min-h-screen bg-[#FBFBF9] pt-24 pb-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" 
          x-data="{
-            // Cart Items pulled from localStorage or default
+            // Checkout flow mode: 'buy_now' (single product) vs 'cart' (shopping bag)
+            checkoutMode: new URLSearchParams(window.location.search).get('mode') === 'buy_now' ? 'buy_now' : 'cart',
+
+            // Cart Items pulled from Buy Now session or Cart
             items: [],
             couponCode: '',
             couponApplied: false,
@@ -62,7 +65,24 @@
             errorMessage: '',
 
             init() {
-                // Initialize cart items from localStorage
+                if (this.checkoutMode === 'buy_now') {
+                    try {
+                        const buyNowRaw = sessionStorage.getItem('menahem_buy_now');
+                        if (buyNowRaw) {
+                            const parsed = JSON.parse(buyNowRaw);
+                            if (Array.isArray(parsed)) {
+                                this.items = parsed;
+                            }
+                        }
+                    } catch (e) {}
+
+                    if (this.items && this.items.length > 0) {
+                        this.calculateBreakdown();
+                    }
+                    return;
+                }
+
+                // Cart Checkout mode: Initialize cart items from localStorage
                 try {
                     const saved = localStorage.getItem('menahem_cart');
                     if (saved) {
@@ -406,9 +426,21 @@
                             .then(r => r.json())
                             .then(verifyRes => {
                                 if (verifyRes.success) {
-                                    // Clear local cart
-                                    try { localStorage.removeItem('menahem_cart'); } catch(e){}
-                                    window.location.href = verifyRes.redirect_url;
+                                    if (this.checkoutMode === 'buy_now') {
+                                        try { sessionStorage.removeItem('menahem_buy_now'); } catch(e){}
+                                        window.location.href = verifyRes.redirect_url;
+                                    } else {
+                                        try { localStorage.removeItem('menahem_cart'); } catch(e){}
+                                        fetch('{{ route('cart.clear') }}', {
+                                            method: 'POST',
+                                            headers: {
+                                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                'Accept': 'application/json'
+                                            }
+                                        }).catch(() => {}).finally(() => {
+                                            window.location.href = verifyRes.redirect_url;
+                                        });
+                                    }
                                 } else {
                                     this.isProcessing = false;
                                     this.errorMessage = verifyRes.message || 'Payment signature verification failed.';
@@ -632,7 +664,10 @@
             <div class="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
                 <div class="bg-white rounded-2xl p-6 sm:p-8 border border-neutral-200 shadow-xs">
                     <h2 class="text-base font-bold text-[#2B3326] pb-4 border-b border-neutral-100 flex items-center justify-between">
-                        <span>Order Summary</span>
+                        <span class="flex items-center gap-2">
+                            <span>Order Summary</span>
+                            <span x-show="checkoutMode === 'buy_now'" x-cloak class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-[#384230]/10 text-[#384230] rounded">Buy Now</span>
+                        </span>
                         <span class="text-xs font-semibold text-[#74826B]" x-text="items.length + ' item(s)'"></span>
                     </h2>
 
@@ -702,7 +737,7 @@
                     <!-- Price Breakdown Table -->
                     <div class="pt-5 mt-5 border-t border-neutral-200 space-y-2 text-xs">
                         <div class="flex justify-between text-[#5C6654]">
-                            <span>Product Subtotal</span>
+                            <span>Product Subtotal (Incl. GST)</span>
                             <span class="font-bold text-[#2B3326]" x-text="'₹' + subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
                         </div>
 
@@ -713,30 +748,32 @@
                             </div>
                         </template>
 
-                        <div class="flex justify-between text-[#5C6654]">
-                            <span>Net Taxable Amount</span>
-                            <span class="font-semibold text-[#2B3326]" x-text="'₹' + taxableAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
+                        <div class="pt-1.5 border-t border-dashed border-neutral-200 space-y-1 text-[11px] text-[#5C6654]">
+                            <div class="flex justify-between">
+                                <span>Taxable Value (Excl. GST)</span>
+                                <span class="font-semibold text-[#2B3326]" x-text="'₹' + taxableAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
+                            </div>
+
+                            <template x-if="isIntraState">
+                                <div class="space-y-1">
+                                    <div class="flex justify-between">
+                                        <span>CGST (2.5% • Included)</span>
+                                        <span x-text="'₹' + cgstAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>SGST (2.5% • ' + shippingState + ' • Included)</span>
+                                        <span x-text="'₹' + sgstAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template x-if="!isIntraState">
+                                <div class="flex justify-between">
+                                    <span>IGST (Interstate • Included)</span>
+                                    <span x-text="'₹' + igstAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
+                                </div>
+                            </template>
                         </div>
-
-                        <template x-if="isIntraState">
-                            <div>
-                                <div class="flex justify-between text-[#5C6654]">
-                                    <span>CGST (Central Tax)</span>
-                                    <span x-text="'₹' + cgstAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
-                                </div>
-                                <div class="flex justify-between text-[#5C6654] mt-1">
-                                    <span>SGST (State Tax - ' + shippingState + ')</span>
-                                    <span x-text="'₹' + sgstAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
-                                </div>
-                            </div>
-                        </template>
-
-                        <template x-if="!isIntraState">
-                            <div class="flex justify-between text-[#5C6654]">
-                                <span>IGST (Integrated Interstate Tax)</span>
-                                <span x-text="'₹' + igstAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
-                            </div>
-                        </template>
 
                         <div class="space-y-1">
                             <div class="flex justify-between text-[#5C6654]">

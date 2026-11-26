@@ -67,7 +67,7 @@
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">GST Rate (%)</label>
-                    <input type="number" step="0.01" name="gst_rate" value="{{ old('gst_rate', $product->gst_rate ?? 12.0) }}"
+                    <input type="number" step="0.01" name="gst_rate" value="{{ old('gst_rate', $product->gst_rate ?? 5.0) }}"
                            class="w-full px-4 py-2.5 rounded-none border border-neutral-300 text-sm focus:outline-none focus:border-neutral-900 bg-white"
                            placeholder="12.00">
                 </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class ClearanceItem extends Model
@@ -17,6 +18,41 @@ class ClearanceItem extends Model
             return Schema::hasTable('clearance_items');
         } catch (\Throwable) {
             return false;
+        }
+    }
+
+    /**
+     * Ensure the clearance_items table exists even if the latest migration was not yet executed.
+     */
+    public static function ensureTableExists(): bool
+    {
+        if (self::tableExists()) {
+            return true;
+        }
+
+        try {
+            if (! Schema::hasTable('products')) {
+                return false;
+            }
+
+            Schema::create('clearance_items', function (Blueprint $table): void {
+                $table->id();
+                $table->foreignId('product_id')
+                    ->unique()
+                    ->constrained('products')
+                    ->cascadeOnDelete();
+                $table->string('discount_type', 20)->default('percentage');
+                $table->decimal('discount_value', 10, 2)->default(0);
+                $table->boolean('show_on_homepage')->default(true)->index();
+                $table->boolean('show_in_all_products')->default(true)->index();
+                $table->integer('display_order')->default(0)->index();
+                $table->boolean('is_active')->default(true)->index();
+                $table->timestamps();
+            });
+
+            return true;
+        } catch (\Throwable) {
+            return self::tableExists();
         }
     }
 

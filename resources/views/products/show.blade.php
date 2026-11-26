@@ -140,41 +140,10 @@
                     };
 
                     try {
-                        let existingCart = [];
-                        try {
-                            const saved = localStorage.getItem('menahem_cart');
-                            if (saved) {
-                                const parsed = JSON.parse(saved);
-                                if (Array.isArray(parsed)) existingCart = parsed;
-                            }
-                        } catch (e) {}
-
-                        const match = existingCart.find((i) => Number(i.product_id || i.id) === {{ $id }} && (i.custom_size || null) === (itemPayload.custom_size || null));
-                        if (match) {
-                            match.quantity = (parseInt(match.quantity, 10) || 1) + this.quantity;
-                        } else {
-                            existingCart.push(itemPayload);
-                        }
-                        localStorage.setItem('menahem_cart', JSON.stringify(existingCart));
+                        sessionStorage.setItem('menahem_buy_now', JSON.stringify([itemPayload]));
                     } catch (e) {}
 
-                    try {
-                        await fetch('{{ route('cart.add') }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                product_id: {{ $id }},
-                                quantity: this.quantity,
-                                custom_size: this.customSizeString
-                            })
-                        });
-                    } catch (e) {}
-
-                    window.location.href = '{{ route('checkout.index') }}';
+                    window.location.href = '{{ route('checkout.index', ['mode' => 'buy_now']) }}';
                 }
             }"
             class="pt-24 sm:pt-28 lg:pt-30 pb-20 bg-white min-h-screen text-[#2B3326]"
@@ -584,28 +553,27 @@
                         </div>
 
                         <!-- Primary Action Buttons -->
-                        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <div class="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-md">
                             <!-- Buy Now Button (Proceeds directly to Checkout) -->
                             <button
                                 type="button"
                                 @click="buyNow()"
                                 :disabled="buyingNow"
-                                class="flex-1 flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#74826B] hover:bg-[#636F5A] text-white text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 group cursor-pointer disabled:opacity-70"
+                                class="flex-1 h-11 inline-flex items-center justify-center gap-2 px-5 rounded-lg bg-[#384230] hover:bg-[#2B3326] text-white text-[13px] font-semibold tracking-wide border border-transparent transition-colors shadow-xs cursor-pointer disabled:opacity-60"
                             >
-                                <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                                 </svg>
-                                <span x-text="buyingNow ? 'Proceeding to Checkout...' : 'Buy Now'">Buy Now</span>
-                                <span class="text-xs group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+                                <span x-text="buyingNow ? 'Proceeding...' : 'Buy Now'">Buy Now</span>
                             </button>
 
                             <!-- Add to Bag Button (Triggers Cart Drawer) -->
                             <button
                                 type="button"
                                 @click="addToBag()"
-                                class="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-white hover:bg-neutral-100 text-[#2B3326] border border-neutral-200 text-sm font-bold tracking-wide transition-all shadow-xs hover:border-[#74826B] cursor-pointer"
+                                class="flex-1 h-11 inline-flex items-center justify-center gap-2 px-5 rounded-lg bg-white hover:bg-[#F7F8F5] text-[#2B3326] border border-[#2B3326]/25 hover:border-[#2B3326] text-[13px] font-semibold tracking-wide transition-colors shadow-xs cursor-pointer"
                             >
-                                <svg class="w-4.5 h-4.5 text-[#2B3326]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-[#2B3326] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                 </svg>
                                 <span>Add to Bag</span>

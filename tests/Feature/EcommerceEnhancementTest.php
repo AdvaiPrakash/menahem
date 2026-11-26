@@ -173,27 +173,31 @@ class EcommerceEnhancementTest extends TestCase
                 'name' => $this->product->name,
                 'sku' => $this->product->sku,
                 'hsn_code' => $this->product->hsn_code,
-                'price' => 1000.0,
+                'price' => 100.0,
                 'quantity' => 1,
-                'gst_rate' => 12.0,
+                'gst_rate' => 5.0,
             ],
         ];
 
-        // Intra-state (Gujarat to Gujarat) -> CGST 6% + SGST 6%
-        $intra = $taxService->calculate($items, 0.0, 'Gujarat');
+        // Intra-state (Gujarat to Gujarat) -> GST-inclusive ₹100 at 5% (CGST 2.5% + SGST 2.5%)
+        $intra = $taxService->calculate($items, 0.0, 'Gujarat', 999.0, 0.0, 0.0, false);
         $this->assertTrue($intra['is_intra_state']);
-        $this->assertEquals(60.0, $intra['cgst_amount']);
-        $this->assertEquals(60.0, $intra['sgst_amount']);
+        $this->assertEquals(95.24, $intra['taxable_amount']);
+        $this->assertEquals(2.38, $intra['cgst_amount']);
+        $this->assertEquals(2.38, $intra['sgst_amount']);
         $this->assertEquals(0.0, $intra['igst_amount']);
-        $this->assertEquals(120.0, $intra['total_tax']);
+        $this->assertEquals(4.76, $intra['total_tax']);
+        $this->assertEquals(100.0, $intra['grand_total']);
 
-        // Inter-state (Gujarat to Maharashtra) -> IGST 12%
-        $inter = $taxService->calculate($items, 0.0, 'Maharashtra');
+        // Inter-state (Gujarat to Maharashtra) -> GST-inclusive ₹100 at 5% (IGST 5%)
+        $inter = $taxService->calculate($items, 0.0, 'Maharashtra', 999.0, 0.0, 0.0, false);
         $this->assertFalse($inter['is_intra_state']);
+        $this->assertEquals(95.24, $inter['taxable_amount']);
         $this->assertEquals(0.0, $inter['cgst_amount']);
         $this->assertEquals(0.0, $inter['sgst_amount']);
-        $this->assertEquals(120.0, $inter['igst_amount']);
-        $this->assertEquals(120.0, $inter['total_tax']);
+        $this->assertEquals(4.76, $inter['igst_amount']);
+        $this->assertEquals(4.76, $inter['total_tax']);
+        $this->assertEquals(100.0, $inter['grand_total']);
     }
 
     public function test_razorpay_signature_verification(): void

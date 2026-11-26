@@ -20,7 +20,10 @@ class StockService
         $errors = [];
 
         foreach ($items as $item) {
-            $productId = $item['id'] ?? null;
+            $rawId = $item['product_id'] ?? $item['id'] ?? null;
+            $productId = is_numeric($rawId)
+                ? (int) $rawId
+                : (is_string($rawId) && preg_match('/^(\d+)-/', $rawId, $m) === 1 ? (int) $m[1] : null);
             $qty = (int) ($item['quantity'] ?? 1);
 
             if (! $productId) {

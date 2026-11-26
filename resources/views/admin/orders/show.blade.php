@@ -4,13 +4,22 @@
 @section('header_title', "Order Details: #{$order->order_number}")
 
 @section('header_actions')
+    <button type="button"
+            onclick="window.print()"
+            class="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 bg-white hover:bg-neutral-100 text-neutral-800 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer print:hidden">
+        <span>Print Bill</span>
+    </button>
     <a href="{{ route('admin.orders.invoice', $order) }}" 
-       class="inline-flex items-center gap-2 px-4 py-2 bg-neutral-900 hover:bg-black text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-none">
+       class="inline-flex items-center gap-2 px-4 py-2 bg-neutral-900 hover:bg-black text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-none print:hidden">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-        <span>Download Invoice</span>
+        <span>Download Invoice (PDF)</span>
+    </a>
+    <a href="{{ route('admin.accounts.index') }}" 
+       class="px-3.5 py-2 border border-neutral-300 text-neutral-700 text-xs font-semibold uppercase tracking-wider hover:bg-neutral-100 transition-colors print:hidden">
+        Accounts
     </a>
     <a href="{{ route('admin.orders.index') }}" 
-       class="px-3.5 py-2 border border-neutral-300 text-neutral-700 text-xs font-semibold uppercase tracking-wider hover:bg-neutral-100 transition-colors">
+       class="px-3.5 py-2 border border-neutral-300 text-neutral-700 text-xs font-semibold uppercase tracking-wider hover:bg-neutral-100 transition-colors print:hidden">
         Back to Orders
     </a>
 @endsection

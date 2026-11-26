@@ -38,6 +38,7 @@ class Order extends Model
         'payment_status',
         'order_status',
         'payment_method',
+        'payment_details',
         'razorpay_order_id',
         'razorpay_payment_id',
         'razorpay_signature',
@@ -50,6 +51,7 @@ class Order extends Model
         return [
             'shipping_address' => 'array',
             'billing_address' => 'array',
+            'payment_details' => 'array',
             'subtotal' => 'float',
             'discount_amount' => 'float',
             'taxable_amount' => 'float',

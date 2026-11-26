@@ -98,18 +98,19 @@ class CheckoutController extends Controller
 
         foreach ($items as $item) {
             $qty = max(1, (int) ($item['quantity'] ?? 1));
-            $product = ! empty($item['id'])
-                ? (ClearanceItem::tableExists() ? Product::with('clearanceItem')->find($item['id']) : Product::find($item['id']))
+            $productId = $this->resolveProductId($item);
+            $product = $productId
+                ? (ClearanceItem::tableExists() ? Product::with('clearanceItem')->find($productId) : Product::find($productId))
                 : null;
             $price = $product ? $product->effectivePrice() : max(0.0, (float) ($item['price'] ?? 0));
             $subtotal += ($price * $qty);
 
             $itemsWithGst[] = [
-                'id' => $item['id'] ?? null,
+                'id' => $product?->id ?? $productId ?? ($item['id'] ?? null),
                 'name' => $product?->name ?? ($item['name'] ?? 'Product'),
                 'price' => $price,
                 'quantity' => $qty,
-                'gst_rate' => $product?->gst_rate ?? 12.0,
+                'gst_rate' => (float) ($product?->gst_rate ?? ($item['gst_rate'] ?? 5.0)),
             ];
         }
 
@@ -221,20 +222,23 @@ class CheckoutController extends Controller
         $subtotal = 0.0;
         foreach ($validated['items'] as $item) {
             $qty = (int) $item['quantity'];
-            $product = ClearanceItem::tableExists()
-                ? Product::with('clearanceItem')->find($item['id'])
-                : Product::find($item['id']);
+            $productId = $this->resolveProductId($item);
+            $product = $productId
+                ? (ClearanceItem::tableExists()
+                    ? Product::with('clearanceItem')->find($productId)
+                    : Product::find($productId))
+                : null;
             $price = $product ? $product->effectivePrice() : max(0.0, (float) $item['price']);
             $subtotal += ($price * $qty);
 
             $itemsWithGst[] = [
-                'id' => $item['id'],
+                'id' => $product?->id ?? $productId,
                 'name' => $product?->name ?? $item['name'],
                 'sku' => $product?->sku,
                 'hsn_code' => $product?->hsn_code ?? '6304',
                 'price' => $price,
                 'quantity' => $qty,
-                'gst_rate' => (float) ($product?->gst_rate ?? 12.0),
+                'gst_rate' => (float) ($product?->gst_rate ?? 5.0),
                 'custom_size' => $item['custom_size'] ?? null,
                 'image' => $item['image'] ?? ($product?->image ?? null),
             ];
@@ -493,5 +497,28 @@ class CheckoutController extends Controller
             'order' => $order,
             'invoice' => $order->invoice,
         ]);
+    }
+
+    /**
+     * Resolve the numeric product ID from a cart or Buy Now item payload.
+     *
+     * @param  array<string, mixed>  $item
+     */
+    protected function resolveProductId(array $item): ?int
+    {
+        $raw = $item['product_id'] ?? $item['id'] ?? null;
+        if (is_numeric($raw)) {
+            $id = (int) $raw;
+
+            return $id > 0 ? $id : null;
+        }
+
+        if (is_string($raw) && preg_match('/^(\d+)-/', $raw, $matches) === 1) {
+            $id = (int) $matches[1];
+
+            return $id > 0 ? $id : null;
+        }
+
+        return null;
     }
 }

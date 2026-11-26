@@ -158,4 +158,104 @@ class AdminManualBillingTest extends TestCase
         $this->assertSame(1, $product->fresh()->stock_quantity);
         $this->assertSame(0, CustomerLead::count());
     }
+
+    public function test_manual_billing_uses_gst_inclusive_5_percent_auto_discount_and_split_payment(): void
+    {
+        $admin = User::factory()->create(['role' => UserRole::Admin]);
+
+        $product = Product::create([
+            'name' => 'Waffle Cotton Throw',
+            'slug' => 'waffle-cotton-throw',
+            'category' => 'Throws',
+            'category_slug' => 'throws',
+            'price' => '₹1,000',
+            'numeric_price' => 1000,
+            'gst_rate' => 5.00,
+            'stock_quantity' => 10,
+            'in_stock' => true,
+        ]);
+
+        // UI removes GSTIN, State, City, Bill Notes and includes Split Payment + Final Payable in bottom sticky bar
+        $page = $this->actingAs($admin)->get(route('admin.billing.create'))->assertOk();
+        $page->assertDontSee('Customer GSTIN');
+        $page->assertDontSee('Bill Notes');
+        $page->assertSee('Split Payment');
+        $page->assertSee('Remaining Balance');
+        $page->assertSee('Final Payable (₹)');
+        $page->assertSee('Generate Bill');
+
+        // Rejects edited_final_amount exceeding original subtotal
+        $this->actingAs($admin)->post(route('admin.billing.store'), [
+            'customer_name' => 'Meera Nair',
+            'customer_phone' => '+919820012345',
+            'payment_method' => 'Cash',
+            'edited_final_amount' => 1200,
+            'items' => [
+                ['product_id' => $product->id, 'quantity' => 1, 'unit_price' => 1000],
+            ],
+        ])->assertSessionHasErrors('edited_final_amount');
+
+        // Rejects mismatched split payment total
+        $this->actingAs($admin)->post(route('admin.billing.store'), [
+            'customer_name' => 'Meera Nair',
+            'customer_phone' => '+919820012345',
+            'is_split_payment' => '1',
+            'edited_final_amount' => 900,
+            'split_payments' => [
+                ['method' => 'UPI', 'amount' => 500],
+                ['method' => 'Cash', 'amount' => 300],
+            ],
+            'items' => [
+                ['product_id' => $product->id, 'quantity' => 1, 'unit_price' => 1000],
+            ],
+        ])->assertSessionHasErrors('split_payments');
+
+        // Rejects duplicate split payment methods
+        $this->actingAs($admin)->post(route('admin.billing.store'), [
+            'customer_name' => 'Meera Nair',
+            'customer_phone' => '+919820012345',
+            'is_split_payment' => '1',
+            'edited_final_amount' => 900,
+            'split_payments' => [
+                ['method' => 'UPI', 'amount' => 500],
+                ['method' => 'UPI', 'amount' => 400],
+            ],
+            'items' => [
+                ['product_id' => $product->id, 'quantity' => 1, 'unit_price' => 1000],
+            ],
+        ])->assertSessionHasErrors('split_payments');
+
+        // Valid split payment + auto-calculated discount (1000 -> 900 => discount 100)
+        $res = $this->actingAs($admin)->post(route('admin.billing.store'), [
+            'customer_name' => 'Meera Nair',
+            'customer_phone' => '+919820012345',
+            'shipping_address_line1' => '14 Pali Hill, Bandra',
+            'is_split_payment' => '1',
+            'edited_final_amount' => 900,
+            'split_payments' => [
+                ['method' => 'UPI', 'amount' => 500],
+                ['method' => 'Cash', 'amount' => 400],
+            ],
+            'items' => [
+                ['product_id' => $product->id, 'quantity' => 1, 'unit_price' => 1000],
+            ],
+        ]);
+
+        $res->assertSessionHasNoErrors();
+        $order = Order::latest('id')->firstOrFail();
+
+        $this->assertEquals(1000.0, $order->subtotal);
+        $this->assertEquals(100.0, $order->discount_amount);
+        $this->assertEquals(857.14, $order->taxable_amount);
+        $this->assertEquals(21.43, $order->cgst_amount);
+        $this->assertEquals(21.43, $order->sgst_amount);
+        $this->assertEquals(0.0, $order->igst_amount);
+        $this->assertEquals(0.0, $order->gateway_fee);
+        $this->assertEquals(900.0, $order->grand_total);
+        $this->assertSame('Split (UPI + Cash)', $order->payment_method);
+        $this->assertSame([
+            ['method' => 'UPI', 'amount' => 500],
+            ['method' => 'Cash', 'amount' => 400],
+        ], $order->payment_details);
+    }
 }

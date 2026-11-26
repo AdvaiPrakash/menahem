@@ -19,7 +19,9 @@ class CartController extends Controller
         $user = $request->user();
 
         try {
-            $items = $this->cartService->getItems($user, $guestToken);
+            $items = $this->cartService->getItems($user, $guestToken)
+                ->filter(fn ($i): bool => $i->product !== null)
+                ->values();
         } catch (\Throwable $e) {
             \Log::error('Cart query error: '.$e->getMessage());
             $items = collect();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountsController as AdminAccountsController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ClearanceSaleController as AdminClearanceSaleController;
@@ -143,6 +144,12 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(func
     Route::get('/orders/{order}/invoice', [AdminOrderController::class, 'downloadInvoice'])->name('orders.invoice');
     Route::get('/billing/create', [AdminManualBillingController::class, 'create'])->name('billing.create');
     Route::post('/billing', [AdminManualBillingController::class, 'store'])->name('billing.store');
+
+    // Accounts & Ledger Management
+    Route::get('/accounts', [AdminAccountsController::class, 'index'])->name('accounts.index');
+    Route::get('/accounts/export-excel', [AdminAccountsController::class, 'exportExcel'])->name('accounts.export-excel');
+    Route::get('/accounts/export-pdf', [AdminAccountsController::class, 'exportPdf'])->name('accounts.export-pdf');
+    Route::post('/accounts/{order}/cancel', [AdminAccountsController::class, 'cancel'])->name('accounts.cancel');
 
     // Module 1: Offer, Coupon & Clearance Sale Management
     Route::resource('coupons', AdminCouponController::class)->except(['show']);

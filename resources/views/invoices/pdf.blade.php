@@ -177,17 +177,20 @@
         <thead>
             <tr>
                 <th style="width: 5%;">#</th>
-                <th style="width: 35%;">Product Description</th>
-                <th style="width: 10%;" class="text-center">HSN</th>
-                <th style="width: 8%;" class="text-center">Qty</th>
-                <th style="width: 12%;" class="text-right">Unit Price</th>
-                <th style="width: 10%;" class="text-right">Taxable</th>
-                <th style="width: 8%;" class="text-center">GST %</th>
-                <th style="width: 12%;" class="text-right">Total (INR)</th>
+                <th style="width: 31%;">Product Description</th>
+                <th style="width: 9%;" class="text-center">HSN</th>
+                <th style="width: 7%;" class="text-center">Qty</th>
+                <th style="width: 12%;" class="text-right">Rate (Incl. GST)</th>
+                <th style="width: 11%;" class="text-right">Taxable</th>
+                <th style="width: 13%;" class="text-center">GST Breakup</th>
+                <th style="width: 12%;" class="text-right">Total (Incl. GST)</th>
             </tr>
         </thead>
         <tbody>
             @foreach($order->items as $idx => $item)
+                @php
+                    $itemTotalTax = (float) $item->cgst_amount + (float) $item->sgst_amount + (float) $item->igst_amount;
+                @endphp
                 <tr>
                     <td class="text-center">{{ $idx + 1 }}</td>
                     <td>
@@ -198,13 +201,25 @@
                         @if($item->sku)
                             <div style="font-size: 8px; color: #888;">SKU: {{ $item->sku }}</div>
                         @endif
+                        @if((float)$item->discount > 0)
+                            <div style="font-size: 8px; color: #2e7d32;">Discount: -&#8377;{{ number_format($item->discount, 2) }}</div>
+                        @endif
                     </td>
                     <td class="text-center">{{ $item->hsn_code ?: '6304' }}</td>
                     <td class="text-center">{{ $item->quantity }}</td>
                     <td class="text-right">&#8377;{{ number_format($item->unit_price, 2) }}</td>
                     <td class="text-right">&#8377;{{ number_format($item->taxable_value, 2) }}</td>
-                    <td class="text-center">{{ (float)$item->gst_rate }}%</td>
-                    <td class="text-right">&#8377;{{ number_format($item->total_amount, 2) }}</td>
+                    <td class="text-center">
+                        {{ (float)$item->gst_rate }}%
+                        <div style="font-size: 8px; color: #555;">
+                            @if((float)$item->igst_amount > 0)
+                                IGST: &#8377;{{ number_format($item->igst_amount, 2) }}
+                            @else
+                                C: &#8377;{{ number_format($item->cgst_amount, 2) }} | S: &#8377;{{ number_format($item->sgst_amount, 2) }}
+                            @endif
+                        </div>
+                    </td>
+                    <td class="text-right"><strong>&#8377;{{ number_format($item->total_amount, 2) }}</strong></td>
                 </tr>
             @endforeach
         </tbody>
@@ -216,37 +231,45 @@
             <td style="width: 50%; vertical-align: top; padding-right: 15px;">
                 <p style="font-size: 9px; color: #555; margin-top: 0;">
                     <strong>Declaration:</strong><br>
+                    All product prices shown are inclusive of applicable GST.
                     We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
-                    Goods sold are covered under applicable GST rates.
                 </p>
                 <p style="font-size: 9px; color: #555;">
                     <strong>State Treatment:</strong> 
-                    {{ $invoice->igst_amount > 0 ? 'Inter-state Transaction (IGST Applicable)' : 'Intra-state Transaction (CGST + SGST Applicable)' }}
+                    {{ $invoice->igst_amount > 0 ? 'Inter-state Transaction (IGST Applicable)' : 'Intra-state Transaction (CGST 2.5% + SGST 2.5% Included)' }}
                 </p>
+                @if($order && is_array($order->payment_details) && count($order->payment_details) > 1)
+                    <p style="font-size: 9px; color: #333; margin-top: 6px;">
+                        <strong>Split Payment Breakdown:</strong><br>
+                        @foreach($order->payment_details as $pSplit)
+                            {{ $pSplit['method'] ?? 'Payment' }}: &#8377;{{ number_format((float) ($pSplit['amount'] ?? 0), 2) }}@if(!$loop->last) &nbsp;|&nbsp; @endif
+                        @endforeach
+                    </p>
+                @endif
             </td>
             <td style="width: 50%; vertical-align: top;">
                 <table class="summary-box" style="width: 100%;">
                     <tr>
-                        <td>Product Subtotal:</td>
+                        <td>Product Subtotal (Incl. GST):</td>
                         <td class="text-right">&#8377;{{ number_format($invoice->subtotal, 2) }}</td>
                     </tr>
                     @if($invoice->discount > 0)
                         <tr style="color: #2e7d32;">
-                            <td>Offer Code Discount:</td>
+                            <td>Discount:</td>
                             <td class="text-right">-&#8377;{{ number_format($invoice->discount, 2) }}</td>
                         </tr>
                     @endif
                     <tr>
-                        <td><strong>Net Taxable Value:</strong></td>
+                        <td><strong>Taxable Value (Excl. GST):</strong></td>
                         <td class="text-right"><strong>&#8377;{{ number_format($invoice->taxable_amount, 2) }}</strong></td>
                     </tr>
                     @if($invoice->cgst_amount > 0)
                         <tr>
-                            <td>CGST:</td>
+                            <td>CGST (2.5%):</td>
                             <td class="text-right">&#8377;{{ number_format($invoice->cgst_amount, 2) }}</td>
                         </tr>
                         <tr>
-                            <td>SGST:</td>
+                            <td>SGST (2.5%):</td>
                             <td class="text-right">&#8377;{{ number_format($invoice->sgst_amount, 2) }}</td>
                         </tr>
                     @endif
@@ -257,10 +280,16 @@
                         </tr>
                     @endif
                     <tr>
-                        <td>Shipping & Delivery:</td>
-                        <td class="text-right">{{ $invoice->shipping_charges == 0 ? 'FREE' : '&#8377;'.number_format($invoice->shipping_charges, 2) }}</td>
+                        <td>Total GST (Included):</td>
+                        <td class="text-right">&#8377;{{ number_format((float)$invoice->cgst_amount + (float)$invoice->sgst_amount + (float)$invoice->igst_amount, 2) }}</td>
                     </tr>
-                    @if($invoice->gateway_charges > 0)
+                    @if((float)$invoice->shipping_charges > 0)
+                        <tr>
+                            <td>Shipping &amp; Delivery:</td>
+                            <td class="text-right">&#8377;{{ number_format($invoice->shipping_charges, 2) }}</td>
+                        </tr>
+                    @endif
+                    @if((float)$invoice->gateway_charges > 0)
                         <tr>
                             <td>Convenience / Gateway Fee:</td>
                             <td class="text-right">&#8377;{{ number_format($invoice->gateway_charges, 2) }}</td>

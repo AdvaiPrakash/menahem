@@ -294,9 +294,9 @@ class CheckoutShippingEnhancementTest extends TestCase
         $razorpayOrderId = $createRes->json('razorpay_order_id');
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
 
-        // Server must use its own computed shipping fee and grand total (1000 + 120 GST + shipping_fee)
+        // Server must use its own computed shipping fee and GST-inclusive grand total (1000 + shipping_fee)
         $this->assertEquals($expectedShipping['shipping_fee'], $order->shipping_fee);
-        $this->assertEquals(round(1120.0 + $expectedShipping['shipping_fee'], 2), $order->grand_total);
+        $this->assertEquals(round(1000.0 + $expectedShipping['shipping_fee'], 2), $order->grand_total);
         $this->assertNull($order->customer_gstin);
 
         // Razorpay verification flow completes successfully

@@ -50,7 +50,7 @@ class ManualBillingController extends Controller
                 'sku' => $p->sku,
                 'hsn_code' => $p->hsn_code,
                 'price' => $p->effectivePrice(),
-                'gst_rate' => (float) ($p->gst_rate ?? 12.0),
+                'gst_rate' => (float) ($p->gst_rate ?? 5.0),
                 'stock_quantity' => (int) $p->stock_quantity,
                 'image' => $p->image,
             ])
@@ -60,7 +60,6 @@ class ManualBillingController extends Controller
 
         return view('admin.billing.create', [
             'products' => $products,
-            'states' => array_keys(TaxCalculationService::STATES),
             'sellerState' => $sellerState,
         ]);
     }
@@ -76,16 +75,15 @@ class ManualBillingController extends Controller
             'customer_name' => ['required', 'string', 'max:255'],
             'customer_email' => ['nullable', 'email', 'max:255'],
             'customer_phone' => ['required', 'string', 'max:30'],
-            'customer_gstin' => ['nullable', 'string', 'max:20'],
             'shipping_address_line1' => ['nullable', 'string', 'max:255'],
-            'shipping_city' => ['nullable', 'string', 'max:100'],
-            'shipping_state' => ['required', 'string', 'max:100'],
-            'shipping_pin_code' => ['nullable', 'string', 'max:20'],
-            'payment_method' => ['required', 'string', 'in:Cash,UPI,Card,Bank Transfer,Razorpay'],
+            'is_split_payment' => ['nullable', 'boolean'],
+            'payment_method' => ['required_unless:is_split_payment,1', 'nullable', 'string', 'in:Cash,UPI,Card,Bank Transfer,Razorpay'],
             'payment_reference' => ['nullable', 'string', 'max:100'],
+            'split_payments' => ['nullable', 'array'],
+            'split_payments.*.method' => ['required_with:split_payments', 'string', 'in:Cash,UPI,Card'],
+            'split_payments.*.amount' => ['required_with:split_payments', 'numeric', 'gt:0'],
+            'edited_final_amount' => ['nullable', 'numeric', 'min:0'],
             'discount_amount' => ['nullable', 'numeric', 'min:0'],
-            'shipping_fee' => ['nullable', 'numeric', 'min:0'],
-            'notes' => ['nullable', 'string', 'max:1000'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'integer', 'exists:products,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
@@ -102,6 +100,7 @@ class ManualBillingController extends Controller
 
         $stockItems = [];
         $itemsWithGst = [];
+        $originalSubtotal = 0.0;
 
         foreach ($validated['items'] as $row) {
             $product = $products->get((int) $row['product_id']);
@@ -113,6 +112,7 @@ class ManualBillingController extends Controller
             $unitPrice = isset($row['unit_price']) && $row['unit_price'] !== ''
                 ? (float) $row['unit_price']
                 : $product->effectivePrice();
+            $originalSubtotal += ($unitPrice * $qty);
 
             $stockItems[] = [
                 'id' => $product->id,
@@ -127,11 +127,13 @@ class ManualBillingController extends Controller
                 'hsn_code' => $product->hsn_code ?? '6304',
                 'price' => $unitPrice,
                 'quantity' => $qty,
-                'gst_rate' => (float) ($product->gst_rate ?? 12.0),
+                'gst_rate' => (float) ($product->gst_rate ?? 5.0),
                 'custom_size' => $row['custom_size'] ?? null,
                 'image' => $product->image,
             ];
         }
+
+        $originalSubtotal = round($originalSubtotal, 2);
 
         $stockCheck = $this->stockService->validateStockAvailability($stockItems);
         if (! $stockCheck['success']) {
@@ -140,18 +142,73 @@ class ManualBillingController extends Controller
                 ->withErrors(['items' => implode(' ', $stockCheck['errors'])]);
         }
 
-        $customerState = $this->pincodeService->normalizeStateName($validated['shipping_state']);
-        $discount = (float) ($validated['discount_amount'] ?? 0);
-        $shippingFee = (float) ($validated['shipping_fee'] ?? 0);
+        $sellerState = $this->pincodeService->normalizeStateName((string) Setting::get('seller_state', 'Maharashtra'));
+        $sellerCity = (string) Setting::get('shipping_origin_city', 'Mumbai');
+
+        // Auto-calculate discount from edited_final_amount when provided
+        if (isset($validated['edited_final_amount']) && $validated['edited_final_amount'] !== '') {
+            $editedFinal = round((float) $validated['edited_final_amount'], 2);
+            if ($editedFinal > $originalSubtotal) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['edited_final_amount' => 'Final payable amount cannot exceed the original bill amount (₹'.number_format($originalSubtotal, 2).').']);
+            }
+            $discount = round(max(0.0, $originalSubtotal - $editedFinal), 2);
+        } else {
+            $discount = round(min(max(0.0, (float) ($validated['discount_amount'] ?? 0)), $originalSubtotal), 2);
+        }
 
         $calc = $this->taxService->calculate(
             $itemsWithGst,
             $discount,
-            $customerState,
+            $sellerState,
             999.0,
-            99.0,
-            $shippingFee
+            0.0,
+            0.0,
+            false
         );
+
+        $isSplit = $request->boolean('is_split_payment');
+        $paymentDetails = [];
+        $paymentMethodLabel = (string) ($validated['payment_method'] ?? 'Cash');
+
+        if ($isSplit) {
+            $rawSplits = collect($validated['split_payments'] ?? [])
+                ->map(static fn (array $entry): array => [
+                    'method' => (string) $entry['method'],
+                    'amount' => round((float) $entry['amount'], 2),
+                ])
+                ->values();
+
+            if ($rawSplits->count() < 2) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['split_payments' => 'Split payment requires at least two payment methods.']);
+            }
+
+            if ($rawSplits->pluck('method')->unique()->count() !== $rawSplits->count()) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['split_payments' => 'Duplicate payment methods are not allowed in split payment.']);
+            }
+
+            $splitSum = round((float) $rawSplits->sum('amount'), 2);
+            if (abs($splitSum - (float) $calc['grand_total']) > 0.01) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['split_payments' => 'Split payment total (₹'.number_format($splitSum, 2).') must match the final payable amount (₹'.number_format($calc['grand_total'], 2).').']);
+            }
+
+            $paymentDetails = $rawSplits->all();
+            $paymentMethodLabel = 'Split ('.$rawSplits->pluck('method')->implode(' + ').')';
+        } else {
+            $paymentDetails = [
+                [
+                    'method' => $paymentMethodLabel,
+                    'amount' => (float) $calc['grand_total'],
+                ],
+            ];
+        }
 
         $address = [
             'full_name' => $validated['customer_name'],
@@ -159,9 +216,9 @@ class ManualBillingController extends Controller
             'email' => $validated['customer_email'] ?? null,
             'address_line1' => ($validated['shipping_address_line1'] ?? null) ?: 'Manual Billing / Store Counter',
             'address_line2' => null,
-            'city' => ($validated['shipping_city'] ?? null) ?: 'Mumbai',
-            'state' => $customerState,
-            'pin_code' => ($validated['shipping_pin_code'] ?? null) ?: '000000',
+            'city' => $sellerCity,
+            'state' => $sellerState,
+            'pin_code' => '000000',
         ];
 
         $orderNumber = 'ORD-'.Carbon::now()->format('Ymd').'-'.strtoupper(Str::random(6));
@@ -174,7 +231,9 @@ class ManualBillingController extends Controller
             $validated,
             $customerEmail,
             $address,
-            $calc
+            $calc,
+            $paymentMethodLabel,
+            $paymentDetails
         ): Order {
             $order = Order::create([
                 'order_number' => $orderNumber,
@@ -185,7 +244,7 @@ class ManualBillingController extends Controller
                 'customer_phone' => $validated['customer_phone'],
                 'shipping_address' => $address,
                 'billing_address' => $address,
-                'customer_gstin' => $validated['customer_gstin'] ?? null,
+                'customer_gstin' => null,
                 'subtotal' => $calc['subtotal'],
                 'coupon_id' => null,
                 'coupon_code' => null,
@@ -196,15 +255,16 @@ class ManualBillingController extends Controller
                 'igst_amount' => $calc['igst_amount'],
                 'total_tax' => $calc['total_tax'],
                 'shipping_fee' => $calc['shipping_fee'],
-                'gateway_fee' => $calc['gateway_fee'],
+                'gateway_fee' => 0.0,
                 'grand_total' => $calc['grand_total'],
                 'currency' => 'INR',
                 'payment_status' => 'paid',
                 'order_status' => 'confirmed',
-                'payment_method' => $validated['payment_method'],
+                'payment_method' => $paymentMethodLabel,
+                'payment_details' => $paymentDetails,
                 'razorpay_payment_id' => ($validated['payment_reference'] ?? null) ?: null,
                 'paid_at' => Carbon::now(),
-                'notes' => $validated['notes'] ?? 'Created via Admin Manual Billing',
+                'notes' => null,
             ]);
 
             foreach ($calc['items'] as $itemData) {

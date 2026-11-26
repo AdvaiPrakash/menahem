@@ -63,7 +63,7 @@
         let isPlayingAudio = false;
         let isPolling = false;
         let isSyncingLiveData = false;
-        let lastBlockedAudio = null;
+        const blockedAudioQueue = [];
 
         let eventSource = null;
         let fallbackPollTimer = null;
@@ -161,8 +161,18 @@
             }
         }
 
+        function removeGestureUnlockListeners() {
+            ['pointerdown', 'keydown', 'click'].forEach((evtName) => {
+                document.removeEventListener(evtName, unlockAudioElements, { passive: true });
+            });
+        }
+
         function unlockAudioElements() {
-            if (audioUnlocked) {
+            if (audioUnlocked && !audioBlocked) {
+                removeGestureUnlockListeners();
+                return;
+            }
+            if (isPlayingAudio) {
                 return;
             }
             const targets = [inquiryAudio, orderAudio].filter(Boolean);
@@ -173,45 +183,64 @@
                     const playPromise = audioEl.play();
                     if (playPromise && typeof playPromise.then === 'function') {
                         playPromise.then(() => {
-                            audioEl.pause();
-                            audioEl.currentTime = 0;
+                            if (!isPlayingAudio) {
+                                audioEl.pause();
+                                audioEl.currentTime = 0;
+                            }
                             audioEl.muted = prevMuted;
                             audioUnlocked = true;
                             audioBlocked = false;
+                            removeGestureUnlockListeners();
                             updateVoiceToggleUI();
                             flushRecentBlockedAudio();
                         }).catch(() => {
                             audioEl.muted = prevMuted;
                         });
+                    } else {
+                        audioEl.muted = prevMuted;
+                        audioUnlocked = true;
+                        audioBlocked = false;
+                        removeGestureUnlockListeners();
+                        updateVoiceToggleUI();
+                        flushRecentBlockedAudio();
                     }
                 } catch (e) {}
             });
         }
 
         function flushRecentBlockedAudio() {
-            if (!soundEnabled || !lastBlockedAudio) {
+            if (!soundEnabled || blockedAudioQueue.length === 0) {
                 return;
             }
-            if (Date.now() - lastBlockedAudio.blockedAt <= 60000) {
-                audioQueue.push(lastBlockedAudio.type);
-                processAudioQueue();
+            const now = Date.now();
+            while (blockedAudioQueue.length > 0) {
+                const entry = blockedAudioQueue.shift();
+                if (now - entry.blockedAt <= 120000) {
+                    enqueueAudio(entry.id, entry.type);
+                }
             }
-            lastBlockedAudio = null;
+        }
+
+        function markAudioPlayed(numericId) {
+            if (!numericId) {
+                return;
+            }
+            playedAudioIds.add(numericId);
+            writeJsonArray(sessionStorage, SESSION_PLAYED_AUDIO_KEY, playedAudioIds, 200);
         }
 
         function enqueueAudio(notificationId, type) {
             if (!soundEnabled) {
                 return;
             }
-            const numericId = Number(notificationId);
+            const numericId = Number(notificationId) || 0;
             if (numericId && playedAudioIds.has(numericId)) {
                 return;
             }
-            if (numericId) {
-                playedAudioIds.add(numericId);
-                writeJsonArray(sessionStorage, SESSION_PLAYED_AUDIO_KEY, playedAudioIds, 200);
+            if (numericId && audioQueue.some((entry) => entry.id === numericId)) {
+                return;
             }
-            audioQueue.push(type);
+            audioQueue.push({ id: numericId, type });
             processAudioQueue();
         }
 
@@ -220,7 +249,9 @@
                 return;
             }
 
-            const type = audioQueue.shift();
+            const entry = audioQueue.shift();
+            const numericId = Number(entry?.id || 0);
+            const type = entry?.type || 'inquiry';
             const audioEl = type === 'order' ? orderAudio : inquiryAudio;
             if (!audioEl) {
                 processAudioQueue();
@@ -228,8 +259,10 @@
             }
 
             isPlayingAudio = true;
+            let safetyTimer = null;
 
             const finish = () => {
+                clearTimeout(safetyTimer);
                 audioEl.removeEventListener('ended', finish);
                 audioEl.removeEventListener('error', finish);
                 isPlayingAudio = false;
@@ -238,6 +271,7 @@
 
             audioEl.addEventListener('ended', finish);
             audioEl.addEventListener('error', finish);
+            safetyTimer = setTimeout(finish, 15000);
 
             try {
                 audioEl.pause();
@@ -246,17 +280,31 @@
                 const playPromise = audioEl.play();
                 if (playPromise && typeof playPromise.then === 'function') {
                     playPromise.then(() => {
+                        markAudioPlayed(numericId);
                         audioUnlocked = true;
                         audioBlocked = false;
+                        removeGestureUnlockListeners();
                         updateVoiceToggleUI();
-                    }).catch(() => {
+                    }).catch((err) => {
+                        clearTimeout(safetyTimer);
                         audioEl.removeEventListener('ended', finish);
                         audioEl.removeEventListener('error', finish);
                         isPlayingAudio = false;
-                        audioBlocked = true;
-                        lastBlockedAudio = { type, blockedAt: Date.now() };
-                        updateVoiceToggleUI();
+                        if (err && (err.name === 'NotAllowedError' || err.name === 'AbortError')) {
+                            audioBlocked = true;
+                            if (!numericId || !blockedAudioQueue.some((b) => b.id === numericId)) {
+                                blockedAudioQueue.push({ id: numericId, type, blockedAt: Date.now() });
+                                if (blockedAudioQueue.length > 10) {
+                                    blockedAudioQueue.shift();
+                                }
+                            }
+                            updateVoiceToggleUI();
+                        } else {
+                            processAudioQueue();
+                        }
                     });
+                } else {
+                    markAudioPlayed(numericId);
                 }
             } catch (e) {
                 finish();
@@ -470,8 +518,7 @@
                     audioBlocked = false;
                     audioUnlocked = true;
                     updateVoiceToggleUI();
-                    audioQueue.push(item.type);
-                    processAudioQueue();
+                    enqueueAudio(item.id, item.type);
                     playBtn.remove();
                 });
                 footer.appendChild(playBtn);
@@ -748,7 +795,7 @@
 
         // Event bindings
         ['pointerdown', 'keydown', 'click'].forEach((evtName) => {
-            document.addEventListener(evtName, unlockAudioElements, { once: true, passive: true });
+            document.addEventListener(evtName, unlockAudioElements, { passive: true });
         });
 
         voiceToggleBtn?.addEventListener('click', () => {
@@ -760,7 +807,7 @@
                 flushRecentBlockedAudio();
             } else {
                 audioQueue.length = 0;
-                lastBlockedAudio = null;
+                blockedAudioQueue.length = 0;
             }
             updateVoiceToggleUI();
         });
@@ -768,6 +815,7 @@
         unlockBtn?.addEventListener('click', () => {
             audioBlocked = false;
             audioUnlocked = true;
+            unlockAudioElements();
             updateVoiceToggleUI();
             flushRecentBlockedAudio();
         });

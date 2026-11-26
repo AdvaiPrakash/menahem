@@ -19,10 +19,12 @@ class ClearanceSaleController extends Controller
     {
         $search = trim((string) $request->input('search', ''));
 
-        $clearanceItems = ClearanceItem::with('product')
-            ->orderBy('display_order')
-            ->orderBy('id')
-            ->get();
+        $clearanceItems = ClearanceItem::ensureTableExists()
+            ? ClearanceItem::with('product')
+                ->orderBy('display_order')
+                ->orderBy('id')
+                ->get()
+            : collect();
 
         $selectedIds = $clearanceItems->pluck('product_id')->all();
 
@@ -55,6 +57,7 @@ class ClearanceSaleController extends Controller
     public function store(Request $request): RedirectResponse
     {
         abort_unless(auth()->user()?->canEditContent(), 403);
+        ClearanceItem::ensureTableExists();
 
         $validated = $request->validate([
             'product_ids' => ['required', 'array', 'min:1'],
