@@ -11,6 +11,7 @@ use App\Models\Setting;
 use App\Services\CouponService;
 use App\Services\CustomerLeadService;
 use App\Services\InvoiceService;
+use App\Services\OrderEmailService;
 use App\Services\PincodeService;
 use App\Services\RazorpayService;
 use App\Services\ShippingCalculationService;
@@ -34,7 +35,8 @@ class CheckoutController extends Controller
         protected InvoiceService $invoiceService,
         protected CustomerLeadService $leadService,
         protected PincodeService $pincodeService,
-        protected ShippingCalculationService $shippingService
+        protected ShippingCalculationService $shippingService,
+        protected OrderEmailService $orderEmailService
     ) {}
 
     /**
@@ -379,6 +381,9 @@ class CheckoutController extends Controller
 
             return $order;
         });
+
+        // Send New Order Placed email once to info@menahem.co
+        $this->orderEmailService->sendNewOrderAdminNotification($order);
 
         // 7. Initialize Razorpay Order (or Simulated Test Order when credentials are not configured)
         $razorpayOrder = $this->razorpayService->createOrder($order);

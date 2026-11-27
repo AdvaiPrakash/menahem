@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\AdminLiveDataService;
 use App\Services\InvoiceService;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\OrderEmailService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,7 +16,8 @@ class OrderController extends Controller
 {
     public function __construct(
         protected InvoiceService $invoiceService,
-        protected AdminLiveDataService $liveDataService
+        protected AdminLiveDataService $liveDataService,
+        protected OrderEmailService $orderEmailService
     ) {}
 
     /**
@@ -51,6 +52,8 @@ class OrderController extends Controller
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
+        $previousOrderStatus = (string) $order->order_status;
+
         $order->order_status = $validated['order_status'];
         $order->payment_status = $validated['payment_status'];
 
@@ -69,6 +72,11 @@ class OrderController extends Controller
             $this->invoiceService->generateForOrder($order);
         }
 
+        // Send fulfillment status email to customer only when order_status changed
+        if ($previousOrderStatus !== (string) $order->order_status) {
+            $this->orderEmailService->sendOrderStatusUpdate($order, $previousOrderStatus);
+        }
+
         return back()->with('success', "Order #{$order->order_number} status updated successfully.");
     }
 
@@ -84,11 +92,7 @@ class OrderController extends Controller
             $invoice = $this->invoiceService->generateForOrder($order);
         }
 
-        $order->load('items');
-        $pdf = Pdf::loadView('invoices.pdf', [
-            'invoice' => $invoice,
-            'order' => $order,
-        ]);
+        $pdf = $this->invoiceService->renderPdf($invoice);
 
         return $pdf->download("invoice-{$invoice->invoice_number}.pdf");
     }
