@@ -171,10 +171,14 @@ class OrderEmailAndInvoiceAlterationTest extends TestCase
 
         $this->assertStringContainsString('Kerala', $html);
         $this->assertStringNotContainsString('State:</strong> Maharashtra', $html);
+        $this->assertStringContainsString('SL No.', $html);
         $this->assertStringContainsString('Product Details', $html);
-        $this->assertStringContainsString('Quantity', $html);
+        $this->assertStringContainsString('QTY', $html);
         $this->assertStringContainsString('Rate', $html);
         $this->assertStringContainsString('Taxable Amount', $html);
+        $this->assertStringContainsString('CGST', $html);
+        $this->assertStringContainsString('SGST', $html);
+        $this->assertStringContainsString('Total Amount', $html);
         $this->assertStringNotContainsString('MNH-00421', $html);
         $this->assertStringNotContainsString('6304', $html);
         $this->assertStringNotContainsString('HSN', $html);

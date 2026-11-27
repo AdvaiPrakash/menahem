@@ -72,10 +72,13 @@ class ManualBillingController extends Controller
         abort_unless(auth()->user()?->canEditContent(), 403);
 
         $validated = $request->validate([
+            'billing_mode' => ['nullable', 'string', 'in:manual_order,walk_in'],
             'customer_name' => ['required', 'string', 'max:255'],
             'customer_email' => ['nullable', 'email', 'max:255'],
             'customer_phone' => ['required', 'string', 'max:30'],
             'shipping_address_line1' => ['nullable', 'string', 'max:255'],
+            'shipping_city' => ['nullable', 'string', 'max:100'],
+            'shipping_pin_code' => ['nullable', 'string', 'max:20'],
             'is_split_payment' => ['nullable', 'boolean'],
             'payment_method' => ['required_unless:is_split_payment,1', 'nullable', 'string', 'in:Cash,UPI,Card,Bank Transfer,Razorpay'],
             'payment_reference' => ['nullable', 'string', 'max:100'],
@@ -210,15 +213,19 @@ class ManualBillingController extends Controller
             ];
         }
 
+        $billingMode = (string) ($validated['billing_mode'] ?? 'walk_in');
+        $isWalkIn = $billingMode === 'walk_in';
+
         $address = [
+            'billing_mode' => $billingMode,
             'full_name' => $validated['customer_name'],
             'phone' => $validated['customer_phone'],
             'email' => $validated['customer_email'] ?? null,
-            'address_line1' => ($validated['shipping_address_line1'] ?? null) ?: 'Manual Billing / Store Counter',
+            'address_line1' => $isWalkIn ? null : (($validated['shipping_address_line1'] ?? null) ?: null),
             'address_line2' => null,
-            'city' => $sellerCity,
-            'state' => $sellerState,
-            'pin_code' => '000000',
+            'city' => $isWalkIn ? null : (($validated['shipping_city'] ?? null) ?: $sellerCity),
+            'state' => $isWalkIn ? null : $sellerState,
+            'pin_code' => $isWalkIn ? null : (($validated['shipping_pin_code'] ?? null) ?: null),
         ];
 
         $orderNumber = 'ORD-'.Carbon::now()->format('Ymd').'-'.strtoupper(Str::random(6));

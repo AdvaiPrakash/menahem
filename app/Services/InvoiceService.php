@@ -86,6 +86,7 @@ class InvoiceService
         }
 
         // Email invoice to customer
+        $order->setRelation('invoice', $invoice);
         $this->emailInvoice($invoice);
 
         return $invoice;
@@ -137,16 +138,21 @@ class InvoiceService
                 }
             };
 
+            $billingMode = (string) ($invoice->shipping_address['billing_mode'] ?? '');
+            $isManualOrder = $billingMode === 'manual_order';
+            $isWalkIn = $billingMode === 'walk_in';
+
+            $viewData = [
+                'invoice' => $invoice,
+                'downloadUrl' => $downloadUrl,
+                'isManualOrder' => $isManualOrder,
+                'isWalkIn' => $isWalkIn,
+            ];
+
             if (Mail::getFacadeRoot() instanceof MailFake || (app()->runningUnitTests() && config('mail.default') === 'array')) {
-                Mail::send('emails.invoice', [
-                    'invoice' => $invoice,
-                    'downloadUrl' => $downloadUrl,
-                ], $sendCallback);
+                Mail::send('emails.invoice', $viewData, $sendCallback);
             } else {
-                Mail::mailer('smtp')->send('emails.invoice', [
-                    'invoice' => $invoice,
-                    'downloadUrl' => $downloadUrl,
-                ], $sendCallback);
+                Mail::mailer('smtp')->send('emails.invoice', $viewData, $sendCallback);
             }
         } catch (\Throwable $e) {
             Log::info('Invoice email sending skipped or logged: '.$e->getMessage());

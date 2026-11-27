@@ -12,10 +12,17 @@
         </div>
 
         <div style="padding: 24px;">
-            <h2 style="color: #2B3326; font-size: 18px; margin-top: 0;">Thank you for your purchase, {{ $invoice->customer_name }}!</h2>
-            <p style="font-size: 14px; line-height: 1.5; color: #555;">
-                We have received your payment of <strong>₹{{ number_format($invoice->grand_total, 2) }}</strong> for Order <strong>#{{ $invoice->order->order_number }}</strong>. Your GST tax invoice PDF is attached to this email.
-            </p>
+            @if(! empty($isManualOrder))
+                <h2 style="color: #2B3326; font-size: 18px; margin-top: 0;">Your order has been placed successfully, {{ $invoice->customer_name }}!</h2>
+                <p style="font-size: 14px; line-height: 1.5; color: #555;">
+                    Your order <strong>#{{ $invoice->order->order_number }}</strong> for <strong>₹{{ number_format($invoice->grand_total, 2) }}</strong> has been confirmed. Your GST tax invoice PDF is attached to this email.
+                </p>
+            @else
+                <h2 style="color: #2B3326; font-size: 18px; margin-top: 0;">Thank you for your purchase, {{ $invoice->customer_name }}!</h2>
+                <p style="font-size: 14px; line-height: 1.5; color: #555;">
+                    We have received your payment of <strong>₹{{ number_format($invoice->grand_total, 2) }}</strong> for Order <strong>#{{ $invoice->order->order_number }}</strong>. Your GST tax invoice PDF is attached to this email.
+                </p>
+            @endif
 
             <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 16px; margin: 20px 0;">
                 <p style="margin: 4px 0; font-size: 13px;"><strong>Invoice Number:</strong> {{ $invoice->invoice_number }}</p>

@@ -179,8 +179,36 @@
             <!-- RIGHT COLUMN: Single Combined Sticky Card (Customer Details + Payment Method) -->
             <div class="lg:col-span-5 flex flex-col min-h-0">
                 <div class="bg-white border border-neutral-200 p-4 sm:p-5 flex flex-col gap-4 lg:max-h-full lg:overflow-y-auto">
+                    <!-- Billing Mode Switch: Manual Order vs Walk-in Purchase -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Billing Mode</span>
+                            <span class="text-[10px] font-semibold text-neutral-600"
+                                  x-text="billingMode === 'walk_in' ? 'Immediate Store Purchase' : 'Phone / Message Order'"></span>
+                        </div>
+                        <input type="hidden" name="billing_mode" :value="billingMode">
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button"
+                                    @click="billingMode = 'walk_in'"
+                                    class="py-2 px-3 text-xs font-bold uppercase tracking-wider border transition-colors cursor-pointer"
+                                    :class="billingMode === 'walk_in'
+                                        ? 'bg-neutral-900 text-white border-neutral-900'
+                                        : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50'">
+                                Walk-in Purchase
+                            </button>
+                            <button type="button"
+                                    @click="billingMode = 'manual_order'"
+                                    class="py-2 px-3 text-xs font-bold uppercase tracking-wider border transition-colors cursor-pointer"
+                                    :class="billingMode === 'manual_order'
+                                        ? 'bg-neutral-900 text-white border-neutral-900'
+                                        : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50'">
+                                Manual Order
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Customer Details Section -->
-                    <div class="space-y-3">
+                    <div class="pt-3 border-t border-neutral-200 space-y-3">
                         <div class="border-b border-neutral-200 pb-2">
                             <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-900">Customer Details</h2>
                         </div>
@@ -200,19 +228,36 @@
                                        class="w-full px-3 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900">
                             </div>
 
-                            <div>
+                            <div class="sm:col-span-2">
                                 <label class="block text-[10px] font-bold uppercase tracking-wider text-neutral-600 mb-1">Email ID (Optional)</label>
                                 <input type="email" name="customer_email" value="{{ old('customer_email') }}"
                                        placeholder="customer@example.com"
                                        class="w-full px-3 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900">
                             </div>
 
-                            <div>
-                                <label class="block text-[10px] font-bold uppercase tracking-wider text-neutral-600 mb-1">Customer Address</label>
-                                <input type="text" name="shipping_address_line1" value="{{ old('shipping_address_line1') }}"
-                                       placeholder="Street / Area (optional)"
-                                       class="w-full px-3 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900">
-                            </div>
+                            <template x-if="billingMode === 'manual_order'">
+                                <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                    <div class="sm:col-span-2">
+                                        <label class="block text-[10px] font-bold uppercase tracking-wider text-neutral-600 mb-1">Delivery Address</label>
+                                        <input type="text" name="shipping_address_line1" value="{{ old('shipping_address_line1') }}"
+                                               placeholder="House / Street / Area"
+                                               class="w-full px-3 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase tracking-wider text-neutral-600 mb-1">City</label>
+                                        <input type="text" name="shipping_city" value="{{ old('shipping_city') }}"
+                                               placeholder="City"
+                                               class="w-full px-3 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold uppercase tracking-wider text-neutral-600 mb-1">PIN Code</label>
+                                        <input type="text" name="shipping_pin_code" value="{{ old('shipping_pin_code') }}"
+                                               placeholder="682019"
+                                               maxlength="10"
+                                               class="w-full px-3 py-2 text-xs border border-neutral-300 bg-white focus:outline-none focus:border-neutral-900">
+                                    </div>
+                                </div>
+                            </template>
                         </div>
                     </div>
 
@@ -404,6 +449,7 @@
 
         return {
             products: catalog,
+            billingMode: @json(old('billing_mode', 'walk_in')),
             uidCounter: 1,
             splitUidCounter: 2,
             formError: '',

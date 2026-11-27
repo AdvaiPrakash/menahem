@@ -162,29 +162,46 @@
     </table>
 
     <!-- Buyer & Consignee Details -->
+    @php
+        $b = $invoice->billing_address ?? [];
+        $s = $invoice->shipping_address ?? [];
+        $isWalkInInvoice = (($s['billing_mode'] ?? '') === 'walk_in')
+            || (($s['address_line1'] ?? '') === 'Manual Billing / Store Counter');
+        $displayCustomerEmail = (str_ends_with((string) $invoice->customer_email, '@menahem.local') || str_ends_with((string) $invoice->customer_email, '@enquiry.local'))
+            ? null
+            : $invoice->customer_email;
+    @endphp
     <table class="info-table">
         <tr>
-            <td class="info-cell" style="border-right: none;">
+            <td class="info-cell" style="{{ $isWalkInInvoice ? '' : 'border-right: none;' }}">
                 <div class="section-header">Billed To (Customer Details)</div>
                 <strong style="font-size: 12px; color: #111;">{{ $invoice->customer_name }}</strong><br>
                 Phone: {{ $invoice->customer_phone }}<br>
-                Email: {{ $invoice->customer_email }}<br>
-                @php $b = $invoice->billing_address ?? []; @endphp
-                Address: {{ $b['address_line1'] ?? '' }} {{ $b['address_line2'] ?? '' }}<br>
-                City/State: {{ $b['city'] ?? '' }}, {{ $b['state'] ?? '' }} - {{ $b['pin_code'] ?? '' }}<br>
+                @if($displayCustomerEmail)
+                    Email: {{ $displayCustomerEmail }}<br>
+                @endif
+                @if(! $isWalkInInvoice && (! empty($b['address_line1']) || ! empty($b['city']) || ! empty($b['state'])))
+                    Address: {{ $b['address_line1'] ?? '' }} {{ $b['address_line2'] ?? '' }}<br>
+                    City/State: {{ $b['city'] ?? '' }}{{ ! empty($b['city']) && ! empty($b['state']) ? ', ' : '' }}{{ $b['state'] ?? '' }}{{ ! empty($b['pin_code']) ? ' - '.$b['pin_code'] : '' }}<br>
+                @endif
                 @if($invoice->customer_gstin)
                     <strong style="color: #384230;">Customer GSTIN: {{ $invoice->customer_gstin }}</strong>
                 @endif
             </td>
-            <td class="info-cell">
-                <div class="section-header">Shipped To (Delivery Destination)</div>
-                @php $s = $invoice->shipping_address ?? []; @endphp
-                <strong style="font-size: 12px; color: #111;">{{ $s['full_name'] ?? $invoice->customer_name }}</strong><br>
-                Phone: {{ $s['phone'] ?? $invoice->customer_phone }}<br>
-                Address: {{ $s['address_line1'] ?? '' }} {{ $s['address_line2'] ?? '' }}<br>
-                City/State: {{ $s['city'] ?? '' }}, {{ $s['state'] ?? '' }} - {{ $s['pin_code'] ?? '' }}<br>
-                Country: India
-            </td>
+            @if(! $isWalkInInvoice)
+                <td class="info-cell">
+                    <div class="section-header">Shipped To (Delivery Destination)</div>
+                    <strong style="font-size: 12px; color: #111;">{{ $s['full_name'] ?? $invoice->customer_name }}</strong><br>
+                    Phone: {{ $s['phone'] ?? $invoice->customer_phone }}<br>
+                    @if(! empty($s['address_line1']) || ! empty($s['address_line2']))
+                        Address: {{ $s['address_line1'] ?? '' }} {{ $s['address_line2'] ?? '' }}<br>
+                    @endif
+                    @if(! empty($s['city']) || ! empty($s['state']))
+                        City/State: {{ $s['city'] ?? '' }}{{ ! empty($s['city']) && ! empty($s['state']) ? ', ' : '' }}{{ $s['state'] ?? '' }}{{ ! empty($s['pin_code']) ? ' - '.$s['pin_code'] : '' }}<br>
+                    @endif
+                    Country: India
+                </td>
+            @endif
         </tr>
     </table>
 
@@ -192,21 +209,38 @@
     <table class="items-table">
         <thead>
             <tr>
-                <th style="width: 52%;">Product Details</th>
-                <th style="width: 12%;" class="text-center">Quantity</th>
-                <th style="width: 18%;" class="text-right">Rate</th>
-                <th style="width: 18%;" class="text-right">Taxable Amount</th>
+                <th style="width: 6%;" class="text-center">SL No.</th>
+                <th style="width: 30%;">Product Details</th>
+                <th style="width: 7%;" class="text-center">QTY</th>
+                <th style="width: 11%;" class="text-right">Rate</th>
+                <th style="width: 13%;" class="text-right">Taxable Amount</th>
+                <th style="width: 10%;" class="text-right">CGST</th>
+                <th style="width: 10%;" class="text-right">SGST</th>
+                <th style="width: 13%;" class="text-right">Total Amount</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($order->items as $item)
+            @foreach($order->items as $idx => $item)
+                @php
+                    $itemCgst = (float) $item->cgst_amount;
+                    $itemSgst = (float) $item->sgst_amount;
+                    if ($itemCgst <= 0 && $itemSgst <= 0 && (float) $item->igst_amount > 0) {
+                        $itemIgst = (float) $item->igst_amount;
+                        $itemCgst = round($itemIgst / 2.0, 2);
+                        $itemSgst = round($itemIgst - $itemCgst, 2);
+                    }
+                @endphp
                 <tr>
+                    <td class="text-center">{{ $idx + 1 }}</td>
                     <td>
                         <strong>{{ $item->product_name }}</strong>
                     </td>
                     <td class="text-center">{{ $item->quantity }}</td>
                     <td class="text-right">&#8377;{{ number_format((float) $item->unit_price, 2) }}</td>
                     <td class="text-right">&#8377;{{ number_format((float) $item->taxable_value, 2) }}</td>
+                    <td class="text-right">&#8377;{{ number_format($itemCgst, 2) }}</td>
+                    <td class="text-right">&#8377;{{ number_format($itemSgst, 2) }}</td>
+                    <td class="text-right"><strong>&#8377;{{ number_format((float) $item->total_amount, 2) }}</strong></td>
                 </tr>
             @endforeach
         </tbody>
