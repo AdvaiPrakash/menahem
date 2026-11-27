@@ -27,24 +27,37 @@ class OrderEmailService
         }
 
         $order->loadMissing('items');
-        $recipient = 'info@menahem.co';
+        $rawRecipients = (string) (Setting::get('order_notification_emails') ?: 'info@menahem.co');
+        $recipients = collect(preg_split('/[\s,;]+/', $rawRecipients) ?: [])
+            ->map(static fn (string $email): string => strtolower(trim($email)))
+            ->filter(static fn (string $email): bool => $email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) !== false)
+            ->unique()
+            ->values();
+
+        if ($recipients->isEmpty()) {
+            $recipients = collect(['info@menahem.co']);
+        }
+
         $fromAddress = (string) config('mail.enquiry_from.address', 'info@menahem.co.in');
         $businessName = (string) (Setting::get('seller_name') ?: 'MENAHEM');
 
-        try {
-            $mailable = new NewOrderNotificationMail(
-                order: $order,
-                businessName: $businessName,
-                fromAddress: $fromAddress,
-            );
+        foreach ($recipients as $recipient) {
+            try {
+                $mailable = new NewOrderNotificationMail(
+                    order: $order,
+                    businessName: $businessName,
+                    fromAddress: $fromAddress,
+                );
 
-            $this->dispatchMailable($recipient, $businessName, $mailable);
-        } catch (\Throwable $e) {
-            Log::warning('New order admin email notification failed', [
-                'order_id' => $order->id,
-                'order_number' => $order->order_number,
-                'error' => $e->getMessage(),
-            ]);
+                $this->dispatchMailable($recipient, $businessName, $mailable);
+            } catch (\Throwable $e) {
+                Log::warning('New order admin email notification failed', [
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'recipient' => $recipient,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\OrderEmailService;
 use App\Services\StockService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -17,7 +18,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AccountsController extends Controller
 {
-    public function __construct(protected StockService $stockService) {}
+    public function __construct(
+        protected StockService $stockService,
+        protected OrderEmailService $orderEmailService
+    ) {}
 
     /**
      * Display the Accounts ledger with date, status, and payment method filters.
@@ -179,6 +183,8 @@ class AccountsController extends Controller
         $noteEntry = '[Cancelled on '.Carbon::now()->format('d M Y, h:i A').' by '.(auth()->user()?->name ?? 'Admin').']'
             .($reason !== '' ? " Reason: {$reason}" : '');
 
+        $previousStatus = (string) $order->order_status;
+
         DB::transaction(function () use ($order, $noteEntry): void {
             $wasPaid = $order->isPaid();
 
@@ -192,6 +198,8 @@ class AccountsController extends Controller
                 $this->stockService->restoreStockForOrder($order, "Bill #{$order->order_number} cancelled from Accounts");
             }
         });
+
+        $this->orderEmailService->sendOrderStatusUpdate($order->fresh(), $previousStatus);
 
         return back()->with('success', "Bill #{$order->order_number} has been cancelled and stock restored.");
     }

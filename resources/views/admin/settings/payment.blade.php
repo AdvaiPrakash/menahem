@@ -190,6 +190,18 @@
                            required 
                            class="w-full px-3 py-2 rounded-none border border-neutral-300 text-xs bg-white focus:outline-none focus:border-neutral-900">
                 </div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider mb-1.5">
+                        Order Notification Admin Emails
+                    </label>
+                    <input type="text"
+                           name="order_notification_emails"
+                           value="{{ old('order_notification_emails', $settings['order_notification_emails'] ?? 'info@menahem.co') }}"
+                           placeholder="info@menahem.co, orders@menahem.co.in"
+                           class="w-full px-3 py-2 rounded-none border border-neutral-300 text-xs bg-white focus:outline-none focus:border-neutral-900">
+                    <p class="text-[10px] text-neutral-500 mt-1">Separate multiple admin email addresses with commas. Enquiry email settings remain unaffected.</p>
+                </div>
             </div>
         </div>
 

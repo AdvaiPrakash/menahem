@@ -62,7 +62,7 @@
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             
             <!-- Mobile Left: Hamburger Button (Hidden on Desktop) -->
-            <div class="w-20 sm:w-24 flex items-center justify-start lg:hidden flex-shrink-0">
+            <div class="flex items-center justify-start lg:hidden flex-shrink-0">
                 <button
                     id="mobile-menu-btn"
                     type="button"
@@ -80,7 +80,7 @@
             <!-- Logo: Centered on Mobile, Left-aligned on Desktop -->
             <a
                 href="/"
-                class="flex items-center justify-center flex-shrink-0 group py-0 w-[66px] h-[66px] sm:w-[74px] sm:h-[74px] lg:w-[76px] lg:h-[76px]"
+                class="flex items-center justify-center flex-shrink-0 group py-0 w-[56px] h-[56px] sm:w-[72px] sm:h-[72px] lg:w-[76px] lg:h-[76px]"
                 aria-label="Menahem Home"
             >
                 <img
@@ -88,8 +88,7 @@
                     alt="Menahem - The one that comforts you"
                     width="76"
                     height="76"
-                    class="site-logo object-contain transition-transform duration-300 group-hover:scale-105"
-                    style="max-width: 76px; max-height: 76px; object-fit: contain;"
+                    class="site-logo object-contain transition-transform duration-300 group-hover:scale-105 max-h-full max-w-full"
                 />
             </a>
 
@@ -141,7 +140,7 @@
             </div>
 
             <!-- Right: Interactive Search, Avatar / Account, Cart Icons -->
-            <div class="w-20 sm:w-24 lg:w-auto flex items-center justify-end gap-1 sm:gap-3 flex-shrink-0">
+            <div class="flex items-center justify-end gap-0.5 sm:gap-2.5 lg:gap-3 flex-shrink-0">
                 
                 <!-- 1. Interactive Search Toggle Button -->
                 <button 

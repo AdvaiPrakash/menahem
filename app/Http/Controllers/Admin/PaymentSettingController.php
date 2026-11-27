@@ -29,6 +29,7 @@ class PaymentSettingController extends Controller
             'seller_state_code' => Setting::get('seller_state_code', '32'),
             'seller_phone' => Setting::get('seller_phone', '+91 8129 4620 45'),
             'seller_email' => Setting::get('seller_email', 'info@menahem.co.in'),
+            'order_notification_emails' => Setting::get('order_notification_emails', 'info@menahem.co'),
         ];
 
         return view('admin.settings.payment', [
@@ -55,6 +56,7 @@ class PaymentSettingController extends Controller
             'seller_state_code' => ['required', 'string', 'max:5'],
             'seller_phone' => ['required', 'string', 'max:30'],
             'seller_email' => ['required', 'email', 'max:100'],
+            'order_notification_emails' => ['nullable', 'string', 'max:500'],
         ]);
 
         foreach ($validated as $key => $value) {

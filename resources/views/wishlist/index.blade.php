@@ -3,7 +3,7 @@
 @section('title', 'My Wishlist & Favorites · Menahem Luxury Home Essentials')
 
 @section('content')
-<div class="min-h-screen bg-[#FBFBF9] pt-24 pb-16" 
+<div class="min-h-screen bg-[#FBFBF9] pt-24 sm:pt-28 pb-16 overflow-x-hidden" 
      x-data="{
         items: {{ json_encode($products->map(fn($p) => [
             'id' => $p->id,
@@ -76,9 +76,9 @@
 
         <!-- Wishlist Grid -->
         <template x-if="items.length > 0">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <template x-for="item in items" :key="item.id">
-                    <div class="bg-white border border-neutral-200 flex flex-col justify-between group hover:border-[#74826B]/50 transition-all duration-200">
+                    <div class="bg-white border border-neutral-200 flex flex-col justify-between group hover:border-[#74826B]/50 transition-all duration-200 min-w-0">
                         <div class="relative">
                             <a :href="'/products/' + item.id" class="block aspect-square overflow-hidden bg-neutral-100">
                                 <img :src="item.image" :alt="item.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">

@@ -198,20 +198,20 @@
         x-transition:leave="transform transition ease-in-out duration-300 sm:duration-400"
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="translate-x-full"
-        class="fixed inset-y-0 right-0 max-w-full flex pl-10"
+        class="fixed inset-y-0 right-0 max-w-full flex pl-4 sm:pl-10"
     >
-        <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between border-l border-neutral-200">
+        <div class="w-full max-w-[calc(100vw-1rem)] sm:max-w-md bg-white shadow-2xl flex flex-col justify-between border-l border-neutral-200 overflow-hidden">
             
             <!-- Drawer Header -->
-            <div class="p-5 sm:p-6 border-b border-neutral-200 bg-white flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <svg class="w-5 h-5 text-[#74826B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <div class="p-4 sm:p-6 border-b border-neutral-200 bg-white flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                    <svg class="w-5 h-5 text-[#74826B] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
-                    <h2 class="text-lg font-bold font-serif text-[#2B3326]">
+                    <h2 class="text-base sm:text-lg font-bold font-serif text-[#2B3326] truncate">
                         Your Shopping Bag
                     </h2>
-                    <span x-text="count + ' items'" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-neutral-100 text-[#2B3326] border border-neutral-200">
+                    <span x-text="count + ' items'" class="px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-neutral-100 text-[#2B3326] border border-neutral-200 shrink-0">
                     </span>
                 </div>
 
@@ -248,7 +248,7 @@
             </div>
 
             <!-- Cart Items List (Scrollable) -->
-            <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
+            <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 space-y-3 sm:space-y-4">
                 <!-- If Cart is Empty -->
                 <template x-if="items.length === 0">
                     <div class="py-16 text-center flex flex-col items-center">
@@ -273,18 +273,18 @@
 
                 <!-- Items Loop -->
                 <template x-for="item in items" :key="item.id">
-                    <div class="flex items-start gap-3.5 p-3 rounded-lg bg-white border border-neutral-200 shadow-2xs">
+                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white border border-neutral-200 shadow-2xs min-w-0">
                         <!-- Product Thumbnail -->
-                        <img :src="item.image" :alt="item.name" class="w-20 h-20 rounded-md object-cover bg-white flex-shrink-0 border border-neutral-200" />
+                        <img :src="item.image" :alt="item.name" class="w-16 h-16 sm:w-20 sm:h-20 rounded-md object-cover bg-white flex-shrink-0 border border-neutral-200" />
 
                         <!-- Details -->
                         <div class="flex-1 min-w-0">
-                            <span x-text="item.category" class="text-[10px] uppercase font-bold text-[#74826B] tracking-wider block"></span>
+                            <span x-text="item.category" class="text-[10px] uppercase font-bold text-[#74826B] tracking-wider block truncate"></span>
                             <h4 x-text="item.name" class="text-xs sm:text-sm font-bold text-[#2B3326] truncate mt-0.5"></h4>
                             <template x-if="item.custom_size">
-                                <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded bg-[#74826B]/10 border border-[#74826B]/20 text-[10px] font-semibold text-[#2B3326]">
+                                <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded bg-[#74826B]/10 border border-[#74826B]/20 text-[10px] font-semibold text-[#2B3326] max-w-full break-words">
                                     <span>📏</span>
-                                    <span x-text="item.custom_size"></span>
+                                    <span x-text="item.custom_size" class="break-words"></span>
                                 </div>
                             </template>
                             <div class="text-xs font-extrabold text-[#2B3326] mt-1">

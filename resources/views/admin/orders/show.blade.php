@@ -9,6 +9,20 @@
             class="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 bg-white hover:bg-neutral-100 text-neutral-800 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer print:hidden">
         <span>Print Bill</span>
     </button>
+    @if($invoice && $invoice->pdf_token)
+        @php
+            $waPhone = preg_replace('/[^0-9]/', '', (string) $order->customer_phone);
+            $waInvoiceUrl = route('invoices.download.token', ['token' => $invoice->pdf_token]);
+            $waText = rawurlencode("Hello {$order->customer_name}, thank you for shopping with MENAHEM! Here is your GST Tax Invoice ({$invoice->invoice_number}) for Order #{$order->order_number} (₹".number_format((float) $order->grand_total, 2)."): {$waInvoiceUrl}");
+            $waShareHref = $waPhone !== '' ? "https://wa.me/{$waPhone}?text={$waText}" : "https://wa.me/?text={$waText}";
+        @endphp
+        <a href="{{ $waShareHref }}"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 px-4 py-2 border border-emerald-700 bg-emerald-50 hover:bg-emerald-700 text-emerald-900 hover:text-white text-xs font-semibold uppercase tracking-wider transition-all print:hidden">
+            <span>Share on WhatsApp</span>
+        </a>
+    @endif
     <a href="{{ route('admin.orders.invoice', $order) }}" 
        class="inline-flex items-center gap-2 px-4 py-2 bg-neutral-900 hover:bg-black text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-none print:hidden">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
