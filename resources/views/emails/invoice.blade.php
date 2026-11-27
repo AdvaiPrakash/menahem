@@ -32,12 +32,14 @@
             </div>
 
             <p style="font-size: 12px; color: #777; line-height: 1.4;">
-                If you have any questions or require custom dimensions assistance, please contact us on WhatsApp at +91 98765 43210 or reply to this email.
+                If you have any questions or require assistance, please contact us at +91 8129 4620 45 or email <a href="mailto:info@menahem.co.in" style="color: #384230;">info@menahem.co.in</a>.
             </p>
         </div>
 
         <div style="background-color: #f1f5f9; padding: 16px; text-align: center; font-size: 11px; color: #64748b;">
-            &copy; {{ date('Y') }} Menahem Home & Living. All rights reserved.
+            <strong>MENAHEM</strong> • GSTIN: 32DDLPP5032G1ZN<br>
+            Karunya, No. 52/1307, St. James Road, Thykoodam, Kochi, Ernakulam, Kerala 682019, India.<br>
+            &copy; {{ date('Y') }} MENAHEM. All rights reserved.
         </div>
     </div>
 </body>

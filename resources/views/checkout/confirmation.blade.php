@@ -42,8 +42,12 @@
                 </div>
                 <div>
                     <p class="text-slate-400 uppercase font-semibold">Payment Status</p>
-                    <span class="inline-block mt-0.5 px-2.5 py-0.5 rounded-full font-bold text-emerald-800 bg-emerald-100">
-                        Paid via Razorpay ({{ $order->razorpay_payment_id ?: 'Verified' }})
+                    <span class="inline-block mt-0.5 px-2.5 py-0.5 rounded-full font-bold {{ $order->isSimulatedPayment() ? 'text-amber-900 bg-amber-100' : 'text-emerald-800 bg-emerald-100' }}">
+                        @if($order->isSimulatedPayment())
+                            Simulated Test Payment ({{ $order->razorpay_payment_id ?: 'Test Mode' }})
+                        @else
+                            Paid via Razorpay ({{ $order->razorpay_payment_id ?: 'Verified' }})
+                        @endif
                     </span>
                 </div>
             </div>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Tax Invoice - {{ $invoice->invoice_number }}</title>
     <style>
         @page {
             margin: 25px 30px;
         }
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'DejaVu Sans', sans-serif;
             font-size: 11px;
             color: #222;
             line-height: 1.4;
@@ -122,16 +122,21 @@
     <table class="header-table">
         <tr>
             <td style="width: 60%; vertical-align: top;">
+                @php
+                    $sellerAddress = $invoice->seller_address ?: "Karunya,\nNo. 52/1307, St. James Road,\nThykoodam, Kochi,\nErnakulam, Kerala.\nKochi 682019, Kerala, India.";
+                    $sellerPhone = $invoice->seller_phone ?: '+91 8129 4620 45';
+                    $sellerEmail = $invoice->seller_email ?: 'info@menahem.co.in';
+                @endphp
                 <span class="badge">ORIGINAL TAX INVOICE (GST)</span>
-                <h1 class="seller-title" style="margin-top: 6px;">{{ $invoice->seller_name }}</h1>
+                <h1 class="seller-title" style="margin-top: 6px;">{{ $invoice->seller_name ?: 'MENAHEM' }}</h1>
                 <p style="margin: 3px 0; color: #444; max-width: 320px;">
-                    {{ $invoice->seller_address }}
+                    {!! nl2br(e($sellerAddress)) !!}
                 </p>
                 <p style="margin: 2px 0;">
-                    <strong>GSTIN:</strong> {{ $invoice->seller_gstin }} &nbsp;|&nbsp; <strong>State:</strong> {{ $invoice->seller_state }} ({{ $invoice->seller_state_code }})
+                    <strong>GSTIN:</strong> {{ $invoice->seller_gstin ?: '32DDLPP5032G1ZN' }} &nbsp;|&nbsp; <strong>State:</strong> {{ $invoice->seller_state ?: 'Kerala' }} ({{ $invoice->seller_state_code ?: '32' }})
                 </p>
                 <p style="margin: 2px 0; color: #555;">
-                    Contact: {{ $invoice->seller_phone }} | {{ $invoice->seller_email }}
+                    Phone: {{ $sellerPhone }} &nbsp;|&nbsp; Email: {{ $sellerEmail }}
                 </p>
             </td>
             <td style="width: 40%; vertical-align: top;" class="text-right">
@@ -140,7 +145,12 @@
                 <p style="margin: 3px 0;"><strong>Order ID:</strong> {{ $order ? $order->order_number : 'N/A' }}</p>
                 <p style="margin: 3px 0;"><strong>Payment Ref:</strong> {{ $invoice->payment_reference }}</p>
                 <p style="margin: 3px 0;"><strong>Payment Status:</strong> <span style="color: #2e7d32; font-weight: bold;">PAID</span></p>
-                <p style="margin: 3px 0;"><strong>Payment Mode:</strong> {{ $invoice->payment_method }}</p>
+                <p style="margin: 3px 0;">
+                    <strong>Payment Mode:</strong> {{ $invoice->payment_method }}
+                    @if($order && $order->isSimulatedPayment())
+                        <br><span style="font-size: 8px; color: #b45309; font-weight: bold;">[SIMULATED TEST PAYMENT]</span>
+                    @endif
+                </p>
             </td>
         </tr>
     </table>

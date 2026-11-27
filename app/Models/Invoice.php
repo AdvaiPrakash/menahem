@@ -27,6 +27,8 @@ class Invoice extends Model
         'seller_address',
         'seller_state',
         'seller_state_code',
+        'seller_phone',
+        'seller_email',
         'subtotal',
         'discount',
         'taxable_amount',

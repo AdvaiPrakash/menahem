@@ -26,6 +26,11 @@
                    ($order->payment_status === 'refunded' ? 'bg-blue-50 text-blue-800 border-blue-300' : 'bg-rose-50 text-rose-800 border-rose-300')) }}">
                 {{ ucfirst($order->payment_status) }}
             </span>
+            @if($order->isSimulatedPayment())
+                <span class="mt-1 inline-block px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
+                    Simulated Test
+                </span>
+            @endif
         </td>
         <td class="px-5 py-4">
             <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-none border

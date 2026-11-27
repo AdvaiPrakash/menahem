@@ -63,6 +63,10 @@
             // UI & Payment State
             isProcessing: false,
             errorMessage: '',
+            showSimulatedModal: false,
+            simulatedMethod: 'UPI',
+            simulatedOrderData: null,
+            simulatedPaymentHandler: null,
 
             init() {
                 if (this.checkoutMode === 'buy_now') {
@@ -458,24 +462,41 @@
                         }
                     };
 
-                    // Check if Razorpay script is loaded or simulated
-                    if (typeof Razorpay !== 'undefined' && data.razorpay_key_id && !data.razorpay_order_id.startsWith('order_sim_')) {
+                    // Check if Razorpay script is loaded for live/keyed checkout, otherwise open Simulated Test Payment Modal
+                    if (typeof Razorpay !== 'undefined' && data.razorpay_key_id && !data.is_simulated && !String(data.razorpay_order_id || '').startsWith('order_sim_')) {
                         const rzp = new Razorpay(options);
                         rzp.open();
                     } else {
-                        // Test fallback simulation
-                        alert('Razorpay Checkout: Simulating payment verification in sandbox mode.');
-                        options.handler({
-                            razorpay_order_id: data.razorpay_order_id,
-                            razorpay_payment_id: 'pay_sim_' + Math.random().toString(36).substring(2, 12),
-                            razorpay_signature: 'simulated_valid_signature'
-                        });
+                        this.simulatedOrderData = data;
+                        this.simulatedPaymentHandler = options.handler;
+                        this.showSimulatedModal = true;
                     }
                 })
                 .catch(err => {
                     this.isProcessing = false;
                     this.errorMessage = 'Something went wrong while connecting to the checkout server.';
                 });
+            },
+
+            confirmSimulatedPayment() {
+                if (!this.simulatedOrderData || !this.simulatedPaymentHandler) {
+                    return;
+                }
+                const handler = this.simulatedPaymentHandler;
+                const orderId = this.simulatedOrderData.razorpay_order_id;
+                this.showSimulatedModal = false;
+                handler({
+                    razorpay_order_id: orderId,
+                    razorpay_payment_id: 'pay_sim_' + Math.random().toString(36).substring(2, 12),
+                    razorpay_signature: 'simulated_valid_signature'
+                });
+            },
+
+            cancelSimulatedPayment() {
+                this.showSimulatedModal = false;
+                this.isProcessing = false;
+                this.simulatedOrderData = null;
+                this.simulatedPaymentHandler = null;
             }
          }">
 
@@ -827,6 +848,67 @@
                     <p class="text-[11px] text-center text-[#5C6654] mt-3">
                         By proceeding with payment, you agree to Menahem Terms of Service & Privacy Policy.
                     </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simulated Razorpay Test Payment Modal -->
+        <div x-show="showSimulatedModal"
+             x-cloak
+             class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="simulated-payment-title">
+            <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-neutral-200 overflow-hidden">
+                <!-- Header -->
+                <div class="bg-[#384230] text-white px-6 py-4 flex items-center justify-between">
+                    <div>
+                        <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-400 text-neutral-900 mb-1">
+                            Test Mode • Simulated Payment
+                        </span>
+                        <h3 id="simulated-payment-title" class="text-base font-bold">MENAHEM Checkout</h3>
+                        <p class="text-[11px] text-white/80 font-mono" x-text="simulatedOrderData ? ('Order #' + simulatedOrderData.order_number) : ''"></p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] uppercase tracking-wider text-white/75 block">Amount</span>
+                        <span class="text-lg font-extrabold" x-text="'₹' + grandTotal.toLocaleString('en-IN', {minimumFractionDigits: 2})"></span>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="p-6 space-y-4">
+                    <div class="p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs">
+                        <strong>Simulated Test Environment:</strong> No real money will be charged. Select a test method below to simulate payment completion.
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-[#2B3326] mb-2">Select Test Payment Method</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <template x-for="method in ['UPI', 'Card', 'NetBanking']" :key="method">
+                                <button type="button"
+                                        @click="simulatedMethod = method"
+                                        class="py-2.5 px-3 rounded-lg text-xs font-bold border transition-colors cursor-pointer"
+                                        :class="simulatedMethod === method
+                                            ? 'bg-[#384230] text-white border-[#384230]'
+                                            : 'bg-white text-[#2B3326] border-neutral-200 hover:bg-neutral-50'"
+                                        x-text="method">
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
+                        <button type="button"
+                                @click="confirmSimulatedPayment()"
+                                class="flex-1 py-3 px-4 rounded-lg bg-[#384230] hover:bg-[#2B3326] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer">
+                            Simulate Successful Payment
+                        </button>
+                        <button type="button"
+                                @click="cancelSimulatedPayment()"
+                                class="py-3 px-4 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-100 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

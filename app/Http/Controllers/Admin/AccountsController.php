@@ -155,7 +155,7 @@ class AccountsController extends Controller
                 'search' => (string) $request->input('search', ''),
             ],
             'generatedAt' => Carbon::now(),
-        ])->setPaper('a4', 'landscape');
+        ])->setPaper('a4', 'landscape')->setOption('defaultFont', 'DejaVu Sans');
 
         return $pdf->download('menahem-accounts-'.Carbon::now()->format('Ymd-His').'.pdf');
     }

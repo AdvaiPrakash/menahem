@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Menahem Accounts Ledger</title>
     <style>
         @page { margin: 20px 24px; }
-        body { font-family: Helvetica, Arial, sans-serif; font-size: 10px; color: #222; }
+        body { font-family: 'DejaVu Sans', sans-serif; font-size: 10px; color: #222; }
         .header { border-bottom: 2px solid #171717; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; }
         h1 { font-size: 16px; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
         .meta { font-size: 9px; color: #555; margin-top: 3px; }

@@ -87,7 +87,14 @@
                     {{ $b['city'] ?? '' }}, {{ $b['state'] ?? '' }} - {{ $b['pin_code'] ?? '' }}
                 </p>
                 <div class="mt-3 pt-3 border-t border-neutral-200">
-                    <p class="text-neutral-500">Method: <strong class="text-neutral-800">{{ $order->payment_method ?: 'Razorpay' }}</strong></p>
+                    <p class="text-neutral-500">
+                        Method: <strong class="text-neutral-800">{{ $order->payment_method ?: 'Razorpay' }}</strong>
+                        @if($order->isSimulatedPayment())
+                            <span class="ml-1.5 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
+                                Simulated Test
+                            </span>
+                        @endif
+                    </p>
                     @if($order->paid_at)
                         <p class="text-neutral-500">Paid At: <strong class="text-neutral-800">{{ $order->paid_at->format('d M Y, h:i A') }}</strong></p>
                     @endif

@@ -380,7 +380,7 @@ class CheckoutController extends Controller
             return $order;
         });
 
-        // 7. Initialize Razorpay Order
+        // 7. Initialize Razorpay Order (or Simulated Test Order when credentials are not configured)
         $razorpayOrder = $this->razorpayService->createOrder($order);
 
         if (! $razorpayOrder['success']) {
@@ -388,6 +388,16 @@ class CheckoutController extends Controller
                 'success' => false,
                 'message' => $razorpayOrder['error'] ?? 'Payment gateway could not initialize.',
             ], 500);
+        }
+
+        $isSimulated = (bool) ($razorpayOrder['simulated'] ?? false)
+            || str_starts_with((string) ($razorpayOrder['order_id'] ?? ''), 'order_sim_');
+
+        if ($isSimulated) {
+            $order->update([
+                'is_simulated_payment' => true,
+                'payment_method' => 'Simulated Test Payment',
+            ]);
         }
 
         return response()->json([
@@ -398,10 +408,11 @@ class CheckoutController extends Controller
             'amount' => $razorpayOrder['amount'],
             'currency' => $razorpayOrder['currency'],
             'razorpay_key_id' => $this->razorpayService->getKeyId(),
+            'is_simulated' => $isSimulated,
             'customer_name' => $order->customer_name,
             'customer_email' => $order->customer_email,
             'customer_phone' => $order->customer_phone,
-            'business_name' => Setting::get('seller_name', 'Menahem'),
+            'business_name' => Setting::get('seller_name', 'MENAHEM'),
         ]);
     }
 
@@ -454,10 +465,16 @@ class CheckoutController extends Controller
         }
 
         // Mark paid and process order within transaction
-        DB::transaction(function () use ($order, $validated) {
+        $isSimulated = (bool) $order->is_simulated_payment
+            || str_starts_with((string) $validated['razorpay_order_id'], 'order_sim_')
+            || str_starts_with((string) $validated['razorpay_payment_id'], 'pay_sim_');
+
+        DB::transaction(function () use ($order, $validated, $isSimulated) {
             $order->update([
                 'payment_status' => 'paid',
                 'order_status' => 'confirmed',
+                'is_simulated_payment' => $isSimulated,
+                'payment_method' => $isSimulated ? 'Simulated Test Payment' : 'Razorpay',
                 'razorpay_payment_id' => $validated['razorpay_payment_id'],
                 'razorpay_signature' => $validated['razorpay_signature'],
                 'paid_at' => Carbon::now(),

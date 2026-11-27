@@ -32,9 +32,16 @@
                     </div>
                 </a>
                 
-                <p class="text-xs text-[#5C6654] leading-relaxed max-w-xs mb-5 font-medium">
+                <p class="text-xs text-[#5C6654] leading-relaxed max-w-xs mb-4 font-medium">
                     Quality products, unmatched style, and exceptional customer service. That's our promise to you.
                 </p>
+
+                <div class="text-[11px] text-[#5C6654] space-y-1 mb-4 leading-relaxed">
+                    <p class="font-bold text-[#2B3326]">MENAHEM</p>
+                    <p>Karunya, No. 52/1307, St. James Road, Thykoodam, Kochi, Ernakulam, Kerala 682019, India</p>
+                    <p>Phone: <a href="tel:+918129462045" class="hover:text-[#2B3326] font-medium">+91 8129 4620 45</a></p>
+                    <p>Email: <a href="mailto:info@menahem.co.in" class="hover:text-[#2B3326] font-medium">info@menahem.co.in</a></p>
+                </div>
 
                 <!-- Social Icons in Sand & White -->
                 <div class="flex items-center gap-2.5 text-[#2B3326]">

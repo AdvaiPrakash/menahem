@@ -29,11 +29,15 @@ class InvoiceService
         $invoiceNumber = sprintf('INV-%d-%05d', $year, $count);
         $pdfToken = Str::random(48);
 
-        $sellerName = Setting::get('seller_name', 'Menahem Home & Living');
-        $sellerGstin = Setting::get('seller_gstin', '27AABCM1234F1Z8');
-        $sellerAddress = Setting::get('seller_address', '42, Textile Market Road, Kalbadevi, Mumbai, Maharashtra 400002');
-        $sellerState = Setting::get('seller_state', 'Maharashtra');
-        $sellerStateCode = Setting::get('seller_state_code', '27');
+        $officialAddress = "Karunya,\nNo. 52/1307, St. James Road,\nThykoodam, Kochi,\nErnakulam, Kerala.\nKochi 682019, Kerala, India.";
+
+        $sellerName = Setting::get('seller_name', 'MENAHEM') ?: 'MENAHEM';
+        $sellerGstin = Setting::get('seller_gstin', '32DDLPP5032G1ZN') ?: '32DDLPP5032G1ZN';
+        $sellerAddress = Setting::get('seller_address', $officialAddress) ?: $officialAddress;
+        $sellerState = Setting::get('seller_state', 'Kerala') ?: 'Kerala';
+        $sellerStateCode = Setting::get('seller_state_code', '32') ?: '32';
+        $sellerPhone = Setting::get('seller_phone', '+91 8129 4620 45') ?: '+91 8129 4620 45';
+        $sellerEmail = Setting::get('seller_email', 'info@menahem.co.in') ?: 'info@menahem.co.in';
 
         $invoice = Invoice::create([
             'order_id' => $order->id,
@@ -52,6 +56,8 @@ class InvoiceService
             'seller_address' => $sellerAddress,
             'seller_state' => $sellerState,
             'seller_state_code' => $sellerStateCode,
+            'seller_phone' => $sellerPhone,
+            'seller_email' => $sellerEmail,
             'subtotal' => $order->subtotal,
             'discount' => $order->discount_amount,
             'taxable_amount' => $order->taxable_amount,
@@ -94,11 +100,11 @@ class InvoiceService
         return Pdf::loadView('invoices.pdf', [
             'invoice' => $invoice,
             'order' => $order,
-        ])->setPaper('a4', 'portrait');
+        ])->setPaper('a4', 'portrait')->setOption('defaultFont', 'DejaVu Sans');
     }
 
     /**
-     * Send email notification with invoice details to customer.
+     * Send email notification with invoice details and PDF attachment to customer.
      */
     protected function emailInvoice(Invoice $invoice): void
     {
@@ -109,13 +115,23 @@ class InvoiceService
             }
 
             $downloadUrl = route('invoices.download.token', ['token' => $invoice->pdf_token]);
+            $pdfFullPath = $invoice->pdf_path && Storage::disk('public')->exists($invoice->pdf_path)
+                ? Storage::disk('public')->path($invoice->pdf_path)
+                : null;
 
             Mail::send('emails.invoice', [
                 'invoice' => $invoice,
                 'downloadUrl' => $downloadUrl,
-            ], function ($message) use ($invoice, $customerEmail) {
+            ], function ($message) use ($invoice, $customerEmail, $pdfFullPath) {
                 $message->to($customerEmail, $invoice->customer_name)
-                    ->subject("Tax Invoice #{$invoice->invoice_number} for Order #{$invoice->order->order_number} - Menahem");
+                    ->subject("Tax Invoice #{$invoice->invoice_number} for Order #{$invoice->order->order_number} - MENAHEM");
+
+                if ($pdfFullPath && is_file($pdfFullPath)) {
+                    $message->attach($pdfFullPath, [
+                        'as' => "{$invoice->invoice_number}.pdf",
+                        'mime' => 'application/pdf',
+                    ]);
+                }
             });
         } catch (\Throwable $e) {
             Log::info('Invoice email sending skipped or logged: '.$e->getMessage());

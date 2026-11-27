@@ -22,13 +22,13 @@ class PaymentSettingController extends Controller
             'razorpay_status' => Setting::get('razorpay_status', 'enabled'),
             'gateway_fee_mode' => Setting::get('gateway_fee_mode', 'absorbed'),
             'gateway_fee_percent' => Setting::get('gateway_fee_percent', '0'),
-            'seller_name' => Setting::get('seller_name', 'Menahem Home & Living'),
-            'seller_gstin' => Setting::get('seller_gstin', '27AABCM1234F1Z8'),
-            'seller_address' => Setting::get('seller_address', '42, Textile Market Road, Kalbadevi, Mumbai, Maharashtra 400002'),
-            'seller_state' => Setting::get('seller_state', 'Maharashtra'),
-            'seller_state_code' => Setting::get('seller_state_code', '27'),
-            'seller_phone' => Setting::get('seller_phone', '+91 98765 43210'),
-            'seller_email' => Setting::get('seller_email', 'orders@menahem.com'),
+            'seller_name' => Setting::get('seller_name', 'MENAHEM'),
+            'seller_gstin' => Setting::get('seller_gstin', '32DDLPP5032G1ZN'),
+            'seller_address' => Setting::get('seller_address', "Karunya,\nNo. 52/1307, St. James Road,\nThykoodam, Kochi,\nErnakulam, Kerala.\nKochi 682019, Kerala, India."),
+            'seller_state' => Setting::get('seller_state', 'Kerala'),
+            'seller_state_code' => Setting::get('seller_state_code', '32'),
+            'seller_phone' => Setting::get('seller_phone', '+91 8129 4620 45'),
+            'seller_email' => Setting::get('seller_email', 'info@menahem.co.in'),
         ];
 
         return view('admin.settings.payment', [

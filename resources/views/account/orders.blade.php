@@ -37,7 +37,12 @@
                             <span class="text-slate-400 mx-2">•</span>
                             <span class="text-slate-500">{{ $order->created_at->format('d M Y, h:i A') }}</span>
                         </div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            @if($order->isSimulatedPayment())
+                                <span class="px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900">
+                                    Simulated Test
+                                </span>
+                            @endif
                             <span class="px-2.5 py-0.5 rounded-full font-bold text-[11px] {{ $order->isPaid() ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }}">
                                 {{ ucfirst($order->payment_status) }}
                             </span>

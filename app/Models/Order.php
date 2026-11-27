@@ -38,6 +38,7 @@ class Order extends Model
         'payment_status',
         'order_status',
         'payment_method',
+        'is_simulated_payment',
         'payment_details',
         'razorpay_order_id',
         'razorpay_payment_id',
@@ -52,6 +53,7 @@ class Order extends Model
             'shipping_address' => 'array',
             'billing_address' => 'array',
             'payment_details' => 'array',
+            'is_simulated_payment' => 'boolean',
             'subtotal' => 'float',
             'discount_amount' => 'float',
             'taxable_amount' => 'float',
@@ -94,5 +96,13 @@ class Order extends Model
     public function isCancelled(): bool
     {
         return $this->order_status === 'cancelled';
+    }
+
+    public function isSimulatedPayment(): bool
+    {
+        return (bool) $this->is_simulated_payment
+            || str_starts_with((string) $this->razorpay_order_id, 'order_sim_')
+            || str_starts_with((string) $this->razorpay_payment_id, 'pay_sim_')
+            || str_contains(strtolower((string) $this->payment_method), 'simulated');
     }
 }

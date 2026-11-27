@@ -131,7 +131,7 @@
                     </label>
                     <input type="text" 
                            name="seller_gstin" 
-                           value="{{ old('seller_gstin', $settings['seller_gstin'] ?? '27AABCM1234F1Z8') }}" 
+                           value="{{ old('seller_gstin', $settings['seller_gstin'] ?? '32DDLPP5032G1ZN') }}" 
                            required 
                            class="w-full px-3 py-2 rounded-none border border-neutral-300 font-mono text-xs uppercase font-bold bg-white focus:outline-none focus:border-neutral-900">
                 </div>
@@ -143,7 +143,7 @@
                     <textarea name="seller_address" 
                               rows="2" 
                               required 
-                              class="w-full px-3 py-2 rounded-none border border-neutral-300 text-xs bg-white focus:outline-none focus:border-neutral-900">{{ old('seller_address', $settings['seller_address'] ?? '42, Textile Market Road, Kalbadevi, Mumbai, Maharashtra 400002') }}</textarea>
+                              class="w-full px-3 py-2 rounded-none border border-neutral-300 text-xs bg-white focus:outline-none focus:border-neutral-900">{{ old('seller_address', $settings['seller_address'] ?? "Karunya,\nNo. 52/1307, St. James Road,\nThykoodam, Kochi,\nErnakulam, Kerala.\nKochi 682019, Kerala, India.") }}</textarea>
                 </div>
 
                 <div>
@@ -152,7 +152,7 @@
                     </label>
                     <input type="text" 
                            name="seller_state" 
-                           value="{{ old('seller_state', $settings['seller_state'] ?? 'Maharashtra') }}" 
+                           value="{{ old('seller_state', $settings['seller_state'] ?? 'Kerala') }}" 
                            required 
                            class="w-full px-3 py-2 rounded-none border border-neutral-300 text-xs bg-white focus:outline-none focus:border-neutral-900">
                     <p class="text-[10px] text-neutral-500 mt-1">Used to determine Intra-state (CGST+SGST) vs Inter-state (IGST).</p>
@@ -164,7 +164,7 @@
                     </label>
                     <input type="text" 
                            name="seller_state_code" 
-                           value="{{ old('seller_state_code', $settings['seller_state_code'] ?? '27') }}" 
+                           value="{{ old('seller_state_code', $settings['seller_state_code'] ?? '32') }}" 
                            required 
                            class="w-full px-3 py-2 rounded-none border border-neutral-300 font-mono text-xs bg-white focus:outline-none focus:border-neutral-900">
                 </div>
@@ -175,7 +175,7 @@
                     </label>
                     <input type="text" 
                            name="seller_phone" 
-                           value="{{ old('seller_phone', $settings['seller_phone'] ?? '+91 98765 43210') }}" 
+                           value="{{ old('seller_phone', $settings['seller_phone'] ?? '+91 8129 4620 45') }}" 
                            required 
                            class="w-full px-3 py-2 rounded-none border border-neutral-300 text-xs bg-white focus:outline-none focus:border-neutral-900">
                 </div>
@@ -186,7 +186,7 @@
                     </label>
                     <input type="email" 
                            name="seller_email" 
-                           value="{{ old('seller_email', $settings['seller_email'] ?? 'orders@menahem.com') }}" 
+                           value="{{ old('seller_email', $settings['seller_email'] ?? 'info@menahem.co.in') }}" 
                            required 
                            class="w-full px-3 py-2 rounded-none border border-neutral-300 text-xs bg-white focus:outline-none focus:border-neutral-900">
                 </div>
