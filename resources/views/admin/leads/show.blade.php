@@ -4,6 +4,10 @@
 @section('header_title', "Customer Profile: {$lead->name}")
 
 @section('header_actions')
+    <a href="{{ route('admin.leads.download', $lead) }}"
+       class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-none bg-neutral-900 hover:bg-black text-white text-xs font-bold uppercase tracking-wider transition-colors">
+        <span>Download Customer Details</span>
+    </a>
     <a href="{{ route('admin.leads.index') }}" 
        class="px-3.5 py-2 rounded-none border border-neutral-300 text-neutral-700 text-xs font-semibold uppercase tracking-wider hover:bg-neutral-100 transition-colors">
         Back to Leads
@@ -52,7 +56,7 @@
             <div>
                 <h4 class="font-bold uppercase tracking-wider text-neutral-400 mb-1">Contact Information</h4>
                 <p class="font-medium text-neutral-900">{{ $lead->phone ?: 'No phone provided' }}</p>
-                <p class="text-neutral-600">{{ $lead->email }}</p>
+                <p class="text-neutral-600">{{ (str_ends_with((string) $lead->email, '@enquiry.local') || str_ends_with((string) $lead->email, '@menahem.local')) ? 'No email provided' : $lead->email }}</p>
                 @if($lead->customer_gstin)
                     <p class="mt-1 font-semibold text-neutral-900">GSTIN: {{ $lead->customer_gstin }}</p>
                 @endif
@@ -83,9 +87,17 @@
             @forelse($orders as $order)
                 <div class="p-5 hover:bg-neutral-50 transition-colors">
                     <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-3">
+                        @php
+                            $isManualBill = (($order->shipping_address['address_line1'] ?? '') === 'Manual Billing / Store Counter')
+                                || in_array((string) $order->payment_method, ['Cash', 'UPI', 'Card'], true)
+                                || str_starts_with((string) $order->payment_method, 'Split');
+                        @endphp
                         <div>
-                            <div class="flex items-center gap-2.5">
+                            <div class="flex items-center gap-2.5 flex-wrap">
                                 <a href="{{ route('admin.orders.show', $order) }}" class="font-mono font-bold text-sm text-neutral-900 hover:underline">{{ $order->order_number }}</a>
+                                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-none border {{ $isManualBill ? 'bg-blue-50 text-blue-800 border-blue-200' : 'bg-neutral-100 text-neutral-800 border-neutral-300' }}">
+                                    {{ $isManualBill ? 'Manual Billing' : 'Website Order' }}
+                                </span>
                                 <span class="px-2 py-0.5 text-[11px] font-bold rounded-none border {{ $order->isPaid() ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-800 border-amber-200' }}">
                                     {{ ucfirst($order->payment_status) }}
                                 </span>
@@ -129,6 +141,34 @@
             @endforelse
         </div>
     </div>
+
+    @if(isset($samePhoneLeads) && $samePhoneLeads->isNotEmpty())
+        <!-- Other Customer Records Sharing the Same Phone Number -->
+        <div class="bg-white rounded-none border border-neutral-200 shadow-none overflow-hidden">
+            <div class="p-5 border-b border-neutral-200 bg-neutral-50/70">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-900">
+                    Other Customer Profiles Sharing Phone ({{ $lead->phone }})
+                </h3>
+                <p class="text-xs text-neutral-500 mt-0.5">Individual customer names are preserved separately even when sharing a phone number.</p>
+            </div>
+            <div class="divide-y divide-neutral-200">
+                @foreach($samePhoneLeads as $other)
+                    <div class="px-5 py-3.5 flex items-center justify-between gap-4 text-xs">
+                        <div>
+                            <span class="font-bold text-neutral-900">{{ $other->name }}</span>
+                            <span class="text-neutral-400 mx-1.5">•</span>
+                            <span class="text-neutral-600">{{ (str_ends_with((string) $other->email, '@enquiry.local') || str_ends_with((string) $other->email, '@menahem.local')) ? 'No email provided' : $other->email }}</span>
+                            <span class="text-neutral-400 mx-1.5">•</span>
+                            <span class="text-neutral-600">{{ $other->total_orders }} order(s)</span>
+                        </div>
+                        <a href="{{ route('admin.leads.show', $other) }}" class="font-bold text-neutral-900 underline">
+                            View Profile &rarr;
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
     <!-- Connected Enquiries History -->
     <div class="bg-white rounded-none border border-neutral-200 shadow-none overflow-hidden">

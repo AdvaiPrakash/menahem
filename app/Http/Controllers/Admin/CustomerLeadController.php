@@ -90,27 +90,15 @@ class CustomerLeadController extends Controller
      */
     public function show(CustomerLead $lead): View
     {
-        $orders = Order::query()
-            ->where(function ($q) use ($lead): void {
-                $q->where('customer_email', $lead->email);
-                if ($lead->user_id) {
-                    $q->orWhere('user_id', $lead->user_id);
-                }
-            })
-            ->with(['items', 'invoice'])
-            ->orderBy('id', 'desc')
-            ->get();
+        $orders = $this->getOrdersForLead($lead);
+        $inquiries = $this->getInquiriesForLead($lead);
 
-        $inquiries = Inquiry::query()
-            ->where(function ($q) use ($lead): void {
-                if (! str_ends_with((string) $lead->email, '@enquiry.local')) {
-                    $q->where('email', $lead->email);
-                } elseif (! empty($lead->phone)) {
-                    $q->whereNull('email')->where('phone', $lead->phone);
-                }
-            })
-            ->orderBy('id', 'desc')
-            ->get();
+        $samePhoneLeads = ! empty($lead->phone)
+            ? CustomerLead::where('phone', $lead->phone)
+                ->where('id', '!=', $lead->id)
+                ->orderBy('id', 'desc')
+                ->get()
+            : collect();
 
         $leadStatus = $lead->resolvedStatus(
             max($orders->count(), (int) $lead->total_orders),
@@ -121,8 +109,159 @@ class CustomerLeadController extends Controller
             'lead' => $lead,
             'orders' => $orders,
             'inquiries' => $inquiries,
+            'samePhoneLeads' => $samePhoneLeads,
             'leadStatus' => $leadStatus,
         ]);
+    }
+
+    /**
+     * Download complete details, order history, manual bills, and invoices for a single customer.
+     */
+    public function download(CustomerLead $lead): StreamedResponse
+    {
+        $orders = $this->getOrdersForLead($lead);
+        $inquiries = $this->getInquiriesForLead($lead);
+        $isSynthetic = str_ends_with((string) $lead->email, '@menahem.local')
+            || str_ends_with((string) $lead->email, '@enquiry.local');
+
+        $filename = 'customer-profile-'.$lead->id.'-'.Carbon::now()->format('Ymd-His').'.csv';
+
+        return response()->streamDownload(function () use ($lead, $orders, $inquiries, $isSynthetic): void {
+            $handle = fopen('php://output', 'w');
+            if ($handle === false) {
+                return;
+            }
+
+            fwrite($handle, "\xEF\xBB\xBF");
+
+            // Customer Profile Summary Table
+            fputcsv($handle, ['CUSTOMER PROFILE']);
+            fputcsv($handle, ['Customer ID', 'Name', 'Type', 'Phone', 'Email', 'Address', 'Total Orders', 'Total Spent']);
+            fputcsv($handle, [
+                '#CUS-'.str_pad((string) $lead->id, 4, '0', STR_PAD_LEFT),
+                $lead->name,
+                ucfirst((string) $lead->customer_type),
+                $lead->phone ?: 'N/A',
+                $isSynthetic ? 'Not provided' : $lead->email,
+                $lead->delivery_address ?: 'N/A',
+                $orders->count(),
+                number_format((float) $lead->total_purchase_amount, 2, '.', ''),
+            ]);
+
+            fputcsv($handle, []);
+
+            // Orders & Manual Billing Table
+            fputcsv($handle, ['ORDERS & MANUAL BILLING HISTORY']);
+            fputcsv($handle, [
+                'Date',
+                'Order / Bill #',
+                'Source',
+                'Invoice #',
+                'Products & Quantities',
+                'Payment Method',
+                'Subtotal',
+                'Discount',
+                'Taxable',
+                'CGST',
+                'SGST',
+                'Grand Total',
+                'Order Status',
+                'Payment Status',
+            ]);
+
+            foreach ($orders as $order) {
+                $isManual = (($order->shipping_address['address_line1'] ?? '') === 'Manual Billing / Store Counter')
+                    || in_array((string) $order->payment_method, ['Cash', 'UPI', 'Card'], true)
+                    || str_starts_with((string) $order->payment_method, 'Split');
+
+                $itemsSummary = $order->items
+                    ->map(static fn ($item): string => "{$item->product_name} x {$item->quantity}")
+                    ->implode(' | ');
+
+                fputcsv($handle, [
+                    $order->created_at?->format('Y-m-d H:i') ?? '',
+                    $order->order_number,
+                    $isManual ? 'Manual Billing' : 'Website Order',
+                    $order->invoice?->invoice_number ?? 'N/A',
+                    $itemsSummary,
+                    $order->payment_method ?: 'Online',
+                    number_format((float) $order->subtotal, 2, '.', ''),
+                    number_format((float) $order->discount_amount, 2, '.', ''),
+                    number_format((float) $order->taxable_amount, 2, '.', ''),
+                    number_format((float) $order->cgst_amount, 2, '.', ''),
+                    number_format((float) $order->sgst_amount, 2, '.', ''),
+                    number_format((float) $order->grand_total, 2, '.', ''),
+                    ucfirst((string) $order->order_status),
+                    ucfirst((string) $order->payment_status),
+                ]);
+            }
+
+            if ($inquiries->isNotEmpty()) {
+                fputcsv($handle, []);
+                fputcsv($handle, ['CUSTOMER ENQUIRIES']);
+                fputcsv($handle, ['Date', 'Subject', 'Status', 'Message']);
+                foreach ($inquiries as $inq) {
+                    fputcsv($handle, [
+                        $inq->created_at?->format('Y-m-d H:i') ?? '',
+                        $inq->resolvedSubject(),
+                        $inq->statusLabel(),
+                        $inq->message ?? '',
+                    ]);
+                }
+            }
+
+            fclose($handle);
+        }, $filename, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
+    /**
+     * Fetch all orders and manual bills belonging to a customer lead.
+     */
+    protected function getOrdersForLead(CustomerLead $lead)
+    {
+        $isSynthetic = str_ends_with((string) $lead->email, '@menahem.local')
+            || str_ends_with((string) $lead->email, '@enquiry.local');
+
+        return Order::query()
+            ->where(function ($q) use ($lead, $isSynthetic): void {
+                if (! $isSynthetic) {
+                    $q->where('customer_email', $lead->email);
+                }
+                if ($lead->user_id) {
+                    $q->orWhere('user_id', $lead->user_id);
+                }
+                if (! empty($lead->phone) && ! empty($lead->name)) {
+                    $q->orWhere(function ($sub) use ($lead): void {
+                        $sub->where('customer_phone', $lead->phone)
+                            ->whereRaw('LOWER(TRIM(customer_name)) = ?', [strtolower(trim((string) $lead->name))]);
+                    });
+                }
+            })
+            ->with(['items', 'invoice'])
+            ->orderBy('id', 'desc')
+            ->get();
+    }
+
+    /**
+     * Fetch all website enquiries belonging to a customer lead.
+     */
+    protected function getInquiriesForLead(CustomerLead $lead)
+    {
+        $isSynthetic = str_ends_with((string) $lead->email, '@menahem.local')
+            || str_ends_with((string) $lead->email, '@enquiry.local');
+
+        return Inquiry::query()
+            ->where(function ($q) use ($lead, $isSynthetic): void {
+                if (! $isSynthetic) {
+                    $q->where('email', $lead->email);
+                } elseif (! empty($lead->phone)) {
+                    $q->whereNull('email')->where('phone', $lead->phone);
+                }
+            })
+            ->orderBy('id', 'desc')
+            ->get();
     }
 
     /**

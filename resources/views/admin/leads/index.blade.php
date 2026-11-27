@@ -144,7 +144,7 @@
                         </td>
                         <td class="py-3 px-4">
                             <p class="font-semibold text-neutral-800">{{ $lead->phone ?: '—' }}</p>
-                            <p class="text-[11px] text-neutral-500">{{ str_ends_with((string) $lead->email, '@enquiry.local') ? 'No email provided' : $lead->email }}</p>
+                            <p class="text-[11px] text-neutral-500">{{ (str_ends_with((string) $lead->email, '@enquiry.local') || str_ends_with((string) $lead->email, '@menahem.local')) ? 'No email provided' : $lead->email }}</p>
                         </td>
                         <td class="py-3 px-4 text-neutral-700">
                             {{ $lead->city ? $lead->city . ', ' . $lead->state : ($lead->delivery_address ? Str::limit($lead->delivery_address, 25) : '—') }}

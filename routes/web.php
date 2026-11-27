@@ -172,6 +172,7 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'admin'])->group(func
     // Module 4: Unified Customer Leads Management
     Route::get('/leads', [AdminCustomerLeadController::class, 'index'])->name('leads.index');
     Route::get('/leads/export', [AdminCustomerLeadController::class, 'export'])->name('leads.export');
+    Route::get('/leads/{lead}/download', [AdminCustomerLeadController::class, 'download'])->name('leads.download');
     Route::get('/leads/{lead}', [AdminCustomerLeadController::class, 'show'])->name('leads.show');
 
     // Customer Inquiries / Custom Requests & Email Replies

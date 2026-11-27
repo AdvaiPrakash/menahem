@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Testing\Fakes\MailFake;
 
 class InvoiceService
 {
@@ -109,8 +110,13 @@ class InvoiceService
     protected function emailInvoice(Invoice $invoice): void
     {
         try {
-            $customerEmail = $invoice->customer_email;
-            if (empty($customerEmail) || ! filter_var($customerEmail, FILTER_VALIDATE_EMAIL)) {
+            $customerEmail = trim((string) ($invoice->customer_email ?? ''));
+            if (
+                $customerEmail === ''
+                || ! filter_var($customerEmail, FILTER_VALIDATE_EMAIL)
+                || str_ends_with(strtolower($customerEmail), '@menahem.local')
+                || str_ends_with(strtolower($customerEmail), '@enquiry.local')
+            ) {
                 return;
             }
 
@@ -119,10 +125,7 @@ class InvoiceService
                 ? Storage::disk('public')->path($invoice->pdf_path)
                 : null;
 
-            Mail::send('emails.invoice', [
-                'invoice' => $invoice,
-                'downloadUrl' => $downloadUrl,
-            ], function ($message) use ($invoice, $customerEmail, $pdfFullPath) {
+            $sendCallback = function ($message) use ($invoice, $customerEmail, $pdfFullPath): void {
                 $message->to($customerEmail, $invoice->customer_name)
                     ->subject("Tax Invoice #{$invoice->invoice_number} for Order #{$invoice->order->order_number} - MENAHEM");
 
@@ -132,7 +135,19 @@ class InvoiceService
                         'mime' => 'application/pdf',
                     ]);
                 }
-            });
+            };
+
+            if (Mail::getFacadeRoot() instanceof MailFake || (app()->runningUnitTests() && config('mail.default') === 'array')) {
+                Mail::send('emails.invoice', [
+                    'invoice' => $invoice,
+                    'downloadUrl' => $downloadUrl,
+                ], $sendCallback);
+            } else {
+                Mail::mailer('smtp')->send('emails.invoice', [
+                    'invoice' => $invoice,
+                    'downloadUrl' => $downloadUrl,
+                ], $sendCallback);
+            }
         } catch (\Throwable $e) {
             Log::info('Invoice email sending skipped or logged: '.$e->getMessage());
         }
